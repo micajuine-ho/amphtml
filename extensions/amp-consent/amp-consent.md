@@ -405,6 +405,59 @@ The table below lists the vendors and components that are integrated with amp-co
 | AMP Geo                           | 05/10/18          | [Link](https://amp.dev/documentation/examples/user-consent/geolocation-based_consent_flow/)            | Yes               |
 | AMP Stories                       | 05/15/18          | [Link](#prompt-ui-for-stories)                                                                         | Yes               |
 
+## Common Usecase
+
+Here are some common use cases for amp-consent. Note that [geoOverride](#geoOverride) can be used to overwrite default config provided..
+
+##### Opt-out flow relying on clientside cache
+
+`checkConsentHref` is used here to sync your server with the client cache, which will be applied on next page visit
+
+```html
+<amp-consent layout="nodisplay" id="consent-element">
+  <script type="application/json">
+    {
+      "consentInstanceId": "my-consent",
+      "consentRequired": true,
+      "checkConsentHref": "https://example.com/api/check-consent",
+      "onUpdateHref": "https://example.com/update-consent",
+    }
+  </script>
+</amp-consent>
+```
+
+##### Opt-out flow relying on serverside decision 
+
+The [response](#Response) from the `checkConsentHref` endpoint will be contain details from your server on if consent is requiredn and if so, if the user has accepted/rejected. 
+
+```html
+<amp-consent layout="nodisplay" id="consent-element">
+  <script type="application/json">
+    {
+      "consentInstanceId": "my-consent",
+      "consentRequired": "remote",
+      "checkConsentHref": "https://example.com/api/check-consent",
+      "onUpdateHref": "https://example.com/update-consent",
+    }
+  </script>
+</amp-consent>
+```
+
+##### Opt-in flow
+
+```html
+<amp-consent layout="nodisplay" id="consent-element">
+  <script type="application/json">
+    {
+      "consentInstanceId": "my-consent",
+      "promptUi": "my-prompt-ui",
+      "consentRequired": true,
+      "onUpdateHref": "https://example.com/update-consent",
+    }
+  </script>
+</amp-consent>
+```
+
 ## FAQs
 
 ##### Will AMP change any behavior by default on May 25th?
