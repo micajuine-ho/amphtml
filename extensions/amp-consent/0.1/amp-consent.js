@@ -26,7 +26,6 @@ import {ConsentPolicyManager} from './consent-policy-manager';
 import {ConsentStateManager} from './consent-state-manager';
 import {ConsentUI} from './consent-ui';
 import {Deferred} from '../../../src/utils/promise';
-import {GEO_IN_GROUP} from '../../amp-geo/0.1/amp-geo-in-group';
 import {
   NOTIFICATION_UI_MANAGER,
   NotificationUiManager,
@@ -38,7 +37,7 @@ import {
   resolveRelativeUrl,
 } from '../../../src/url';
 import {dev, devAssert, user, userAssert} from '../../../src/log';
-import {dict, hasOwn} from '../../../src/utils/object';
+import {dict} from '../../../src/utils/object';
 import {getData} from '../../../src/event-helper';
 import {getServicePromiseForDoc} from '../../../src/service';
 import {isEnumValue} from '../../../src/types';
@@ -426,9 +425,7 @@ export class AmpConsent extends AMP.BaseElement {
   init_() {
     this.passSharedData_();
     this.maybeSetDirtyBit_();
-    if (isExperimentOn(this.win, 'amp-consent-geo-override')) {
-      this.syncRemoteConsentState_();
-    }
+    this.syncRemoteConsentState_();
 
     this.getConsentRequiredPromise_()
       .then(isConsentRequired => {
@@ -453,9 +450,6 @@ export class AmpConsent extends AMP.BaseElement {
    * @return {!Promise<boolean>}
    */
   getConsentRequiredPromise_() {
-    if (!isExperimentOn(this.win, 'amp-consent-geo-override')) {
-      return this.getConsentRequiredPromiseLegacy_();
-    }
     return this.consentStateManager_
       .getConsentInstanceInfo()
       .then(storedInfo => {
@@ -467,44 +461,12 @@ export class AmpConsent extends AMP.BaseElement {
           return Promise.resolve(consentRequired);
         }
         return this.getConsentRemote_().then(consentResponse => {
-          return !!consentResponse['consentRequired'];
+          return (
+            !!consentResponse['consentRequired'] ||
+            !!consentResponse['promptIfUnknown']
+          );
         });
       });
-  }
-
-  /**
-   * Returns a promise that resolve when amp-consent knows
-   * if the consent is required.
-   * @return {!Promise<boolean>}
-   */
-  getConsentRequiredPromiseLegacy_() {
-    let consentRequiredPromise = null;
-    if (this.consentConfig_['promptIfUnknownForGeoGroup']) {
-      const geoGroup = this.consentConfig_['promptIfUnknownForGeoGroup'];
-      consentRequiredPromise = this.isConsentRequiredGeo_(geoGroup);
-    } else {
-      consentRequiredPromise = this.getConsentRemote_().then(
-        remoteConfigResponse => {
-          if (
-            !remoteConfigResponse ||
-            !hasOwn(remoteConfigResponse, 'promptIfUnknown')
-          ) {
-            this.user().error(
-              TAG,
-              'Expecting promptIfUnknown from ' +
-                'checkConsentHref when promptIfUnknownForGeoGroup is not ' +
-                'specified'
-            );
-            // Set to false if not defined
-            return false;
-          }
-          return !!remoteConfigResponse['promptIfUnknown'];
-        }
-      );
-    }
-    return consentRequiredPromise.then(required => {
-      return !!required;
-    });
   }
 
   /**
@@ -577,18 +539,6 @@ export class AmpConsent extends AMP.BaseElement {
         );
       });
     }
-  }
-
-  /**
-   * Returns a promise that if user is in the given geoGroup
-   * @param {string} geoGroup
-   * @return {Promise<boolean>}
-   */
-  isConsentRequiredGeo_(geoGroup) {
-    return Services.geoForDocOrNull(this.element).then(geo => {
-      userAssert(geo, 'requires <amp-geo> to use promptIfUnknownForGeoGroup');
-      return geo.isInCountryGroup(geoGroup) == GEO_IN_GROUP.IN;
-    });
   }
 
   /**
