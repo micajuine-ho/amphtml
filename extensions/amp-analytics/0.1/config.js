@@ -65,7 +65,6 @@ export class AnalyticsConfig {
   loadConfig() {
     this.win_ = this.element_.ownerDocument.defaultView;
     this.isSandbox_ = this.element_.hasAttribute('sandbox');
-
     return Promise.all([this.fetchRemoteConfig_(), this.fetchVendorConfig_()])
       .then(this.processConfigs_.bind(this))
       .then(this.checkWarningMessage_.bind(this))
@@ -97,8 +96,12 @@ export class AnalyticsConfig {
    * @return {!Promise<undefined>}
    */
   fetchVendorConfig_() {
+    console.time('fetch vendor config' + this.element_.getAttribute('type'));
     const type = this.element_.getAttribute('type');
     if (!type) {
+      console.timeEnd(
+        'fetch vendor config' + this.element_.getAttribute('type')
+      );
       return Promise.resolve();
     }
 
@@ -113,6 +116,9 @@ export class AnalyticsConfig {
       .then(
         jsonValue => {
           this.predefinedConfig_[type] = jsonValue;
+          console.timeEnd(
+            'fetch vendor config' + this.element_.getAttribute('type')
+          );
           dev().fine(TAG, 'Vendor config loaded for ' + type, jsonValue);
         },
         err => {
@@ -128,8 +134,10 @@ export class AnalyticsConfig {
    * @return {!Promise<undefined>}
    */
   fetchRemoteConfig_() {
+    console.time('fetch remote' + this.element_.getAttribute('type'));
     let remoteConfigUrl = this.element_.getAttribute('config');
     if (!remoteConfigUrl || this.isSandbox_) {
+      console.timeEnd('fetch remote' + this.element_.getAttribute('type'));
       return Promise.resolve();
     }
     assertHttpsUrl(remoteConfigUrl, this.element_);
@@ -152,9 +160,11 @@ export class AnalyticsConfig {
       .then(
         jsonValue => {
           this.remoteConfig_ = jsonValue;
+          console.timeEnd('fetch remote' + this.element_.getAttribute('type'));
           dev().fine(TAG, 'Remote config loaded', remoteConfigUrl);
         },
         err => {
+          console.timeEnd('fetch remote' + this.element_.getAttribute('type'));
           user().error(
             TAG,
             'Error loading remote config: ',
@@ -172,6 +182,7 @@ export class AnalyticsConfig {
    * @return {!Promise<undefined>}
    */
   processConfigs_() {
+    console.time('Merge configs' + this.element_.getAttribute('type'));
     const configRewriterUrl = this.getConfigRewriter_()['url'];
 
     const config = dict({});
@@ -182,9 +193,11 @@ export class AnalyticsConfig {
 
     if (!configRewriterUrl || this.isSandbox_) {
       this.config_ = this.mergeConfigs_(config);
+      console.timeEnd('Merge configs' + this.element_.getAttribute('type'));
       // use default configuration merge.
       return Promise.resolve();
     }
+    console.timeEnd('Merge configs' + this.element_.getAttribute('type'));
 
     return this.handleConfigRewriter_(config, configRewriterUrl);
   }
@@ -196,6 +209,7 @@ export class AnalyticsConfig {
    * @return {!Promise<undefined>}
    */
   handleConfigRewriter_(config, configRewriterUrl) {
+    console.time('configRewriter' + this.element_.getAttribute('type'));
     assertHttpsUrl(configRewriterUrl, this.element_);
     const TAG = this.getName_();
     dev().fine(TAG, 'Rewriting config', configRewriterUrl);
@@ -222,6 +236,9 @@ export class AnalyticsConfig {
         .then(
           jsonValue => {
             this.config_ = this.mergeConfigs_(jsonValue);
+            console.timeEnd(
+              'configRewriter' + this.element_.getAttribute('type')
+            );
             dev().fine(TAG, 'Configuration re-written', configRewriterUrl);
           },
           err => {
