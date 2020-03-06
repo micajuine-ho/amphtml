@@ -223,24 +223,34 @@ export class AmpAnalytics extends AMP.BaseElement {
       .then(services => {
         this.instrumentation_ = services[0];
         this.variableService_ = services[1];
-        console.time('Load Config' + this.element.getAttribute('type'));
+        console.time(
+          'LOG-' + this.element.getAttribute('type') + '-loadConfig'
+        );
 
         return new AnalyticsConfig(this.element).loadConfig();
       })
       .then(config => {
         this.config_ = /** @type {!JsonObject} */ (config);
-        console.timeEnd('Load Config' + this.element.getAttribute('type'));
-        console.time('Cookie Writer' + this.element.getAttribute('type'));
+        console.timeEnd(
+          'LOG-' + this.element.getAttribute('type') + '-loadConfig'
+        );
+        console.time(
+          'LOG-' + this.element.getAttribute('type') + '-cookieWriter'
+        );
         return new CookieWriter(this.win, this.element, this.config_).write();
       })
       .then(() => {
-        console.timeEnd('Cookie Writer' + this.element.getAttribute('type'));
-        console.time('Transport' + this.element.getAttribute('type'));
+        console.timeEnd(
+          'LOG-' + this.element.getAttribute('type') + '-cookieWriter'
+        );
+        console.time('LOG-' + this.element.getAttribute('type') + '-transport');
         this.transport_ = new Transport(
           this.win,
           this.config_['transport'] || {}
         );
-        console.timeEnd('Transport');
+        console.timeEnd(
+          'LOG-' + this.element.getAttribute('type') + '-transport'
+        );
       })
       .then(this.registerTriggers_.bind(this))
       .then(this.initializeLinker_.bind(this));
@@ -276,7 +286,9 @@ export class AmpAnalytics extends AMP.BaseElement {
       user().fine(TAG, 'User has opted out. No hits will be sent.');
       return Promise.resolve();
     }
-    console.time('registerTriggers' + this.element.getAttribute('type'));
+    console.time(
+      'LOG-' + this.element.getAttribute('type') + '-registerTriggers'
+    );
     this.generateRequests_();
 
     if (!this.config_['triggers']) {
@@ -385,7 +397,9 @@ export class AmpAnalytics extends AMP.BaseElement {
       }
     }
     return Promise.all(promises).then(x => {
-      console.timeEnd('registerTriggers' + this.element.getAttribute('type'));
+      console.timeEnd(
+        'LOG-' + this.element.getAttribute('type') + '-registerTriggers'
+      );
       console.log('# of triggers:', promises.length);
       return x;
     });
@@ -567,7 +581,9 @@ export class AmpAnalytics extends AMP.BaseElement {
    * @private
    */
   initializeLinker_() {
-    console.time('initalizeLinker' + this.element.getAttribute('type'));
+    console.time(
+      'LOG-' + this.element.getAttribute('type') + '-initalizeLinker_'
+    );
     const type = this.element.getAttribute('type');
     this.linkerManager_ = new LinkerManager(
       this.getAmpDoc(),

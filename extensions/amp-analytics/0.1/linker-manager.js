@@ -86,8 +86,9 @@ export class LinkerManager {
    */
   init() {
     if (!isObject(this.config_)) {
-      console.log('no linker');
-      console.timeEnd('initalizeLinker' + this.element_.getAttribute('type'));
+      console.timeEnd(
+        'LOG-' + this.element.getAttribute('type') + '-initalizeLinker_'
+      );
 
       return;
     }
@@ -143,7 +144,9 @@ export class LinkerManager {
     this.enableFormSupport_();
 
     return Promise.all(this.allLinkerPromises_).then(x => {
-      console.timeEnd('initalizeLinker' + this.element_.getAttribute('type'));
+      console.timeEnd(
+        'LOG-' + this.element.getAttribute('type') + '-initalizeLinker_'
+      );
       return x;
     });
   }
