@@ -87,7 +87,7 @@ export class LinkerManager {
   init() {
     if (!isObject(this.config_)) {
       console.timeEnd(
-        'LOG-' + this.element.getAttribute('type') + '-initalizeLinker_'
+        'LOG-' + this.element_.getAttribute('type') + '-initalizeLinker_'
       );
 
       return;
@@ -145,7 +145,7 @@ export class LinkerManager {
 
     return Promise.all(this.allLinkerPromises_).then(x => {
       console.timeEnd(
-        'LOG-' + this.element.getAttribute('type') + '-initalizeLinker_'
+        'LOG-' + this.element_.getAttribute('type') + '-initalizeLinker_'
       );
       return x;
     });
