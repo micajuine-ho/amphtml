@@ -113,7 +113,7 @@ export class AnalyticsConfig {
     dev().fine(TAG, 'Fetching vendor config', vendorUrl);
 
     return Services.xhrFor(toWin(this.win_))
-      .fetchJson(vendorUrl)
+      .fetchJson(vendorUrl, {ampCors: false})
       .then(res => res.json())
       .then(
         jsonValue => {
