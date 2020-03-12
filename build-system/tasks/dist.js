@@ -451,4 +451,6 @@ dist.flags = {
     "  Doesn't use nailgun to invoke closure compiler (much slower)",
   type: '  Points sourcemap to fetch files from the correct GitHub tag',
   esm: '  Does not transpile down to ES5',
+  rtv_version:
+    '  Specifies the version number instead of creating a new number',
 };

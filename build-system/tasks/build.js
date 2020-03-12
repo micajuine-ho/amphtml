@@ -132,6 +132,8 @@ build.flags = {
   noextensions: '  Builds with no extensions.',
   core_runtime_only: '  Builds only the core runtime.',
   coverage: '  Adds code coverage instrumentation to JS files using istanbul.',
+  rtv_version:
+    '  Specifies the version number instead of creating a new number',
 };
 
 watch.description = 'Watches for changes in files, re-builds when detected';
