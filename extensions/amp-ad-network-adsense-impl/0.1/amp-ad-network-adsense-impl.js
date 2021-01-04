@@ -23,6 +23,8 @@
 import {AdsenseSharedState} from './adsense-shared-state';
 import {AmpA4A} from '../../amp-a4a/0.1/amp-a4a';
 import {CONSENT_POLICY_STATE} from '../../../src/consent-state';
+import {FIE_RESOURCES_EXP} from '../../../src/experiments/fie-resources-exp';
+import {INTERSECT_RESOURCES_EXP} from '../../../src/experiments/intersect-resources-exp';
 import {Navigation} from '../../../src/service/navigation';
 import {
   QQID_HEADER,
@@ -35,6 +37,7 @@ import {
   getCsiAmpAnalyticsVariables,
   getEnclosingContainerTypes,
   getIdentityToken,
+  getServeNpaPromise,
   googleAdUrl,
   isCdnProxy,
   isReportingEnabled,
@@ -250,6 +253,20 @@ export class AmpAdNetworkAdsenseImpl extends AmpA4A {
     if (moduleNomoduleExpId) {
       addExperimentIdToElement(moduleNomoduleExpId, this.element);
     }
+    const intersectResourcesExpId = getExperimentBranch(
+      this.win,
+      INTERSECT_RESOURCES_EXP.id
+    );
+    if (intersectResourcesExpId) {
+      addExperimentIdToElement(intersectResourcesExpId, this.element);
+    }
+    const fieResourcesExpId = getExperimentBranch(
+      this.win,
+      FIE_RESOURCES_EXP.id
+    );
+    if (fieResourcesExpId) {
+      addExperimentIdToElement(fieResourcesExpId, this.element);
+    }
     const ssrExpIds = this.getSsrExpIds_();
     for (let i = 0; i < ssrExpIds.length; i++) {
       addAmpExperimentIdToElement(ssrExpIds[i], this.element);
@@ -271,7 +288,7 @@ export class AmpAdNetworkAdsenseImpl extends AmpA4A {
   }
 
   /** @override */
-  getAdUrl(consentTuple) {
+  getAdUrl(consentTuple, opt_unusedRtcResponsesPromise, opt_serveNpaSignal) {
     let consentState = undefined;
     let consentString = undefined;
     let gdprApplies = undefined;
@@ -348,7 +365,8 @@ export class AmpAdNetworkAdsenseImpl extends AmpA4A {
       'iu': slotname,
       'npa':
         consentState == CONSENT_POLICY_STATE.INSUFFICIENT ||
-        consentState == CONSENT_POLICY_STATE.UNKNOWN
+        consentState == CONSENT_POLICY_STATE.UNKNOWN ||
+        !!opt_serveNpaSignal
           ? 1
           : null,
       'adtest': adTestOn ? 'on' : null,
@@ -412,6 +430,11 @@ export class AmpAdNetworkAdsenseImpl extends AmpA4A {
         experimentIds
       );
     });
+  }
+
+  /** @override */
+  getServeNpaSignal() {
+    return getServeNpaPromise(this.element);
   }
 
   /** @override */

@@ -154,6 +154,7 @@ exports.rules = [
       'ads/google/a4a/**->src/services.js',
       'ads/google/a4a/utils.js->src/service/variable-source.js',
       'ads/google/a4a/utils.js->src/ini-load.js',
+      'ads/google/a4a/utils.js->src/utils/page-layout-box.js',
       // Some ads need to depend on json.js
       'ads/**->src/json.js',
       // IMA, similar to other non-Ad 3Ps above, needs access to event-helper
@@ -165,6 +166,7 @@ exports.rules = [
     mustNotDependOn: 'extensions/**/*.js',
     allowlist: [
       // See todo note in ads/_a4a-config.js
+      'ads/google/a4a/utils.js->extensions/amp-geo/0.1/amp-geo-in-group.js',
     ],
   },
   // Rules for extensions and main src.
@@ -243,7 +245,13 @@ exports.rules = [
       'extensions/amp-facebook-page/0.1/amp-facebook-page.js->extensions/amp-facebook/0.1/facebook-loader.js',
       'extensions/amp-facebook-comments/0.1/amp-facebook-comments.js->extensions/amp-facebook/0.1/facebook-loader.js',
 
+      // Bento AMP Youtube
+      'extensions/amp-youtube/1.0/amp-youtube.js->extensions/amp-video/1.0/base-element.js',
+      'extensions/amp-youtube/1.0/youtube.js->extensions/amp-video/1.0/video-iframe.js',
+      'extensions/amp-youtube/1.0/youtube.js->extensions/amp-video/1.0/video-wrapper.js',
+
       // Amp geo in group enum
+      'extensions/amp-a4a/0.1/amp-a4a.js->extensions/amp-geo/0.1/amp-geo-in-group.js',
       'extensions/amp-consent/0.1/consent-config.js->extensions/amp-geo/0.1/amp-geo-in-group.js',
       'extensions/amp-user-notification/0.1/amp-user-notification.js->extensions/amp-geo/0.1/amp-geo-in-group.js',
 
