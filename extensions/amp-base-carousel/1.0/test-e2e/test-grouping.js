@@ -30,7 +30,7 @@ describes.endtoend(
     testUrl:
       'http://localhost:8000/test/manual/amp-base-carousel/1.0/' +
       'grouping-move-by-2.amp.html',
-    experiments: ['bento-carousel'],
+    experiments: ['amp-base-carousel-bento'],
     initialRect: {width: pageWidth, height: pageHeight},
     environments: ['single'],
   },

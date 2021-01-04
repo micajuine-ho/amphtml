@@ -49,11 +49,8 @@ export class FirstImpressionIoConfig {
   getConfigUrl() {
     let previewId = 0;
 
-    const {host, pathname, hash, search} = window.location;
-    const hashParams = Object.assign(
-      parseQueryString(hash),
-      parseQueryString(search)
-    );
+    const {host, pathname, hash} = window.location;
+    const hashParams = parseQueryString(hash);
     const docInfo = Services.documentInfoForDoc(this.autoAmpAdsElement_);
 
     const previewFlowRegex = /amp\/fi\/(\d+)\//;
@@ -65,7 +62,6 @@ export class FirstImpressionIoConfig {
     const fiReveal = hashParams['fi_reveal'];
     const fiDemand = hashParams['fi_demand'];
     const fiGeo = hashParams['fi_geo'];
-    const fiDisable = hashParams['disable_fi'];
 
     const cdnHost =
       hashParams['fi_cdnhost'] || (previewId ? host : 'cdn.firstimpression.io');
@@ -94,9 +90,6 @@ export class FirstImpressionIoConfig {
     }
     if (fiGeo) {
       queryParams['fi_geo'] = fiGeo;
-    }
-    if (fiDisable) {
-      queryParams['disable_fi'] = fiDisable;
     }
     if (previewId) {
       queryParams['preview_id'] = previewId;

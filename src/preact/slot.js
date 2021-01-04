@@ -39,25 +39,9 @@ export function createSlot(element, name, props) {
  * @return {!PreactDef.VNode}
  */
 export function Slot(props) {
+  const context = useAmpContext();
   const ref = useRef(/** @type {?Element} */ (null));
 
-  useSlotContext(ref);
-
-  useEffect(() => {
-    // Post-rendering cleanup, if any.
-    if (props['postRender']) {
-      props['postRender']();
-    }
-  });
-
-  return <slot {...props} ref={ref} />;
-}
-
-/**
- * @param {{current:?}} ref
- */
-export function useSlotContext(ref) {
-  const context = useAmpContext();
   useLayoutEffect(() => {
     const slot = dev().assertElement(ref.current);
     setProp(slot, CanRender, Slot, context.renderable);
@@ -74,5 +58,14 @@ export function useSlotContext(ref) {
       removeProp(slot, LoadingProp, Slot);
       rediscoverChildren(slot);
     };
-  }, [ref, context]);
+  }, [context]);
+
+  useEffect(() => {
+    // Post-rendering cleanup, if any.
+    if (props['postRender']) {
+      props['postRender']();
+    }
+  });
+
+  return <slot {...props} ref={ref} />;
 }

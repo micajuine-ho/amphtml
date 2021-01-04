@@ -15,10 +15,7 @@
  */
 
 import '../amp-story-360';
-import {
-  Action,
-  AmpStoryStoreService,
-} from '../../../amp-story/1.0/amp-story-store-service';
+import {AmpStoryStoreService} from '../../../amp-story/1.0/amp-story-store-service';
 import {LocalizationService} from '../../../../src/service/localization';
 import {createElementWithAttributes} from '../../../../src/dom';
 import {
@@ -38,7 +35,6 @@ describes.realWin(
     let win;
     let element;
     let threesixty;
-    let storeService;
 
     function appendAmpImg(parent, path) {
       const ampImg = createElementWithAttributes(win.document, 'amp-img', {
@@ -50,8 +46,6 @@ describes.realWin(
     }
 
     async function createAmpStory360(imagePath) {
-      const pageEl = win.document.createElement('amp-story-page');
-      pageEl.id = 'page1';
       element = createElementWithAttributes(win.document, 'amp-story-360', {
         'layout': 'fill',
         'duration': '1s',
@@ -61,8 +55,7 @@ describes.realWin(
       if (imagePath) {
         appendAmpImg(element, imagePath);
       }
-      pageEl.appendChild(element);
-      win.document.body.appendChild(pageEl);
+      win.document.body.appendChild(element);
 
       const localizationService = new LocalizationService(win.document.body);
       registerServiceBuilderForDoc(element, 'localization', function () {
@@ -75,7 +68,7 @@ describes.realWin(
     beforeEach(() => {
       win = env.win;
 
-      storeService = new AmpStoryStoreService(win);
+      const storeService = new AmpStoryStoreService(win);
       registerServiceBuilder(win, 'story-store', function () {
         return storeService;
       });
@@ -99,46 +92,12 @@ describes.realWin(
       }).to.throw();
     });
 
-    it('parses orientation attributes', async () => {
+    it('parse orientation attributes', async () => {
       await createAmpStory360(
         '/examples/img/SeanDoran-Quela-sol1462-edited_ver2-sm.jpg'
       );
       await threesixty.layoutCallback();
       expect(threesixty.canAnimate).to.be.true;
-    });
-
-    it('should play when in view', async () => {
-      await createAmpStory360(
-        '/examples/img/SeanDoran-Quela-sol1462-edited_ver2-sm.jpg'
-      );
-      await threesixty.layoutCallback();
-      await storeService.dispatch(Action.CHANGE_PAGE, {id: 'page1', index: 0});
-      expect(threesixty.isPlaying_).to.be.true;
-    });
-
-    it('should respond to pause when in view', async () => {
-      await createAmpStory360(
-        '/examples/img/SeanDoran-Quela-sol1462-edited_ver2-sm.jpg'
-      );
-      await threesixty.layoutCallback();
-      await storeService.dispatch(Action.CHANGE_PAGE, {id: 'page1', index: 0});
-      await storeService.dispatch(Action.TOGGLE_PAUSED, false);
-      expect(threesixty.isPlaying_).to.be.true;
-    });
-
-    it('should not play when out of view', async () => {
-      await createAmpStory360(
-        '/examples/img/SeanDoran-Quela-sol1462-edited_ver2-sm.jpg'
-      );
-      await threesixty.layoutCallback();
-      await storeService.dispatch(Action.CHANGE_PAGE, {id: 'page1', index: 0});
-      await storeService.dispatch(Action.TOGGLE_PAUSED, true);
-      await storeService.dispatch(Action.CHANGE_PAGE, {
-        id: 'notPage1',
-        index: 1,
-      });
-      await storeService.dispatch(Action.TOGGLE_PAUSED, false);
-      expect(threesixty.isPlaying_).to.be.false;
     });
   }
 );

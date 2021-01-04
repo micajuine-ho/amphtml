@@ -15,10 +15,7 @@
  */
 
 import {getMode} from '../mode';
-import {
-  registerServiceBuilder,
-  registerServiceBuilderInEmbedWin,
-} from '../service';
+import {installServiceInEmbedScope, registerServiceBuilder} from '../service';
 import {reportError} from '../error';
 import {user} from '../log';
 
@@ -189,7 +186,7 @@ export function installTimerService(window) {
  * @param {!Window} embedWin
  */
 export function installTimerInEmbedWindow(embedWin) {
-  registerServiceBuilderInEmbedWin(embedWin, TAG, Timer);
+  installServiceInEmbedScope(embedWin, TAG, new Timer(embedWin));
 }
 
 /**

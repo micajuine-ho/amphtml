@@ -55,7 +55,7 @@ constexpr std::array<std::string_view, 35> kIndentSpaces {
   "                                 ",
   "                                  "};
 
-const int64_t MAX_SAFE_INTEGER = 1L << 53;  // 2 ^^ 53.
+constexpr int64_t MAX_SAFE_INTEGER = 9007199254740992;  // 2 ^^ 53.
 
 void AddIndentation(std::stringbuf* buf, int indent_columns) {
   if (indent_columns > 35) indent_columns = 35;

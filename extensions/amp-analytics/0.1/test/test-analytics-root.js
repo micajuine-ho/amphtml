@@ -754,7 +754,11 @@ describes.realWin(
         child2.setAttribute('data-vars-id', '456');
         child3.setAttribute('data-vars-id', '789');
 
-        toggleExperiment(win, 'visibility-trigger-improvements', true);
+        toggleExperiment(
+          parentRoot.ampdoc.win,
+          'visibility-trigger-improvements',
+          true
+        );
       });
 
       afterEach(() => {

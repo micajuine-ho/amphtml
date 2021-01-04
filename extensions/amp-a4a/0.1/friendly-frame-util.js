@@ -79,7 +79,9 @@ export function renderCreativeIntoFriendlyFrame(
     (embedWin, ampdoc) => {
       const parentAmpdoc = element.getAmpDoc();
       installUrlReplacementsForEmbed(
-        ampdoc,
+        // TODO(#22733): Cleanup `parentAmpdoc` once ampdoc-fie is launched.
+        ampdoc || parentAmpdoc,
+        embedWin,
         new A4AVariableSource(parentAmpdoc, embedWin)
       );
     }

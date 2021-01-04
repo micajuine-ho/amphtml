@@ -882,7 +882,7 @@ function supportsUnderProto() {
  * @param {!Object} prototype
  */
 function setPrototypeOf(obj, prototype) {
-  if (IS_ESM || Object.setPrototypeOf) {
+  if (Object.setPrototypeOf) {
     // Every decent browser.
     Object.setPrototypeOf(obj, prototype);
   } else if (supportsUnderProto()) {

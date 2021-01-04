@@ -16,12 +16,10 @@
 
 import * as Preact from '../../../src/preact';
 import {BaseCarousel} from '../../amp-base-carousel/1.0/base-carousel';
-import {forwardRef} from '../../../src/preact/compat';
 import {setStyle} from '../../../src/style';
 import {toWin} from '../../../src/types';
 import {
   useCallback,
-  useImperativeHandle,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -34,27 +32,28 @@ const OUTSET_ARROWS_WIDTH = 100;
 
 /**
  * @param {!StreamGalleryDef.Props} props
- * @param {{current: (!BaseCarouselDef.CarouselApi|null)}} ref
  * @return {PreactDef.Renderable}
  */
-function StreamGalleryWithRef(props, ref) {
+export function StreamGallery(props) {
   const {
     arrowPrev: customArrowPrev,
     arrowNext: customArrowNext,
     children,
     className,
     extraSpace,
+    insetArrowVisibility,
+    loop,
     maxItemWidth = Number.MAX_VALUE,
     minItemWidth = 1,
     maxVisibleCount = Number.MAX_VALUE,
     minVisibleCount = 1,
     outsetArrows,
     peek = 0,
-    slideAlign = 'start',
+    snap,
     ...rest
   } = props;
   const classes = useStyles();
-  const carouselRef = useRef(null);
+  const ref = useRef(null);
   const [visibleCount, setVisibleCount] = useState(DEFAULT_VISIBLE_COUNT);
   const arrowPrev = useMemo(
     () =>
@@ -78,7 +77,7 @@ function StreamGalleryWithRef(props, ref) {
         outsetArrows,
         peek,
         containerWidth,
-        carouselRef.current.node
+        ref.current.node
       ),
     [
       maxItemWidth,
@@ -91,23 +90,12 @@ function StreamGalleryWithRef(props, ref) {
     ]
   );
 
-  useImperativeHandle(
-    ref,
-    () =>
-      /** @type {!BaseCarouselDef.CarouselApi} */ ({
-        goToSlide: (index) => carouselRef.current.goToSlide(index),
-        next: () => carouselRef.current.next(),
-        prev: () => carouselRef.current.prev(),
-      }),
-    []
-  );
-
   // Adjust visible slide count when container size or parameters change.
   useLayoutEffect(() => {
-    if (!carouselRef.current) {
+    if (!ref.current) {
       return;
     }
-    const node = carouselRef.current.root;
+    const node = ref.current.root;
     if (!node) {
       return;
     }
@@ -132,9 +120,11 @@ function StreamGalleryWithRef(props, ref) {
       className={`${className ?? ''} ${classes.gallery} ${
         extraSpace === 'around' ? classes.extraSpace : ''
       }`}
+      controls={insetArrowVisibility}
+      loop={loop}
       outsetArrows={outsetArrows}
-      snapAlign={slideAlign}
-      ref={carouselRef}
+      snap={snap}
+      ref={ref}
       visibleCount={visibleCount}
       {...rest}
     >
@@ -142,10 +132,6 @@ function StreamGalleryWithRef(props, ref) {
     </BaseCarousel>
   );
 }
-
-const StreamGallery = forwardRef(StreamGalleryWithRef);
-StreamGallery.displayName = 'StreamGallery'; // Make findable for tests.
-export {StreamGallery};
 
 /**
  * @param {!StreamGalleryDef.ArrowProps} props

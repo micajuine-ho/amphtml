@@ -3,8 +3,7 @@
     "actionName": "webtrekk_ignore",
     "contentId": "${title}",
     "mediaName": "${id}",
-    "everId": "${clientId(amp-wt3-eid)}",
-    "mediaEventName": "customMediaEvent"
+    "everId": "${clientId(amp-wt3-eid)}"
   },
   "requests": {
     "trackURL": "https://${trackDomain}/${trackId}/wt",
@@ -20,8 +19,7 @@
     "mediaPlay": "${mediaPrefix}&mk=play${mediaSuffix}",
     "mediaPause": "${mediaPrefix}&mk=pause${mediaSuffix}",
     "mediaPosition": "${mediaPrefix}&mk=pos${mediaSuffix}",
-    "mediaEnded": "${mediaPrefix}&mk=eof${mediaSuffix}",
-    "mediaCustomEvent": "${mediaPrefix}&mk=${mediaEventName}${mediaSuffix}"
+    "mediaEnded": "${mediaPrefix}&mk=eof${mediaSuffix}"
   },
   "extraUrlParamsReplaceMap": {
     "pageParameter": "cp",

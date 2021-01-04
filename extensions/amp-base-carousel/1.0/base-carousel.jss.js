@@ -43,13 +43,6 @@ const horizontalScroll = {
   },
 };
 
-const verticalScroll = {
-  flexDirection: 'column',
-  scrollSnapTypeY: 'mandatory', // Firefox/IE
-  scrollSnapType: 'y mandatory',
-  overflowX: 'hidden',
-};
-
 /*
  * Styles to hide scrollbars, with three different methods:
  *
@@ -68,6 +61,8 @@ const hideScrollbar = {
   scrollbarWidth: 'none',
 
   boxSizing: '',
+  height: '100%',
+  paddingBottom: '20px',
 
   // Chrome, Safari
   '&::-webkit-scrollbar': {
@@ -77,6 +72,7 @@ const hideScrollbar = {
 };
 
 const slideElement = {
+  height: '100%',
   position: 'relative',
   overflow: 'hidden',
   display: 'flex',
@@ -122,30 +118,12 @@ const arrow = {
   justifyContent: 'space-between',
   // Center the button vertically.
   top: '50%',
+  transform: 'translateY(-50%)',
   alignItems: 'center',
   pointerEvents: 'auto',
-  '&$ltr': {
-    transform: 'translateY(-50%)',
-  },
-  '&$rtl': {
-    transform: 'scaleX(-1) translateY(-50%)',
-  },
-  '&$arrowPrev$ltr, &$arrowNext$rtl': {
-    left: 0,
-  },
-  '&$arrowNext$ltr, &$arrowPrev$rtl': {
-    right: 0,
-  },
 };
-
-const rtl = {};
-
-const ltr = {};
-
-const arrowPrev = {};
-
-const arrowNext = {};
-
+const arrowPrev = {left: 0};
+const arrowNext = {right: 0};
 const arrowDisabled = {
   pointerEvents: 'none',
   '&$insetArrow': {
@@ -251,15 +229,12 @@ const JSS = {
   scrollContainer,
   hideScrollbar,
   horizontalScroll,
-  verticalScroll,
   slideElement,
   thumbnails,
   enableSnap,
   disableSnap,
   slideSizing,
   arrow,
-  ltr,
-  rtl,
   arrowPrev,
   arrowNext,
   arrowDisabled,

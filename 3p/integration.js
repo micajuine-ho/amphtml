@@ -92,7 +92,6 @@ import {adspirit} from '../ads/adspirit';
 import {adstir} from '../ads/adstir';
 import {adstyle} from '../ads/adstyle';
 import {adtech} from '../ads/adtech';
-import {adtelligent} from '../ads/adtelligent';
 import {adthrive} from '../ads/adthrive';
 import {adunity} from '../ads/adunity';
 import {aduptech} from '../ads/aduptech';
@@ -143,7 +142,6 @@ import {ezoic} from '../ads/ezoic';
 import {f1e} from '../ads/f1e';
 import {f1h} from '../ads/f1h';
 import {fakeDelayed} from '../ads/_fakedelayed_';
-import {feedad} from '../ads/feedad';
 import {felmat} from '../ads/felmat';
 import {firstimpression} from '../ads/firstimpression';
 import {flite} from '../ads/flite';
@@ -229,7 +227,6 @@ import {pubguru} from '../ads/pubguru';
 import {pubmatic} from '../ads/pubmatic';
 import {pubmine} from '../ads/pubmine';
 import {puffnetwork} from '../ads/puffnetwork';
-import {pulse} from '../ads/pulse';
 import {pulsepoint} from '../ads/pulsepoint';
 import {purch} from '../ads/purch';
 import {quoraad} from '../ads/quoraad';
@@ -348,7 +345,6 @@ const AMP_EMBED_ALLOWED = {
   postquare: true,
   ppstudio: true,
   pubexchange: true,
-  pulse: true,
   rbinfox: true,
   readmo: true,
   recreativ: true,
@@ -411,7 +407,6 @@ register('adspirit', adspirit);
 register('adstir', adstir);
 register('adstyle', adstyle);
 register('adtech', adtech);
-register('adtelligent', adtelligent);
 register('adthrive', adthrive);
 register('adunity', adunity);
 register('aduptech', aduptech);
@@ -465,7 +460,6 @@ register('ezoic', ezoic);
 register('f1e', f1e);
 register('f1h', f1h);
 register('facebook', facebook);
-register('feedad', feedad);
 register('felmat', felmat);
 register('firstimpression', firstimpression);
 register('flite', flite);
@@ -556,7 +550,6 @@ register('pubguru', pubguru);
 register('pubmatic', pubmatic);
 register('pubmine', pubmine);
 register('puffnetwork', puffnetwork);
-register('pulse', pulse);
 register('pulsepoint', pulsepoint);
 register('purch', purch);
 register('quoraad', quoraad);

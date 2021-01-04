@@ -28,7 +28,7 @@ export default {
       {name: 'amp-bind', version: '0.1'},
       {name: 'amp-accordion', version: '1.0'},
     ],
-    experiments: ['bento'],
+    experiments: ['amp-accordion-bento'],
   },
 };
 
@@ -43,15 +43,15 @@ export const withAmpBind = () => {
       >
         <section data-amp-bind-expanded="section1">
           <h2>Section 1</h2>
-          <div>Puppies are cute.</div>
+          <p>Content in section 1.</p>
         </section>
         <section data-amp-bind-expanded="section2">
           <h2>Section 2</h2>
-          <div>Kittens are furry.</div>
+          <div>Content in section 2.</div>
         </section>
         <section expanded data-amp-bind-expanded="section3">
           <h2>Section 3</h2>
-          <div>Elephants have great memory.</div>
+          <div>Content in section 3.</div>
         </section>
       </amp-accordion>
 

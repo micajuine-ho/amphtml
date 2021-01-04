@@ -29,9 +29,7 @@
 import {AmpStoryBaseLayer} from './amp-story-base-layer';
 import {StateProperty, getStoreService} from './amp-story-store-service';
 import {assertDoesNotContainDisplay, px, setStyles} from '../../../src/style';
-import {escapeCssSelectorIdent} from '../../../src/css';
-import {parseQueryString} from '../../../src/url';
-import {scopedQuerySelectorAll} from '../../../src/dom';
+import {matches, scopedQuerySelectorAll} from '../../../src/dom';
 
 /**
  * A mapping of attribute names we support for grid layers to the CSS Grid
@@ -86,29 +84,24 @@ export class AmpStoryGridLayer extends AmpStoryBaseLayer {
     super(element);
 
     /** @private {?boolean} */
-    this.isPrerenderActivePage_ = null;
+    this.isFirstPage_ = null;
 
     /** @private {?{horiz: number, vert: number}} */
     this.aspectRatio_ = null;
   }
 
   /**
-   * Returns true if the page should be prerendered (for being an active page or first page)
+   * Returns true if a child of the first page.
    * @return {boolean}
    */
-  isPrerenderActivePage() {
-    if (this.isPrerenderActivePage_ != null) {
-      return this.isPrerenderActivePage_;
+  isFirstPage() {
+    if (this.isFirstPage_ === null) {
+      this.isFirstPage_ = matches(
+        this.element,
+        'amp-story-page:first-of-type amp-story-grid-layer'
+      );
     }
-    const hashId = parseQueryString(this.win.location.href)['page'];
-    let selector = 'amp-story-page:first-of-type';
-    if (hashId) {
-      selector += `, amp-story-page#${escapeCssSelectorIdent(hashId)}`;
-    }
-    const selectorNodes = this.win.document.querySelectorAll(selector);
-    this.isPrerenderActivePage_ =
-      selectorNodes[selectorNodes.length - 1] === this.element.parentElement;
-    return this.isPrerenderActivePage_;
+    return this.isFirstPage_;
   }
 
   /** @override */
@@ -122,7 +115,7 @@ export class AmpStoryGridLayer extends AmpStoryBaseLayer {
 
   /** @override */
   prerenderAllowed() {
-    return this.isPrerenderActivePage();
+    return this.isFirstPage();
   }
 
   /** @private */

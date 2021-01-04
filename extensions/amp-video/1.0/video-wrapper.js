@@ -29,7 +29,6 @@ import {dict} from '../../../src/utils/object';
 import {fillContentOverlay, fillStretch} from './video-wrapper.css';
 import {forwardRef} from '../../../src/preact/compat';
 import {once} from '../../../src/utils/function';
-import {useAmpContext, useLoad} from '../../../src/preact/context';
 import {useStyles as useAutoplayStyles} from './autoplay.jss';
 import {
   useCallback,
@@ -77,8 +76,6 @@ const getMetadata = (player, props) =>
 function VideoWrapperWithRef(
   {
     component: Component = 'video',
-    loading,
-    unloadOnPause = false,
     autoplay = false,
     controls = false,
     loop = false,
@@ -86,17 +83,12 @@ function VideoWrapperWithRef(
     mediasession = true,
     className,
     style,
-    src,
     sources,
-    poster,
-    onLoad,
     ...rest
   },
   ref
 ) {
   useResourcesNotify();
-  const {playable} = useAmpContext();
-  const load = useLoad(loading, unloadOnPause);
 
   const [muted, setMuted] = useState(autoplay);
   const [playing, setPlaying] = useState(false);
@@ -139,13 +131,6 @@ function VideoWrapperWithRef(
     };
   }, [mediasession, playing, metadata, play, pause]);
 
-  // Pause if the video goes into a "paused" context.
-  useEffect(() => {
-    if (!playable) {
-      pause();
-    }
-  }, [playable, pause]);
-
   // We'd like this to be as close as possible to the HTMLMediaElement
   // interface, preferrably as an extension/superset.
   useImperativeHandle(
@@ -156,15 +141,9 @@ function VideoWrapperWithRef(
       pause,
       requestFullscreen,
       get currentTime() {
-        if (!playerRef.current) {
-          return 0;
-        }
         return playerRef.current.currentTime;
       },
       get duration() {
-        if (!playerRef.current) {
-          return NaN;
-        }
         return playerRef.current.duration;
       },
       get autoplay() {
@@ -207,36 +186,26 @@ function VideoWrapperWithRef(
       layout
       paint
     >
-      {load && (
-        <Component
-          {...rest}
-          ref={playerRef}
-          loading={loading}
-          muted={muted}
-          loop={loop}
-          controls={controls && (!autoplay || hasUserInteracted)}
-          onCanPlay={() => {
-            readyDeferred.resolve();
-            if (onLoad) {
-              onLoad();
-            }
-          }}
-          onLoadedMetadata={() => {
-            if (mediasession) {
-              readyDeferred.promise.then(() => {
-                setMetadata(getMetadata(playerRef.current, rest));
-              });
-            }
-          }}
-          onPlaying={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          style={fillStretch}
-          src={src}
-          poster={poster}
-        >
-          {sources}
-        </Component>
-      )}
+      <Component
+        {...rest}
+        ref={playerRef}
+        muted={muted}
+        loop={loop}
+        controls={controls && (!autoplay || hasUserInteracted)}
+        onCanPlay={readyDeferred.resolve}
+        onLoadedMetadata={() => {
+          if (mediasession) {
+            readyDeferred.promise.then(() => {
+              setMetadata(getMetadata(playerRef.current, rest));
+            });
+          }
+        }}
+        onPlaying={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        style={fillStretch}
+      >
+        {sources}
+      </Component>
       {autoplay && !hasUserInteracted && (
         <Autoplay
           metadata={metadata}
@@ -267,15 +236,9 @@ function Autoplay({
   play,
   pause,
 }) {
-  const {playable} = useAmpContext();
   const classes = useAutoplayStyles();
 
   useEffect(() => {
-    if (!playable) {
-      pause();
-      return;
-    }
-
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[entries.length - 1].isIntersecting) {
@@ -295,7 +258,7 @@ function Autoplay({
     return () => {
       observer.disconnect();
     };
-  }, [wrapperRef, play, pause, playable]);
+  }, [wrapperRef, play, pause]);
 
   return (
     <>

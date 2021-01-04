@@ -464,24 +464,16 @@ export class AccessService {
    */
   applyAuthorizationToElement_(element, response) {
     const expr = element.getAttribute('amp-access');
-    let on = false;
-    try {
-      on = this.evaluator_.evaluate(expr, response);
-    } catch (err) {
-      // If evaluating the expression yields an error
-      // it is most likely an invalid expression (publisher error).
-      user().error(TAG, err);
-    }
-
+    const on = this.evaluator_.evaluate(expr, response);
+    let renderPromise = null;
     if (on) {
-      const renderTemplate = this.renderTemplates_(element, response);
-      if (renderTemplate) {
-        return renderTemplate.then(() =>
-          this.applyAuthorizationAttrs_(element, on)
-        );
-      }
+      renderPromise = this.renderTemplates_(element, response);
     }
-
+    if (renderPromise) {
+      return renderPromise.then(() =>
+        this.applyAuthorizationAttrs_(element, on)
+      );
+    }
     return this.applyAuthorizationAttrs_(element, on);
   }
 

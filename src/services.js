@@ -20,7 +20,6 @@ import {
   getService,
   getServiceForDoc,
   getServiceForDocOrNull,
-  getServiceInEmbedWin,
   getServicePromiseForDoc,
 } from './service';
 import {
@@ -649,7 +648,7 @@ export class Services {
    */
   static timerFor(window) {
     // TODO(alabiaga): This will always return the top window's Timer service.
-    return /** @type {!./service/timer-impl.Timer} */ (getServiceInEmbedWin(
+    return /** @type {!./service/timer-impl.Timer} */ (getService(
       window,
       'timer'
     ));

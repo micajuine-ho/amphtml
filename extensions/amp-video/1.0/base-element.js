@@ -69,9 +69,6 @@ export class VideoBaseElement extends PreactBaseElement {
 VideoBaseElement['Component'] = VideoWrapper;
 
 /** @override */
-VideoBaseElement['loadable'] = true;
-
-/** @override */
 VideoBaseElement['layoutSizeDefined'] = true;
 
 /**

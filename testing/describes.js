@@ -635,7 +635,7 @@ class RealWinFixture {
         win.testLocation = new FakeLocation(window.location.href, win);
 
         if (!spec.allowExternalResources) {
-          doNotLoadExternalResourcesInTest(win, env.sandbox);
+          doNotLoadExternalResourcesInTest(win);
         }
 
         // Install AMP CSS if requested.

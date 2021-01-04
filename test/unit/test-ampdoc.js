@@ -30,11 +30,7 @@ import {
 } from '../../src/web-components';
 import {Signals} from '../../src/utils/signals';
 import {createShadowRoot} from '../../src/shadow-embed';
-import {
-  getServiceForDoc,
-  registerServiceBuilderForDoc,
-  setParentWindow,
-} from '../../src/service';
+import {setParentWindow} from '../../src/service';
 import {waitFor} from '../../testing/test-helper';
 
 describes.realWin('AmpDocService', {}, (env) => {
@@ -518,23 +514,6 @@ describes.sandboxed('AmpDoc.visibilityState', {}, (env) => {
     // Destroy the top.
     top.dispose();
     expect(doc.removeEventListener.callCount).to.equal(2);
-  });
-
-  it('should set up and dipose services', () => {
-    const disposableFactory = function () {
-      return {
-        dispose: env.sandbox.spy(),
-      };
-    };
-
-    // Register a disposable service.
-    registerServiceBuilderForDoc(embedChild, 'a', disposableFactory);
-    const disposableService = getServiceForDoc(embedChild, 'a');
-
-    // Destroy the nested child.
-    embedChild.dispose();
-
-    expect(disposableService.dispose).to.be.calledOnce;
   });
 
   it('should be visible by default', () => {

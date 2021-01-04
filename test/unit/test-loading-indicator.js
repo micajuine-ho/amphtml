@@ -23,11 +23,13 @@ describes.realWin('LoadingIndicatorImpl', {amp: true}, (env) => {
   let service;
   let loaderService;
   let io;
+  let failRoot;
   let el;
 
   beforeEach(() => {
     ampdoc = env.ampdoc;
 
+    failRoot = false;
     env.sandbox
       .stub(env.win, 'IntersectionObserver')
       .value(IntersectionObserverStub);
@@ -49,6 +51,9 @@ describes.realWin('LoadingIndicatorImpl', {amp: true}, (env) => {
 
   class IntersectionObserverStub {
     constructor(callback, options) {
+      if (options.root && failRoot) {
+        throw new Error('root is not allowed');
+      }
       this.callback = callback;
       this.options = options;
       this.observed = [];
@@ -76,8 +81,20 @@ describes.realWin('LoadingIndicatorImpl', {amp: true}, (env) => {
     return el.querySelector('.i-amphtml-loading-container');
   }
 
-  it('tracking should observe an element', () => {
+  it('should use root when supported', () => {
+    failRoot = false;
     service = new LoadingIndicatorImpl(ampdoc);
+    expect(io.options.root).to.equal(ampdoc.win.document);
+
+    service.track(el);
+    expect(io.observed).to.include(el);
+  });
+
+  it('should fail over when root is not supported', () => {
+    failRoot = true;
+    service = new LoadingIndicatorImpl(ampdoc);
+    expect(io.options.root).to.be.undefined;
+
     service.track(el);
     expect(io.observed).to.include(el);
   });

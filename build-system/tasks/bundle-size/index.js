@@ -23,15 +23,15 @@ const url = require('url');
 const util = require('util');
 const {
   gitCommitHash,
-  gitCiMasterBaseline,
+  gitTravisMasterBaseline,
   shortSha,
 } = require('../../common/git');
 const {
-  isPullRequestBuild,
-  isPushBuild,
-  ciPushBranch,
-  ciRepoSlug,
-} = require('../../common/ci');
+  isTravisPullRequestBuild,
+  isTravisPushBuild,
+  travisPushBranch,
+  travisRepoSlug,
+} = require('../../common/travis');
 const {
   VERSION: internalRuntimeVersion,
 } = require('../../compile/internal-version');
@@ -83,20 +83,20 @@ async function getBrotliBundleSizes() {
  * repository to the passed value.
  */
 async function storeBundleSize() {
-  if (!isPushBuild() || ciPushBranch() !== 'master') {
+  if (!isTravisPushBuild() || travisPushBranch() !== 'master') {
     log(
       yellow('Skipping'),
       cyan('--on_push_build') + ':',
-      'this action can only be performed on `master` push builds during CI'
+      'this action can only be performed on `master` push builds on Travis'
     );
     return;
   }
 
-  if (ciRepoSlug() !== expectedGitHubRepoSlug) {
+  if (travisRepoSlug() !== expectedGitHubRepoSlug) {
     log(
       yellow('Skipping'),
       cyan('--on_push_build') + ':',
-      'this action can only be performed during CI builds on the',
+      'this action can only be performed on Travis builds on the',
       cyan(expectedGitHubRepoSlug),
       'repository'
     );
@@ -130,10 +130,10 @@ async function storeBundleSize() {
 }
 
 /**
- * Mark a pull request as skipped, via the AMP bundle-size GitHub App.
+ * Mark a pull request on Travis as skipped, via the AMP bundle-size GitHub App.
  */
 async function skipBundleSize() {
-  if (isPullRequestBuild()) {
+  if (isTravisPullRequestBuild()) {
     const commitHash = gitCommitHash();
     try {
       const response = await requestPost(
@@ -154,7 +154,12 @@ async function skipBundleSize() {
       return;
     }
   } else {
-    log(yellow('Pull requests can be marked as skipped only during CI builds'));
+    log(
+      yellow(
+        'Not marking this pull request to skip because that can only be ' +
+          'done on Travis'
+      )
+    );
   }
 }
 
@@ -162,8 +167,8 @@ async function skipBundleSize() {
  * Report the size to the bundle-size GitHub App, to determine size changes.
  */
 async function reportBundleSize() {
-  if (isPullRequestBuild()) {
-    const baseSha = gitCiMasterBaseline();
+  if (isTravisPullRequestBuild()) {
+    const baseSha = gitTravisMasterBaseline();
     const commitHash = gitCommitHash();
     try {
       const response = await requestPost({
@@ -191,7 +196,8 @@ async function reportBundleSize() {
   } else {
     log(
       yellow(
-        'Bundle sizes from pull requests can be reported only during CI builds'
+        'Not reporting the bundle size of this pull request because ' +
+          'that can only be done on Travis'
       )
     );
   }

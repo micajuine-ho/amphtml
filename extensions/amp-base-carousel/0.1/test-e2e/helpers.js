@@ -78,7 +78,3 @@ export function getPrevArrow(controller) {
 export function getNextArrow(controller) {
   return controller.findElement(NEXT_ARROW_SELECTOR);
 }
-
-export function sleep(ms) {
-  return new Promise((res) => setTimeout(res, ms));
-}

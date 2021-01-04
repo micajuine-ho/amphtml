@@ -10,7 +10,8 @@ if (!window.context) {
   document.head.appendChild(ampContextScript);
 }
 
-function intersectionCallback(changes) {
+function intersectionCallback(payload) {
+  var changes = payload.changes;
   // Code below is simply an example.
   var latestChange = changes[changes.length - 1];
 

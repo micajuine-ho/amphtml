@@ -33,7 +33,7 @@ export function maybeRenderInaboxAsStoryAd(ampdoc) {
   const {win} = ampdoc;
   const doc = win.document;
   const storyAdMetadata = getStoryAdMetadataFromDoc(doc);
-  if (!validateCtaMetadata(storyAdMetadata, true /* opt_inabox */)) {
+  if (!validateCtaMetadata(storyAdMetadata)) {
     return;
   }
   installStylesForDoc(ampdoc, sharedCSS + inaboxCSS, () => {});

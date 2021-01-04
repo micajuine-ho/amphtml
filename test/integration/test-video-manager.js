@@ -48,7 +48,7 @@ describe
   .configure()
   .ifChrome()
   .run('VideoManager', function () {
-    describes.realWin(
+    describes.fakeWin(
       'VideoManager',
       {
         amp: {

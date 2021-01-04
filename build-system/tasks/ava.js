@@ -17,7 +17,7 @@
 
 const gulp = require('gulp');
 const gulpAva = require('gulp-ava');
-const {isCiBuild} = require('../common/ci');
+const {isTravisBuild} = require('../common/travis');
 
 /**
  * Runs ava tests.
@@ -34,7 +34,7 @@ async function ava() {
       gulpAva({
         'concurrency': 5,
         'failFast': true,
-        'silent': isCiBuild(),
+        'silent': isTravisBuild(),
       })
     );
 }

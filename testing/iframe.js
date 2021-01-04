@@ -551,14 +551,12 @@ export function expectBodyToBecomeVisible(win, opt_timeout) {
  * Calling `triggerError` on the respective resources makes them
  * appear in error state.
  * @param {!Window} win
- * @param {!Object} sandbox
  */
-export function doNotLoadExternalResourcesInTest(win, sandbox) {
-  const {document} = win;
+export function doNotLoadExternalResourcesInTest(win) {
   const {prototype} = win.Document;
   const {createElement} = prototype;
-  sandbox.stub(prototype, 'createElement').callsFake(function (tagName) {
-    const element = createElement.apply(document, arguments);
+  prototype.createElement = function (tagName) {
+    const element = createElement.apply(this, arguments);
     tagName = tagName.toLowerCase();
     if (tagName == 'iframe' || tagName == 'img') {
       // Make get/set write to a fake property instead of
@@ -591,7 +589,7 @@ export function doNotLoadExternalResourcesInTest(win, sandbox) {
       }
     }
     return element;
-  });
+  };
 }
 
 /**

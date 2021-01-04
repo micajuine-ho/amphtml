@@ -32,7 +32,7 @@ export default {
       {name: 'amp-mustache', version: '0.2'},
     ],
 
-    experiments: ['bento'],
+    experiments: ['amp-date-display-bento'],
   },
 };
 

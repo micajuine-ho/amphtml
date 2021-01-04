@@ -25,11 +25,7 @@ import {
   removeDocumentVisibilityChangeListener,
 } from '../utils/document-visibility';
 import {dev, devAssert} from '../log';
-import {
-  disposeServicesForDoc,
-  getParentWindowFrameElement,
-  registerServiceBuilder,
-} from '../service';
+import {getParentWindowFrameElement, registerServiceBuilder} from '../service';
 import {isDocumentReady, whenDocumentReady} from '../document-ready';
 import {iterateCursor, rootNodeFor, waitForBodyOpenPromise} from '../dom';
 import {map} from '../utils/object';
@@ -323,7 +319,6 @@ export class AmpDoc {
    * Dispose the document.
    */
   dispose() {
-    disposeServicesForDoc(this);
     this.unsubsribes_.forEach((unsubsribe) => unsubsribe());
   }
 

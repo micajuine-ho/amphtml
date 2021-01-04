@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 import * as Preact from '../../../src/preact';
-import {Alignment, Axis, Orientation} from './dimensions';
 import {Arrow} from './arrow';
 import {CarouselContext} from './carousel-context';
 import {ContainWrapper} from '../../../src/preact/component';
 import {Scroller} from './scroller';
 import {WithAmpContext} from '../../../src/preact/context';
 import {forwardRef} from '../../../src/preact/compat';
-import {isRTL} from '../../../src/dom';
 import {
   toChildArray,
   useCallback,
   useContext,
   useEffect,
   useImperativeHandle,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -48,20 +45,10 @@ const Controls = {
  * @enum {string}
  */
 const Interaction = {
-  GENERIC: 0,
-  FOCUS: 1,
-  MOUSE: 2,
-  TOUCH: 3,
-  NONE: 4,
-};
-
-/**
- * @enum {string}
- */
-const Direction = {
-  LTR: 'ltr',
-  RTL: 'rtl',
-  AUTO: 'auto',
+  FOCUS: 'focus',
+  MOUSE: 'mouse',
+  TOUCH: 'touch',
+  NONE: 'none',
 };
 
 const MIN_AUTO_ADVANCE_INTERVAL = 1000;
@@ -82,19 +69,14 @@ function BaseCarouselWithRef(
     autoAdvanceLoops = Number.POSITIVE_INFINITY,
     children,
     controls = Controls.AUTO,
-    defaultSlide = 0,
-    dir = Direction.AUTO,
     loop,
     mixedLength = false,
     onFocus,
     onMouseEnter,
     onSlideChange,
     onTouchStart,
-    orientation = Orientation.HORIZONTAL,
     outsetArrows,
     snap = true,
-    snapAlign = Alignment.START,
-    snapBy = 1,
     visibleCount = 1,
     _thumbnails = false,
     ...rest
@@ -104,29 +86,15 @@ function BaseCarouselWithRef(
   const childrenArray = useMemo(() => toChildArray(children), [children]);
   const {length} = childrenArray;
   const carouselContext = useContext(CarouselContext);
-  const [currentSlideState, setCurrentSlideState] = useState(
-    Math.min(Math.max(defaultSlide, 0), length)
-  );
-  const globalCurrentSlide = carouselContext.currentSlide ?? currentSlideState;
-  const setGlobalCurrentSlide =
-    carouselContext.setCurrentSlide ?? setCurrentSlideState;
-  const currentSlide = _thumbnails ? currentSlideState : globalCurrentSlide;
-  const setCurrentSlide = _thumbnails
-    ? setCurrentSlideState
-    : setGlobalCurrentSlide;
+  const [currentSlideState, setCurrentSlideState] = useState(0);
+  const currentSlide = carouselContext.currentSlide ?? currentSlideState;
   const currentSlideRef = useRef(currentSlide);
-
-  useLayoutEffect(() => {
-    // noop if !_thumbnails || !carouselContext.
-    setCurrentSlide(globalCurrentSlide);
-  }, [globalCurrentSlide, setCurrentSlide]);
-
+  const setCurrentSlide =
+    carouselContext.setCurrentSlide ?? setCurrentSlideState;
   const {slides, setSlides} = carouselContext;
-
   const scrollRef = useRef(null);
   const containRef = useRef(null);
   const contentRef = useRef(null);
-
   const autoAdvanceTimesRef = useRef(0);
   const autoAdvanceInterval = useMemo(
     () => Math.max(customAutoAdvanceInterval, MIN_AUTO_ADVANCE_INTERVAL),
@@ -134,19 +102,20 @@ function BaseCarouselWithRef(
   );
 
   const autoAdvance = useCallback(() => {
+    // Count autoadvance loops as times we have reached the last visible slide.
+    if (currentSlideRef.current >= length - visibleCount) {
+      autoAdvanceTimesRef.current += 1;
+    }
     if (
-      autoAdvanceTimesRef.current + visibleCount / length >= autoAdvanceLoops ||
+      autoAdvanceTimesRef.current == autoAdvanceLoops ||
       interaction.current !== Interaction.NONE
     ) {
       return false;
     }
     if (loop || currentSlideRef.current + visibleCount < length) {
       scrollRef.current.advance(autoAdvanceCount); // Advance forward by specified count
-      // Count autoadvance loops as proportions of the carousel we have advanced through.
-      autoAdvanceTimesRef.current += autoAdvanceCount / length;
     } else {
-      scrollRef.current.advance(-currentSlideRef.current); // Advance in reverse to first slide
-      autoAdvanceTimesRef.current = Math.ceil(autoAdvanceTimesRef.current);
+      scrollRef.current.advance(-(length - 1)); // Advance in reverse to first slide
     }
     return true;
   }, [autoAdvanceCount, autoAdvanceLoops, length, loop, visibleCount]);
@@ -169,10 +138,10 @@ function BaseCarouselWithRef(
 
   const setRestingIndex = useCallback(
     (index) => {
-      if (length <= 0 || isNaN(index)) {
+      index = length > 0 ? Math.min(Math.max(index, 0), length - 1) : -1;
+      if (index < 0) {
         return;
       }
-      index = Math.min(Math.max(index, 0), length - 1);
       setCurrentSlide(index);
       currentSlideRef.current = index;
       if (onSlideChange) {
@@ -186,18 +155,9 @@ function BaseCarouselWithRef(
     ref,
     () =>
       /** @type {!BaseCarouselDef.CarouselApi} */ ({
-        goToSlide: (index) => {
-          interaction.current = Interaction.GENERIC;
-          setRestingIndex(index);
-        },
-        next: () => {
-          interaction.current = Interaction.GENERIC;
-          next();
-        },
-        prev: () => {
-          interaction.current = Interaction.GENERIC;
-          prev();
-        },
+        goToSlide: (index) => setRestingIndex(index),
+        next,
+        prev,
         root: containRef.current,
         node: contentRef.current,
       }),
@@ -212,21 +172,10 @@ function BaseCarouselWithRef(
     }
   }, [_thumbnails, childrenArray, setSlides, slides]);
 
-  const disableForDir = (dir) => {
-    if (loop) {
-      // Arrows always available when looping.
-      return false;
-    }
-    if (currentSlide + dir < 0) {
-      // Can no longer advance backwards.
-      return true;
-    }
-    if (currentSlide + visibleCount + dir > length) {
-      // Can no longer advance forwards.
-      return true;
-    }
-    return false;
-  };
+  const disableForDir = (dir) =>
+    !loop &&
+    (currentSlide + dir < 0 ||
+      (!mixedLength && currentSlide + visibleCount + dir > length));
 
   const interaction = useRef(Interaction.NONE);
   const hideControls = useMemo(() => {
@@ -239,27 +188,12 @@ function BaseCarouselWithRef(
     return interaction.current === Interaction.TOUCH;
   }, [controls, outsetArrows]);
 
-  const [rtl, setRtl] = useState(dir === Direction.RTL);
-  useLayoutEffect(() => {
-    if (!containRef.current || dir !== Direction.AUTO) {
-      return;
-    }
-    const doc = containRef.current.ownerDocument;
-    if (!doc) {
-      return;
-    }
-    setRtl(isRTL(doc));
-  }, [dir, setRtl]);
-
   return (
     <ContainWrapper
       size={true}
       layout={true}
       paint={true}
-      contentStyle={{
-        display: 'flex',
-        direction: rtl ? Direction.RTL : Direction.LTR,
-      }}
+      contentStyle={{display: 'flex'}}
       ref={containRef}
       contentRef={contentRef}
       onFocus={(e) => {
@@ -290,20 +224,16 @@ function BaseCarouselWithRef(
           customArrow={arrowPrev}
           disabled={disableForDir(-1)}
           outsetArrows={outsetArrows}
-          rtl={rtl}
         />
       )}
       <Scroller
         advanceCount={advanceCount}
-        alignment={snapAlign}
         autoAdvanceCount={autoAdvanceCount}
-        axis={orientation == Orientation.HORIZONTAL ? Axis.X : Axis.Y}
         loop={loop}
         mixedLength={mixedLength}
         restingIndex={currentSlide}
         setRestingIndex={setRestingIndex}
         snap={snap}
-        snapBy={snapBy}
         ref={scrollRef}
         visibleCount={mixedLength ? 1 : visibleCount}
         _thumbnails={_thumbnails}
@@ -341,7 +271,6 @@ function BaseCarouselWithRef(
           customArrow={arrowNext}
           disabled={disableForDir(1)}
           outsetArrows={outsetArrows}
-          rtl={rtl}
         />
       )}
     </ContainWrapper>

@@ -405,20 +405,17 @@ export class Carousel {
     const atEnd = index === endIndex;
     const passingStart = newIndex < 0;
     const passingEnd = newIndex > endIndex;
-    const forwardWithinLastWindow =
-      delta > 0 && this.inLastWindow_(index) && this.inLastWindow_(newIndex);
 
     let slideIndex;
     if (this.isLooping()) {
       slideIndex = mod(newIndex, endIndex + 1);
     } else if (!allowWrap) {
-      // We only need to bail out if both indices are in the
-      // the last window. If we didn't bail, we would attempt
-      // to scroll the container, when it shouldn't.
-      slideIndex = forwardWithinLastWindow
-        ? index
-        : clamp(newIndex, 0, endIndex);
-    } else if (forwardWithinLastWindow) {
+      slideIndex = clamp(newIndex, 0, endIndex);
+    } else if (
+      delta > 0 &&
+      this.inLastWindow_(index) &&
+      this.inLastWindow_(newIndex)
+    ) {
       slideIndex = 0;
     } else if ((passingStart && atStart) || (passingEnd && !atEnd)) {
       slideIndex = endIndex;
@@ -907,7 +904,9 @@ export class Carousel {
       return false;
     }
 
-    return this.isScrollAtEndingEdge_();
+    return this.forwards_
+      ? this.isScrollAtRightEdge()
+      : this.isScrollAtLeftEdge();
   }
 
   /**
@@ -919,38 +918,29 @@ export class Carousel {
       return false;
     }
 
-    return this.isScrollAtBeginningEdge_();
+    return this.forwards_
+      ? this.isScrollAtLeftEdge()
+      : this.isScrollAtRightEdge();
   }
 
   /**
    * @return {boolean} True if the scrolling is at the right edge of the
-   *    carousel in LTR and left edge of the carousel if RTL.
-   * @private
+   *    carousel. Note that this ignores RTL, and only checks for the right
+   *    edge.
    */
-  isScrollAtEndingEdge_() {
+  isScrollAtRightEdge() {
     const el = this.scrollContainer_;
-    const vector =
-      el./*OK*/ getBoundingClientRect().width * (this.forwards_ ? 1 : -1);
-    const roundedVector = this.forwards_
-      ? Math.ceil(vector)
-      : Math.floor(vector);
-    const edgeClosestToEnd = el./*OK*/ scrollLeft + roundedVector;
-    const containerScrollWidth = el./*OK*/ scrollWidth;
-
-    const atEndingEdge = this.forwards_
-      ? edgeClosestToEnd >= containerScrollWidth
-      : edgeClosestToEnd <= -containerScrollWidth;
-    return atEndingEdge;
+    const {width} = el./*OK*/ getBoundingClientRect();
+    return el./*OK*/ scrollLeft + Math.ceil(width) >= el./*OK*/ scrollWidth;
   }
 
   /**
    * @return {boolean} True if the scrolling is at the left edge of the
-   *    carousel for LTR and right edge for RTL.
-   * @private
+   *    carousel. Note that this ignores RTL, and only checks for the left
+   *    edge.
    */
-  isScrollAtBeginningEdge_() {
-    const currentScrollPos = this.scrollContainer_./*OK*/ scrollLeft;
-    return this.forwards_ ? currentScrollPos <= 0 : currentScrollPos >= 0;
+  isScrollAtLeftEdge() {
+    return this.scrollContainer_./*OK*/ scrollLeft <= 0;
   }
 
   /**
@@ -1045,14 +1035,7 @@ export class Carousel {
       // If an item is at the start of the group, it gets an aligned.
       const shouldSnap = mod(slideIndex, this.snapBy_) === 0;
 
-      // If it is type=slides, make sure to set the alignment of the element
-      // with the content and not the wrapping div.
-      const snapElement =
-        child.firstChild &&
-        child.classList.contains('i-amphtml-carousel-wrapper')
-          ? child.firstChild
-          : child;
-      setStyles(snapElement, {
+      setStyles(child, {
         'scroll-snap-align': shouldSnap ? this.alignment_ : 'none',
         'scroll-snap-coordinate': shouldSnap ? coordinate : 'none',
       });
@@ -1347,7 +1330,7 @@ export class Carousel {
   /**
    * Checks if a given index is in the last window of items. For example, if
    * showing two slides at a time with the slides [a, b, c, d], both slide
-   * c and d are in the last window.
+   * b and c are in the last window.
    * @param {number} index The index to check.
    * @return {boolean} True if the slide is in the last window, false
    *    otherwise.

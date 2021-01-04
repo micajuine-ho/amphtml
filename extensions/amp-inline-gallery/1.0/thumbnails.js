@@ -72,11 +72,9 @@ export function Thumbnails({
       className={`${className} ${classes.thumbnails}`}
       mixedLength={true}
       snap={false}
-      snapAlign={loop ? 'center' : 'start'}
       controls={pointerFine ? 'always' : 'never'}
       loop={loop}
       ref={ref}
-      outsetArrows={true}
       _thumbnails={true}
       {...rest}
     >
@@ -89,7 +87,7 @@ export function Thumbnails({
               onClick={() => setCurrentSlide(i)}
               loading="lazy"
               role="button"
-              src={thumbnailSrc || undefined}
+              src={thumbnailSrc || ''}
               style={{
                 height: px(height),
                 width: aspectRatio ? px(aspectRatio * height) : '',

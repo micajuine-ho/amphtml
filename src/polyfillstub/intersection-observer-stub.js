@@ -26,8 +26,6 @@
 import {Services} from '../services';
 
 const UPGRADERS = '_upgraders';
-const NATIVE = '_native';
-const STUB = '_stub';
 
 /**
  * @param {!Window} win
@@ -37,62 +35,9 @@ const STUB = '_stub';
 export function shouldLoadPolyfill(win) {
   return (
     !win.IntersectionObserver ||
-    !win.IntersectionObserverEntry ||
-    !!win.IntersectionObserver[STUB] ||
-    !supportsDocumentRoot(win)
+    win.IntersectionObserver === IntersectionObserverStub ||
+    !win.IntersectionObserverEntry
   );
-}
-
-/**
- * @param {typeof IntersectionObserver} Native
- * @param {typeof IntersectionObserver} Polyfill
- * @return {typeof IntersectionObserver}
- */
-function getIntersectionObserverDispatcher(Native, Polyfill) {
-  return function (ioCallback, opts) {
-    if (opts && opts.root && opts.root.nodeType === 9) {
-      return new Polyfill(ioCallback, opts);
-    } else {
-      return new Native(ioCallback, opts);
-    }
-  };
-}
-
-/**
- * Installs the InOb stubs. This should only be called in two cases:
- * 1. No native InOb exists.
- * 2. Native InOb is present, but lacks document root support.
- *
- * @param {!Window} win
- */
-export function installStub(win) {
-  if (!win.IntersectionObserver) {
-    win.IntersectionObserver = IntersectionObserverStub;
-    win.IntersectionObserver[STUB] = IntersectionObserverStub;
-    return;
-  }
-
-  const Native = win.IntersectionObserver;
-  win.IntersectionObserver = getIntersectionObserverDispatcher(
-    win.IntersectionObserver,
-    IntersectionObserverStub
-  );
-  win.IntersectionObserver[STUB] = IntersectionObserverStub;
-  win.IntersectionObserver[NATIVE] = Native;
-}
-
-/**
- * Returns true if IntersectionObserver supports a document root.
- * @param {!Window} win
- * @return {boolean}
- */
-export function supportsDocumentRoot(win) {
-  try {
-    new win.IntersectionObserver(() => {}, {root: win.document});
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 /**
@@ -113,25 +58,16 @@ export function scheduleUpgradeIfNeeded(win) {
 export function upgradePolyfill(win, installer) {
   // Can't use the IntersectionObserverStub here directly since it's a separate
   // instance deployed in v0.js vs the polyfill extension.
-  const Stub = /** @type {typeof IntersectionObserverStub} */ (win
-    .IntersectionObserver[STUB]);
-  if (Stub) {
-    const Native = win.IntersectionObserver[NATIVE];
+  const Stub = /** @type {typeof IntersectionObserverStub} */ (win.IntersectionObserver);
+  if (Stub && UPGRADERS in Stub) {
     delete win.IntersectionObserver;
     delete win.IntersectionObserverEntry;
     installer();
-    const Polyfill = win.IntersectionObserver;
-    if (Native) {
-      win.IntersectionObserver = getIntersectionObserverDispatcher(
-        Native,
-        Polyfill
-      );
-    }
-
+    const Impl = win.IntersectionObserver;
     const upgraders = Stub[UPGRADERS].slice(0);
     const microtask = Promise.resolve();
     const upgrade = (upgrader) => {
-      microtask.then(() => upgrader(Polyfill));
+      microtask.then(() => upgrader(Impl));
     };
     if (upgraders.length > 0) {
       /** @type {!Array} */ (upgraders).forEach(upgrade);
@@ -168,6 +104,13 @@ export class IntersectionObserverStub {
       rootMargin: '0px 0px 0px 0px',
       ...options,
     };
+
+    // Must fail on any non-element root. This is critical because this
+    // failure is used as a feature-detection for document root support.
+    const {root} = this.options_;
+    if (root && root.nodeType !== /* ELEMENT */ 1) {
+      throw new Error('root must be an Element');
+    }
 
     /** @private {?Array<!Element>} */
     this.elements_ = [];

@@ -15,7 +15,6 @@
  */
 
 import * as Preact from '../../../src/preact';
-import {WithAmpContext} from '../../../src/preact/context';
 import {animateCollapse, animateExpand} from './animations';
 import {forwardRef} from '../../../src/preact/compat';
 import {omit} from '../../../src/utils/object';
@@ -36,11 +35,7 @@ import {
 import {useStyles} from './accordion.jss';
 
 const AccordionContext = Preact.createContext(
-  /** @type {AccordionDef.AccordionContext} */ ({})
-);
-
-const SectionContext = Preact.createContext(
-  /** @type {AccordionDef.SectionContext} */ ({})
+  /** @type {AccordionDef.ContextProps} */ ({})
 );
 
 /** @type {!Object<string, boolean>} */
@@ -53,7 +48,7 @@ const generateSectionId = sequentialIdGenerator();
 const generateRandomId = randomIdGenerator(100000);
 
 /**
- * @param {!AccordionDef.AccordionProps} props
+ * @param {!AccordionDef.Props} props
  * @param {{current: (!AccordionDef.AccordionApi|null)}} ref
  * @return {PreactDef.Renderable}
  */
@@ -62,7 +57,6 @@ function AccordionWithRef(
     as: Comp = 'section',
     expandSingleSection = false,
     animate = false,
-    experimentDisplayLocking = false,
     children,
     id,
     ...rest
@@ -111,12 +105,11 @@ function AccordionWithRef(
   );
 
   const toggleExpanded = useCallback(
-    (id, opt_expand) => {
+    (id) => {
       setExpandedMap((expandedMap) => {
-        const newExpanded = opt_expand ?? !expandedMap[id];
         const newExpandedMap = setExpanded(
           id,
-          newExpanded,
+          !expandedMap[id],
           expandedMap,
           expandSingleSection
         );
@@ -210,22 +203,14 @@ function AccordionWithRef(
 
   const context = useMemo(
     () =>
-      /** @type {!AccordionDef.AccordionContext} */ ({
+      /** @type {!AccordionDef.ContextProps} */ ({
         registerSection,
         toggleExpanded,
         isExpanded,
         animate,
         prefix,
-        experimentDisplayLocking,
       }),
-    [
-      registerSection,
-      toggleExpanded,
-      isExpanded,
-      animate,
-      prefix,
-      experimentDisplayLocking,
-    ]
+    [animate, registerSection, toggleExpanded, prefix, isExpanded]
   );
 
   return (
@@ -264,14 +249,19 @@ function setExpanded(id, value, expandedMap, expandSingleSection) {
 }
 
 /**
- * @param {!AccordionDef.AccordionSectionProps} props
+ * @param {!AccordionDef.SectionProps} props
  * @return {PreactDef.Renderable}
  */
 export function AccordionSection({
   as: Comp = 'section',
+  headerAs: HeaderComp = 'header',
+  contentAs: ContentComp = 'div',
   expanded: defaultExpanded = false,
   animate: defaultAnimate = false,
+  headerClassName = '',
+  contentClassName = '',
   id: propId,
+  header,
   children,
   onExpandStateChange,
   ...rest
@@ -280,8 +270,9 @@ export function AccordionSection({
   const id = propId || genId;
   const [suffix] = useState(generateRandomId);
   const [expandedState, setExpandedState] = useState(defaultExpanded);
-  const [contentIdState, setContentIdState] = useState(null);
-  const [headerIdState, setHeaderIdState] = useState(null);
+  const contentRef = useRef(null);
+  const hasMountedRef = useRef(false);
+  const classes = useStyles();
 
   const {
     registerSection,
@@ -289,16 +280,18 @@ export function AccordionSection({
     isExpanded,
     toggleExpanded,
     prefix,
-    experimentDisplayLocking,
   } = useContext(AccordionContext);
 
   const expanded = isExpanded ? isExpanded(id, defaultExpanded) : expandedState;
   const animate = contextAnimate ?? defaultAnimate;
-  const contentId =
-    contentIdState || `${prefix || 'a'}-content-${id}-${suffix}`;
-  const headerId = headerIdState || `${prefix || 'a'}-header-${id}-${suffix}`;
+  const contentId = `${prefix || 'a'}-content-${id}-${suffix}`;
 
-  // Storing this state change callback in a ref because this may change
+  useEffect(() => {
+    hasMountedRef.current = true;
+    return () => (hasMountedRef.current = false);
+  }, []);
+
+  // Storying this state change callback in a ref because this may change
   // frequently and we do not want to trigger a re-register of the section
   // each time  the callback is updated
   const onExpandStateChangeRef = useRef(
@@ -311,179 +304,26 @@ export function AccordionSection({
     }
   }, [registerSection, id, defaultExpanded]);
 
-  const toggleHandler = useCallback(
-    (opt_expand) => {
-      if (toggleExpanded) {
-        toggleExpanded(id, opt_expand);
-      } else {
-        setExpandedState((prev) => {
-          const newValue = opt_expand ?? !prev;
-          Promise.resolve().then(() => {
-            const onExpandStateChange = onExpandStateChangeRef.current;
-            if (onExpandStateChange) {
-              onExpandStateChange(newValue);
-            }
-          });
-          return newValue;
+  const expandHandler = useCallback(() => {
+    if (toggleExpanded) {
+      toggleExpanded(id);
+    } else {
+      setExpandedState((prev) => {
+        const newValue = !prev;
+        Promise.resolve().then(() => {
+          const onExpandStateChange = onExpandStateChangeRef.current;
+          if (onExpandStateChange) {
+            onExpandStateChange(newValue);
+          }
         });
-      }
-    },
-    [id, toggleExpanded]
-  );
-
-  const context = useMemo(
-    () =>
-      /** @type {AccordionDef.SectionContext} */ ({
-        animate,
-        contentId,
-        headerId,
-        expanded,
-        toggleHandler,
-        setContentId: setContentIdState,
-        setHeaderId: setHeaderIdState,
-        experimentDisplayLocking,
-      }),
-    [
-      animate,
-      contentId,
-      headerId,
-      expanded,
-      toggleHandler,
-      experimentDisplayLocking,
-    ]
-  );
-
-  return (
-    <Comp {...rest} expanded={expanded}>
-      <SectionContext.Provider value={context}>
-        {children}
-      </SectionContext.Provider>
-    </Comp>
-  );
-}
-
-/**
- * @param {!AccordionDef.AccordionHeaderProps} props
- * @return {PreactDef.Renderable}
- */
-export function AccordionHeader({
-  as: Comp = 'div',
-  role = 'button',
-  className = '',
-  tabIndex = 0,
-  id,
-  children,
-  ...rest
-}) {
-  const {
-    contentId,
-    headerId,
-    expanded,
-    toggleHandler,
-    setHeaderId,
-  } = useContext(SectionContext);
-  const classes = useStyles();
-
-  useLayoutEffect(() => {
-    if (setHeaderId) {
-      setHeaderId(id);
+        return newValue;
+      });
     }
-  }, [setHeaderId, id]);
-
-  return (
-    <Comp
-      {...rest}
-      id={headerId}
-      role={role}
-      className={`${className} ${classes.sectionChild} ${classes.header}`}
-      tabIndex={tabIndex}
-      aria-controls={contentId}
-      onClick={() => toggleHandler()}
-      aria-expanded={String(expanded)}
-    >
-      {children}
-    </Comp>
-  );
-}
-
-/**
- * @param {!AccordionDef.AccordionContentProps} props
- * @return {PreactDef.Renderable}
- */
-export function AccordionContent({
-  as: Comp = 'div',
-  role = 'region',
-  className = '',
-  id,
-  children,
-  ...rest
-}) {
-  const ref = useRef(null);
-  const hasMountedRef = useRef(false);
-  const {
-    contentId,
-    headerId,
-    expanded,
-    animate,
-    setContentId,
-    toggleHandler,
-    experimentDisplayLocking,
-  } = useContext(SectionContext);
-  const classes = useStyles();
-  const [supportsContentVisibility, setSupportsContentVisibility] = useState(
-    false
-  );
-  const enableDisplayLocking =
-    supportsContentVisibility && experimentDisplayLocking;
-  const hiddenClass = enableDisplayLocking
-    ? classes.contentHiddenMatchable
-    : classes.contentHidden;
-
-  useEffect(() => {
-    hasMountedRef.current = true;
-    return () => (hasMountedRef.current = false);
-  }, []);
-
-  useEffect(() => {
-    if (!experimentDisplayLocking) {
-      return;
-    }
-
-    const element = ref.current;
-    if (!element) {
-      return;
-    }
-
-    const win = element.ownerDocument.defaultView;
-    if (!win) {
-      return;
-    }
-
-    const newSupportsContentVisibility = win.CSS.supports(
-      'content-visibility',
-      'hidden-matchable'
-    );
-    setSupportsContentVisibility(newSupportsContentVisibility);
-    if (!newSupportsContentVisibility) {
-      return;
-    }
-
-    const beforeMatchHandler = () => {
-      toggleHandler(/* force expand */ true);
-    };
-    element.addEventListener('beforematch', beforeMatchHandler);
-    return () => element.removeEventListener('beforematch', beforeMatchHandler);
-  }, [toggleHandler, experimentDisplayLocking]);
-
-  useLayoutEffect(() => {
-    if (setContentId) {
-      setContentId(id);
-    }
-  }, [setContentId, id]);
+  }, [id, toggleExpanded]);
 
   useLayoutEffect(() => {
     const hasMounted = hasMountedRef.current;
-    const content = ref.current;
+    const content = contentRef.current;
     if (!animate || !hasMounted || !content || !content.animate) {
       return;
     }
@@ -491,19 +331,25 @@ export function AccordionContent({
   }, [expanded, animate]);
 
   return (
-    <WithAmpContext renderable={expanded}>
-      <Comp
-        {...rest}
-        ref={ref}
-        className={`${className} ${classes.sectionChild} ${
-          expanded ? '' : hiddenClass
-        }`}
+    <Comp {...rest} expanded={expanded}>
+      <HeaderComp
+        role="button"
+        className={`${headerClassName} ${classes.sectionChild} ${classes.header}`}
+        aria-controls={contentId}
+        tabIndex="0"
+        onClick={expandHandler}
+        aria-expanded={String(expanded)}
+      >
+        {header}
+      </HeaderComp>
+      <ContentComp
+        ref={contentRef}
+        className={`${contentClassName} ${classes.sectionChild} ${classes.content}`}
         id={contentId}
-        aria-labelledby={headerId}
-        role={role}
+        hidden={!expanded}
       >
         {children}
-      </Comp>
-    </WithAmpContext>
+      </ContentComp>
+    </Comp>
   );
 }

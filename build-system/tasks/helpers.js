@@ -39,7 +39,7 @@ const {applyConfig, removeConfig} = require('./prepend-global/index.js');
 const {closureCompile} = require('../compile/compile');
 const {EventEmitter} = require('events');
 const {green, red, cyan} = require('ansi-colors');
-const {isCiBuild} = require('../common/ci');
+const {isTravisBuild} = require('../common/travis');
 const {jsBundles} = require('../compile/bundles.config');
 const {thirdPartyFrames} = require('../test-configs/config');
 const {transpileTs} = require('../compile/typescript');
@@ -468,7 +468,8 @@ async function compileJs(srcDir, srcFilename, destDir, options) {
 }
 
 /**
- * Stops the timer for the given build step and prints the execution time.
+ * Stops the timer for the given build step and prints the execution time,
+ * unless we are on Travis.
  * @param {string} stepName Name of the action, like 'Compiled' or 'Minified'
  * @param {string} targetName Name of the target, like a filename or path
  * @param {DOMHighResTimeStamp} startTime Start time of build step
@@ -502,7 +503,7 @@ function printConfigHelp(command) {
     cyan(argv.config === 'canary' ? 'canary' : 'prod'),
     green('AMP config.')
   );
-  if (!isCiBuild()) {
+  if (!isTravisBuild()) {
     log(
       green('⤷ Use'),
       cyan('--config={canary|prod}'),
@@ -538,7 +539,7 @@ function printNobuildHelp() {
  * @return {!Promise}
  */
 async function maybePrintCoverageMessage(covPath) {
-  if (!argv.coverage || isCiBuild()) {
+  if (!argv.coverage || isTravisBuild()) {
     return;
   }
 

@@ -52,9 +52,7 @@ const buildOptionTemplate = (option) => {
     <span
       class="i-amphtml-story-interactive-quiz-option i-amphtml-story-interactive-option"
     >
-      <span
-        class="i-amphtml-story-interactive-quiz-answer-choice notranslate"
-      ></span>
+      <span class="i-amphtml-story-interactive-quiz-answer-choice"></span>
     </span>
   `;
 };

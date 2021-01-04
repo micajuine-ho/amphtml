@@ -396,8 +396,7 @@ describes.realWin(
           .stub(win.navigator, 'sendBeacon')
           .callsFake(() => true);
       }
-      const {createElement} = win.document;
-      createElement.resetHistory();
+      const createElement = env.sandbox.spy(win.document, 'createElement');
 
       element.implementation_.executeAction({
         method: 'exit',
@@ -426,8 +425,7 @@ describes.realWin(
       const sendBeacon = env.sandbox
         .stub(win.navigator, 'sendBeacon')
         .callsFake(() => false);
-      const {createElement} = win.document;
-      createElement.resetHistory();
+      const createElement = env.sandbox.spy(win.document, 'createElement');
 
       element.implementation_.executeAction({
         method: 'exit',
@@ -461,8 +459,7 @@ describes.realWin(
         const sendBeacon = env.sandbox
           .stub(win.navigator, 'sendBeacon')
           .callsFake(() => true);
-        const {createElement} = win.document;
-        createElement.resetHistory();
+        const createElement = env.sandbox.spy(win.document, 'createElement');
 
         el.implementation_.executeAction({
           method: 'exit',

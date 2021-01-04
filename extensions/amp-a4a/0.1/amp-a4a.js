@@ -16,10 +16,8 @@
 
 import {A4AVariableSource} from './a4a-variable-source';
 import {CONSENT_POLICY_STATE} from '../../../src/consent-state';
-import {Deferred, tryResolve} from '../../../src/utils/promise';
 import {DetachedDomStream} from '../../../src/utils/detached-dom-stream';
 import {DomTransformStream} from '../../../src/utils/dom-tranform-stream';
-import {GEO_IN_GROUP} from '../../amp-geo/0.1/amp-geo-in-group';
 import {Layout, LayoutPriority, isLayoutSizeDefined} from '../../../src/layout';
 import {Services} from '../../../src/services';
 import {SignatureVerifier, VerificationStatus} from './signature-verifier';
@@ -37,7 +35,6 @@ import {
   devAssert,
   duplicateErrorIfNecessary,
   user,
-  userAssert,
 } from '../../../src/log';
 import {dict} from '../../../src/utils/object';
 import {
@@ -72,8 +69,8 @@ import {setStyle} from '../../../src/style';
 import {signingServerURLs} from '../../../ads/_a4a-config';
 import {streamResponseToWriter} from '../../../src/utils/stream-response';
 import {triggerAnalyticsEvent} from '../../../src/analytics';
+import {tryResolve} from '../../../src/utils/promise';
 import {utf8Decode} from '../../../src/utils/bytes';
-import {whenWithinViewport} from './within-viewport';
 
 /** @type {Array<string>} */
 const METADATA_STRINGS = [
@@ -536,18 +533,10 @@ export class AmpA4A extends AMP.BaseElement {
   }
 
   /** @override */
-  pauseCallback() {
-    if (this.friendlyIframeEmbed_) {
-      this.friendlyIframeEmbed_.pause();
-    }
-  }
-
-  /** @override */
   resumeCallback() {
     // FIE that was not destroyed on unlayoutCallback does not require a new
     // ad request.
     if (this.friendlyIframeEmbed_) {
-      this.friendlyIframeEmbed_.resume();
       return;
     }
     // If layout of page has not changed, onLayoutMeasure will not be called
@@ -643,28 +632,6 @@ export class AmpA4A extends AMP.BaseElement {
   }
 
   /**
-   * Resolves when underlying element is within the viewport range given or
-   * has been loaded already.
-   * @param {number|boolean} viewport derived from renderOutsideViewport.
-   * @return {!Promise}
-   * @protected
-   */
-  whenWithinViewport(viewport) {
-    devAssert(viewport !== false);
-    const resource = this.getResource();
-    if (WITHIN_VIEWPORT_INOB || getMode().localDev || getMode().test) {
-      // Resolve is already laid out or viewport is true.
-      if (!resource.isLayoutPending() || viewport === true) {
-        return Promise.resolve();
-      }
-      // Track when within the specified number of viewports.
-      const viewportNum = dev().assertNumber(viewport);
-      return whenWithinViewport(this.element, viewportNum);
-    }
-    return resource.whenWithinViewport(viewport);
-  }
-
-  /**
    * This is the entry point into the ad promise chain.
    *
    * Calling this function will initiate the following sequence of events: ad
@@ -710,7 +677,7 @@ export class AmpA4A extends AMP.BaseElement {
         // meeting the definition as opposed to waiting on the promise.
         const delay = this.delayAdRequestEnabled();
         if (delay) {
-          return this.whenWithinViewport(
+          return this.getResource().whenWithinViewport(
             typeof delay == 'number' ? delay : this.renderOutsideViewport()
           );
         }
@@ -767,17 +734,13 @@ export class AmpA4A extends AMP.BaseElement {
           ? consentMetadata['gdprApplies']
           : consentMetadata;
 
-        return /** @type {!Promise<?string>} */ (this.getServeNpaSignal().then(
-          (npaSignal) =>
-            this.getAdUrl(
-              {consentState, consentString, gdprApplies},
-              this.tryExecuteRealTimeConfig_(
-                consentState,
-                consentString,
-                /** @type {?Object<string, string|number|boolean|undefined>} */ (consentMetadata)
-              ),
-              npaSignal
-            )
+        return /** @type {!Promise<?string>} */ (this.getAdUrl(
+          {consentState, consentString, gdprApplies},
+          this.tryExecuteRealTimeConfig_(
+            consentState,
+            consentString,
+            /** @type {?Object<string, string|number|boolean|undefined>} */ (consentMetadata)
+          )
         ));
       })
       // This block returns the (possibly empty) response to the XHR request.
@@ -1302,16 +1265,9 @@ export class AmpA4A extends AMP.BaseElement {
     }
     const checkStillCurrent = this.verifyStillCurrent();
     // Promise chain will have determined if creative is valid AMP.
-
-    return Promise.all([
-      this.adPromise_,
-      this.uiHandler.getScrollPromiseForStickyAd(),
-    ])
-      .then((values) => {
+    return this.adPromise_
+      .then((creativeMetaData) => {
         checkStillCurrent();
-
-        this.uiHandler.maybeInitStickyAd();
-        const creativeMetaData = values[0];
         if (this.isCollapsed_) {
           return Promise.resolve();
         }
@@ -1454,9 +1410,6 @@ export class AmpA4A extends AMP.BaseElement {
       this.xOriginIframeHandler_.freeXOriginIframe();
       this.xOriginIframeHandler_ = null;
     }
-    if (this.uiHandler) {
-      this.uiHandler.cleanup();
-    }
   }
 
   // TODO: Rename to viewportCallback once BaseElement.viewportCallback has been removed.
@@ -1475,50 +1428,10 @@ export class AmpA4A extends AMP.BaseElement {
    * by network.
    * @param {!ConsentTupleDef=} opt_ununsedConsentTuple
    * @param {Promise<!Array<rtcResponseDef>>=} opt_rtcResponsesPromise
-   * @param {boolean=} opt_serveNpaSignal
    * @return {!Promise<string>|string}
    */
-  getAdUrl(
-    opt_ununsedConsentTuple,
-    opt_rtcResponsesPromise,
-    opt_serveNpaSignal
-  ) {
+  getAdUrl(opt_ununsedConsentTuple, opt_rtcResponsesPromise) {
     throw new Error('getAdUrl not implemented!');
-  }
-
-  /**
-   * Checks if the `always-serve-npa` attribute is present and valid
-   * based on the geolocation.  To be implemented by network.
-   * @return {!Promise<boolean>}
-   */
-  getServeNpaSignal() {
-    return Promise.resolve(false);
-  }
-
-  /**
-   * Checks if the `block-rtc` attribute is present and valid
-   * based on the geolocation.
-   * @return {!Promise<boolean>}
-   */
-  getBlockRtc_() {
-    if (!this.element.getAttribute('block-rtc')) {
-      return Promise.resolve(false);
-    }
-    return Services.geoForDocOrNull(this.element).then((geoService) => {
-      userAssert(geoService, '%s: requires <amp-geo> to use `block-rtc`', TAG);
-      const blockRtcLocations = this.element.getAttribute('block-rtc');
-      const locations = blockRtcLocations.split(',');
-      for (let i = 0; i < locations.length; i++) {
-        const geoGroup = geoService.isInCountryGroup(locations[i]);
-        if (geoGroup === GEO_IN_GROUP.IN) {
-          return true;
-        } else if (geoGroup === GEO_IN_GROUP.NOT_DEFINED) {
-          user().warn('AMP-AD', `Geo group "${locations[i]}" was not defined.`);
-        }
-      }
-      // Not in any of the defined geo groups.
-      return false;
-    });
   }
 
   /**
@@ -1762,20 +1675,16 @@ export class AmpA4A extends AMP.BaseElement {
     this.applyFillContent(this.iframe);
 
     let body = '';
-    const transferComplete = new Deferred();
     // If srcdoc is not supported, streaming is also not supported so we
     // can go ahead and write the ad content body.
     if (!isSrcdocSupported()) {
       body = head.ownerDocument.body./*OK */ outerHTML;
-      transferComplete.resolve();
     } else {
       // Once skeleton doc has be written to srcdoc we start transferring
       // body chunks.
       listenOnce(this.iframe, 'load', () => {
         const fieBody = this.iframe.contentDocument.body;
-        this.transferDomBody_(devAssert(fieBody)).then(
-          transferComplete.resolve
-        );
+        this.transferDomBody_(devAssert(fieBody));
       });
     }
 
@@ -1789,22 +1698,12 @@ export class AmpA4A extends AMP.BaseElement {
     // it accessible here.
     const extensionIds = extensions.map((extension) => extension.extensionId);
 
-    const fieInstallPromise = this.installFriendlyIframeEmbed_(
+    return this.installFriendlyIframeEmbed_(
       secureDoc,
       extensionIds,
       fonts,
       true // skipHtmlMerge
-    );
-
-    // Tell the FIE it is done after transferring.
-    Promise.all([fieInstallPromise, transferComplete.promise]).then(
-      (values) => {
-        const friendlyIframeEmbed = values[0];
-        friendlyIframeEmbed.renderCompleted();
-      }
-    );
-
-    return fieInstallPromise.then((friendlyIframeEmbed) => {
+    ).then((friendlyIframeEmbed) => {
       checkStillCurrent();
       this.makeFieVisible_(
         friendlyIframeEmbed,
@@ -1907,7 +1806,9 @@ export class AmpA4A extends AMP.BaseElement {
   preinstallCallback_(embedWin, ampdoc) {
     const parentAmpdoc = this.getAmpDoc();
     installUrlReplacementsForEmbed(
-      ampdoc,
+      // TODO(#22733): Cleanup `parentAmpdoc` once ampdoc-fie is launched.
+      ampdoc || parentAmpdoc,
+      embedWin,
       new A4AVariableSource(parentAmpdoc, embedWin)
     );
   }
@@ -2308,8 +2209,7 @@ export class AmpA4A extends AMP.BaseElement {
   /**
    * Attempts to execute Real Time Config, if the ad network has enabled it.
    * If it is not supported by the network, but the publisher has included
-   * the rtc-config attribute on the amp-ad element, warn. Additionaly,
-   * if the publisher has included a valid `block-rtc` attribute, don't send.
+   * the rtc-config attribute on the amp-ad element, warn.
    * @param {?CONSENT_POLICY_STATE} consentState
    * @param {?string} consentString
    * @param {?Object<string, string|number|boolean|undefined>} consentMetadata
@@ -2317,25 +2217,20 @@ export class AmpA4A extends AMP.BaseElement {
    */
   tryExecuteRealTimeConfig_(consentState, consentString, consentMetadata) {
     if (!!AMP.RealTimeConfigManager) {
-      return this.getBlockRtc_().then((shouldBlock) => {
-        if (shouldBlock) {
-          return;
-        }
-        try {
-          return new AMP.RealTimeConfigManager(
-            this.getAmpDoc()
-          ).maybeExecuteRealTimeConfig(
-            this.element,
-            this.getCustomRealTimeConfigMacros_(),
-            consentState,
-            consentString,
-            consentMetadata,
-            this.verifyStillCurrent()
-          );
-        } catch (err) {
-          user().error(TAG, 'Could not perform Real Time Config.', err);
-        }
-      });
+      try {
+        return new AMP.RealTimeConfigManager(
+          this.getAmpDoc()
+        ).maybeExecuteRealTimeConfig(
+          this.element,
+          this.getCustomRealTimeConfigMacros_(),
+          consentState,
+          consentString,
+          consentMetadata,
+          this.verifyStillCurrent()
+        );
+      } catch (err) {
+        user().error(TAG, 'Could not perform Real Time Config.', err);
+      }
     } else if (this.element.getAttribute('rtc-config')) {
       user().error(
         TAG,

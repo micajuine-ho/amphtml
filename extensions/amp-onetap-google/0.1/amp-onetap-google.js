@@ -31,7 +31,7 @@ import {CSS} from '../../../build/amp-onetap-google-0.1.css';
 import {Layout} from '../../../src/layout';
 import {Services} from '../../../src/services';
 import {assertHttpsUrl} from '../../../src/url';
-import {dev, devAssert, user} from '../../../src/log';
+import {dev, user} from '../../../src/log';
 import {dict} from '../../../src/utils/object';
 import {getData, listen} from '../../../src/event-helper';
 import {isObject} from '../../../src/types';
@@ -42,10 +42,10 @@ import {removeElement} from '../../../src/dom';
 const TAG = 'amp-onetap-google';
 
 /** @const {string} */
-export const SENTINEL = 'onetap_google';
+const SENTINEL = 'onetap_google';
 
 /** @const {Object} */
-export const ACTIONS = {
+const ACTIONS = {
   READY: 'intermediate_iframe_ready',
   RESIZE: 'intermediate_iframe_resize',
   CLOSE: 'intermediate_iframe_close',
@@ -58,6 +58,15 @@ export class AmpOnetapGoogle extends AMP.BaseElement {
   /** @param {!AmpElement} element */
   constructor(element) {
     super(element);
+
+    /** @private @const {string} */
+    this.iframeUrl_ = assertHttpsUrl(
+      this.element.getAttribute('data-src'),
+      this.element
+    );
+
+    /** @private @const {string} */
+    this.iframeOrigin_ = new URL(this.iframeUrl_).origin;
 
     /** @private {?Element} */
     this.iframe_ = null;
@@ -79,22 +88,22 @@ export class AmpOnetapGoogle extends AMP.BaseElement {
     this.getAmpDoc()
       .whenFirstVisible()
       .then(() => {
-        this.createIframe_(
-          assertHttpsUrl(this.element.dataset.src, this.element)
-        );
+        this.loadIframe_();
       });
   }
 
   /**
-   * @param {string} origin
-   * @param {Event} event
    * @private
+   * @param {Event} event
    */
-  handleIntermediateIframeMessage_(origin, event) {
+  handleIntermediateIframeMessage_(event) {
     if (!this.iframe_) {
       return;
     }
-    if (event.source != this.iframe_.contentWindow || event.origin !== origin) {
+    if (
+      event.source != this.iframe_.contentWindow ||
+      event.origin !== this.iframeOrigin_
+    ) {
       return;
     }
     const data = getData(event);
@@ -182,39 +191,16 @@ export class AmpOnetapGoogle extends AMP.BaseElement {
   }
 
   /**
-   * @param {string} srcUnexpanded
    * @private
    */
-  createIframe_(srcUnexpanded) {
+  loadIframe_() {
     if (this.iframe_) {
       return;
     }
-    this.iframe_ = this.getAmpDoc().getRootNode().createElement('iframe');
-
-    // Don't insert <iframe> until URL has been expanded.
-    // Likewise, don't display the UI until then.
-    Services.urlReplacementsForDoc(this.element)
-      .expandUrlAsync(srcUnexpanded)
-      .then((srcExpanded) => {
-        if (!this.win) {
-          return; // now detached
-        }
-        this.insertIframe_(srcExpanded);
-      });
-  }
-
-  /**
-   * @param {string} src
-   * @private
-   */
-  insertIframe_(src) {
-    devAssert(this.iframe_);
     toggle(this.element, false);
-
-    const {origin} = Services.urlForDoc(this.element).parse(src);
     this.unlisteners_ = [
       listen(this.win, 'message', (event) => {
-        this.handleIntermediateIframeMessage_(origin, event);
+        this.handleIntermediateIframeMessage_(event);
       }),
       listen(this.getAmpDoc().getRootNode(), 'click', () => {
         if (
@@ -225,8 +211,9 @@ export class AmpOnetapGoogle extends AMP.BaseElement {
         }
       }),
     ];
+    this.iframe_ = this.getAmpDoc().getRootNode().createElement('iframe');
     this.iframe_.classList.add('i-amphtml-onetap-google-iframe');
-    this.iframe_.src = src;
+    this.iframe_.src = this.iframeUrl_;
     this.element.appendChild(this.iframe_);
     this.getViewport().addToFixedLayer(this.iframe_);
   }

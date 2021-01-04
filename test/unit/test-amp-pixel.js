@@ -177,7 +177,7 @@ describes.realWin(
         .stub(env.ampdoc, 'whenFirstVisible')
         .callsFake(() => whenFirstVisiblePromise);
 
-      installUrlReplacementsForEmbed(env.ampdoc, new TestVariableSource());
+      installUrlReplacementsForEmbed(env.ampdoc, win, new TestVariableSource());
 
       pixel = win.document.createElement('amp-pixel');
       pixel.setAttribute(

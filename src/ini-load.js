@@ -85,7 +85,7 @@ export function getMeasuredResources(ampdoc, hostWin, filterFn) {
       const resources = Services.resourcesForDoc(ampdoc);
       resources.get().forEach((r) => {
         if (!r.hasBeenMeasured() && r.hostWin == hostWin && !r.hasOwner()) {
-          measurePromiseArray.push(r.ensureMeasured());
+          measurePromiseArray.push(r.getPageLayoutBoxAsync());
         }
       });
       return Promise.all(measurePromiseArray);

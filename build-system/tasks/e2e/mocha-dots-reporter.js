@@ -22,7 +22,7 @@ const {symbols} = require('../karma.conf').mochaReporter;
 
 /**
  * Custom Mocha reporter for CI builds.
- * Mimics the style of the Karma reporter.
+ * Mimics the style of the Karma reporter on Travis.
  * @param {*} runner
  */
 function MochaDotsReporter(runner) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {sleep} from './common';
+import sleep from 'sleep-promise';
 
 describes.endtoend(
   'amp-consent',

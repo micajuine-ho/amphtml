@@ -122,9 +122,8 @@ const RTC_VENDORS = jsonConfiguration({
     disableKeyAppend: true,
   },
   future: {
-    url:
-      'https://ads.servebom.com/amp?adunit=ADUNIT&gdpr_consent=CONSENT_STRING',
-    macros: ['ADUNIT', 'CONSENT_STRING'],
+    url: 'https://ads.servebom.com/amp?adunit=ADUNIT',
+    macros: ['ADUNIT'],
     disableKeyAppend: true,
   },
   glxm: {

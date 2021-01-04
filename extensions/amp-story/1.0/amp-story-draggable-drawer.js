@@ -290,9 +290,7 @@ export class DraggableDrawer extends AMP.BaseElement {
       return;
     }
 
-    if (this.shouldStopPropagation_()) {
-      event.stopPropagation();
-    }
+    event.stopPropagation();
 
     if (this.touchEventState_.isSwipeY === null) {
       this.touchEventState_.isSwipeY =
@@ -311,18 +309,6 @@ export class DraggableDrawer extends AMP.BaseElement {
         last: false,
       },
     });
-  }
-
-  /**
-   * Checks for when scroll event should be stopped from propagating.
-   * @return {boolean}
-   * @private
-   */
-  shouldStopPropagation_() {
-    return (
-      this.state_ !== DrawerState.CLOSED ||
-      (this.state_ === DrawerState.CLOSED && this.touchEventState_.swipingUp)
-    );
   }
 
   /**
@@ -357,7 +343,7 @@ export class DraggableDrawer extends AMP.BaseElement {
   onSwipeY_(gesture) {
     const {data} = gesture;
 
-    if (this.ignoreCurrentSwipeYGesture_) {
+    if (this.ignoreCurrentSwipeYGesture_ === true) {
       this.ignoreCurrentSwipeYGesture_ = !data.last;
       return;
     }

@@ -37,7 +37,7 @@ let nativeClientRect;
  */
 function getBoundingClientRect() {
   // eslint-disable-next-line local/no-invalid-this
-  if (IS_ESM || isConnectedNode(this)) {
+  if (isConnectedNode(this)) {
     return nativeClientRect.call(this);
   }
 
@@ -50,10 +50,6 @@ function getBoundingClientRect() {
  * @return {boolean}
  */
 function shouldInstall(win) {
-  if (IS_ESM) {
-    return false;
-  }
-
   // Don't install in no-DOM environments e.g. worker.
   if (!win.document) {
     return false;

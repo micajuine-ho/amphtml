@@ -18,7 +18,7 @@
 const config = require('../test-configs/config');
 const globby = require('globby');
 const Mocha = require('mocha');
-const {isCiBuild} = require('../common/ci');
+const {isTravisBuild} = require('../common/travis');
 
 /**
  * Run all the dev dashboard tests
@@ -26,7 +26,7 @@ const {isCiBuild} = require('../common/ci');
  */
 async function devDashboardTests() {
   const mocha = new Mocha({
-    reporter: isCiBuild() ? 'mocha-silent-reporter' : 'spec',
+    reporter: isTravisBuild() ? 'mocha-silent-reporter' : 'spec',
   });
 
   // Add our files

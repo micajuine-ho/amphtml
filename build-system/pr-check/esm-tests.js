@@ -31,7 +31,7 @@ const {
   downloadDistOutput,
 } = require('./utils');
 const {determineBuildTargets} = require('./build-targets');
-const {isPullRequestBuild} = require('../common/ci');
+const {isTravisPullRequestBuild} = require('../common/travis');
 
 const FILENAME = 'esm-tests.js';
 const FILELOGPREFIX = colors.bold(colors.yellow(`${FILENAME}:`));
@@ -41,7 +41,7 @@ const timedExecOrDie = (cmd, unusedFileName) =>
 function main() {
   const startTime = startTimer(FILENAME, FILENAME);
 
-  if (!isPullRequestBuild()) {
+  if (!isTravisPullRequestBuild()) {
     downloadDistOutput(FILENAME);
     downloadEsmDistOutput(FILENAME);
     timedExecOrDie('gulp update-packages');

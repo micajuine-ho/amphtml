@@ -58,6 +58,7 @@ describes.fakeWin(
 
     afterEach(() => {
       toggleExperiment(win, 'amp-access-server', false);
+      toggleExperiment(win, 'amp-access-iframe', false);
     });
 
     function expectSourceType(ampdoc, config, type, adapter) {
@@ -110,8 +111,12 @@ describes.fakeWin(
       config['type'] = 'client';
       expectSourceType(ampdoc, config, 'client', AccessClientAdapter);
 
-      config['type'] = 'iframe';
-      expectSourceType(ampdoc, config, 'iframe', AccessIframeAdapter);
+      allowConsoleError(() => {
+        config['type'] = 'iframe';
+        expectSourceType(ampdoc, config, 'client', AccessClientAdapter);
+        toggleExperiment(win, 'amp-access-iframe', true);
+        expectSourceType(ampdoc, config, 'iframe', AccessIframeAdapter);
+      });
 
       config['type'] = 'server';
       expectSourceType(ampdoc, config, 'client', AccessClientAdapter);

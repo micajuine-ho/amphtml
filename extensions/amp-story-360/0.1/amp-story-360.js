@@ -305,9 +305,6 @@ export class AmpStory360 extends AMP.BaseElement {
 
     /** @private WebGL extension for lost context. */
     this.lostGlContext_ = null;
-
-    /** @private {!Array<number>} */
-    this.rot_ = null;
   }
 
   /** @override */
@@ -393,9 +390,7 @@ export class AmpStory360 extends AMP.BaseElement {
         });
 
         this.storeService_.subscribe(StateProperty.PAUSED_STATE, (isPaused) => {
-          if (this.isOnActivePage_) {
-            isPaused ? this.pause_() : this.play_();
-          }
+          isPaused ? this.pause_() : this.play_();
         });
       }),
 
@@ -579,11 +574,7 @@ export class AmpStory360 extends AMP.BaseElement {
     );
     rot = Matrix.mul(3, Matrix.rotation(3, 2, 1, deg2rad(e.beta)), rot);
     rot = Matrix.mul(3, Matrix.rotation(3, 0, 2, deg2rad(e.gamma)), rot);
-
-    // Smoothen sensor data by averaging previous and next rotation matrix values.
-    this.rot_ = this.rot_ ? rot.map((val, i) => (val + this.rot_[i]) / 2) : rot;
-
-    this.renderer_.setCamera(this.rot_, 1);
+    this.renderer_.setCamera(rot, 1);
     this.renderer_.render(true);
   }
 
@@ -697,7 +688,9 @@ export class AmpStory360 extends AMP.BaseElement {
     owners.setOwner(ampImgEl, this.element);
     owners.scheduleLayout(this.element, ampImgEl);
     return whenUpgradedToCustomElement(ampImgEl)
-      .then(() => ampImgEl.signals().whenSignal(CommonSignals.LOAD_END))
+      .then(() => {
+        return ampImgEl.signals().whenSignal(CommonSignals.LOAD_END);
+      })
       .then(
         () => {
           this.renderer_ = new Renderer(this.canvas_);
@@ -719,7 +712,9 @@ export class AmpStory360 extends AMP.BaseElement {
    */
   setupAmpVideoRenderer_() {
     return whenUpgradedToCustomElement(dev().assertElement(this.ampVideoEl_))
-      .then(() => this.ampVideoEl_.signals().whenSignal(CommonSignals.LOAD_END))
+      .then(() => {
+        return this.ampVideoEl_.signals().whenSignal(CommonSignals.LOAD_END);
+      })
       .then(() => {
         const alreadyHasData =
           dev().assertElement(this.ampVideoEl_.querySelector('video'))
@@ -776,14 +771,6 @@ export class AmpStory360 extends AMP.BaseElement {
     if (this.isPlaying_) {
       this.animate_();
     }
-    this.markAsLoaded_();
-  }
-
-  /** @private */
-  markAsLoaded_() {
-    this.mutateElement(() => {
-      this.element.classList.add('i-amphtml-story-360-loaded');
-    });
   }
 
   /** @private */

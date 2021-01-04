@@ -30,7 +30,7 @@ const {
   timedExecOrDie: timedExecOrDieBase,
 } = require('./utils');
 const {determineBuildTargets} = require('./build-targets');
-const {isPullRequestBuild} = require('../common/ci');
+const {isTravisPullRequestBuild} = require('../common/travis');
 const {runNpmChecks} = require('./npm-checks');
 
 const FILENAME = 'validator-tests.js';
@@ -44,7 +44,7 @@ function main() {
     return;
   }
 
-  if (!isPullRequestBuild()) {
+  if (!isTravisPullRequestBuild()) {
     timedExecOrDie('gulp validator');
     timedExecOrDie('gulp validator-webui');
   } else {

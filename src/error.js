@@ -194,12 +194,7 @@ export function reportError(error, opt_associatedElement) {
     }
 
     // Report to console.
-    if (
-      self.console &&
-      (isUserErrorMessage(error.message) ||
-        !error.expected ||
-        getMode().localDev)
-    ) {
+    if (self.console) {
       const output = console.error || console.log;
       if (error.messageArray) {
         output.apply(console, error.messageArray);

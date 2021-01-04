@@ -88,10 +88,6 @@ export class AmpSmartlinks extends AMP.BaseElement {
    */
   runSmartlinks_() {
     this.getLinkmateOptions_().then((config) => {
-      if (!config) {
-        return;
-      }
-
       this.linkmateOptions_.linkmateExpected = config['linkmate_enabled'];
       this.linkmateOptions_.publisherID = config['publisher_id'];
 

@@ -42,17 +42,6 @@ export const UPGRADE_TO_CUSTOMELEMENT_PROMISE = '__AMP_UPG_PRM';
 export const UPGRADE_TO_CUSTOMELEMENT_RESOLVER = '__AMP_UPG_RES';
 
 /**
- * @typedef {{
- *   bubbles: (boolean|undefined),
- *   cancelable: (boolean|undefined),
- * }}
- */
-export let CustomEventOptionsDef;
-
-/** @const {!CustomEventOptionsDef} */
-const DEFAULT_CUSTOM_EVENT_OPTIONS = {bubbles: true, cancelable: true};
-
-/**
  * Waits until the child element is constructed. Once the child is found, the
  * callback is executed.
  * @param {!Element} parent
@@ -66,7 +55,7 @@ export function waitForChild(parent, checkFunc, callback) {
   }
   /** @const {!Window} */
   const win = toWin(parent.ownerDocument.defaultView);
-  if (IS_ESM || win.MutationObserver) {
+  if (win.MutationObserver) {
     /** @const {MutationObserver} */
     const observer = new win.MutationObserver(() => {
       if (checkFunc(parent)) {
@@ -537,7 +526,7 @@ function scopedQuerySelectionFallback(root, selector) {
  * @return {?Element}
  */
 export function scopedQuerySelector(root, selector) {
-  if (IS_ESM || isScopeSelectorSupported(root)) {
+  if (isScopeSelectorSupported(root)) {
     return root./*OK*/ querySelector(prependSelectorsWith(selector, ':scope'));
   }
 
@@ -554,7 +543,7 @@ export function scopedQuerySelector(root, selector) {
  * @return {!NodeList<!Element>}
  */
 export function scopedQuerySelectorAll(root, selector) {
-  if (IS_ESM || isScopeSelectorSupported(root)) {
+  if (isScopeSelectorSupported(root)) {
     return root./*OK*/ querySelectorAll(
       prependSelectorsWith(selector, ':scope')
     );
@@ -969,14 +958,12 @@ export function getVerticalScrollbarWidth(win) {
  * @param {!Node} node
  * @param {string} name
  * @param {!Object=} opt_data Event data.
- * @param {!CustomEventOptionsDef=} opt_options
  */
-export function dispatchCustomEvent(node, name, opt_data, opt_options) {
+export function dispatchCustomEvent(node, name, opt_data) {
   const data = opt_data || {};
   // Constructors of events need to come from the correct window. Sigh.
   const event = node.ownerDocument.createEvent('Event');
   event.data = data;
-  const {bubbles, cancelable} = opt_options || DEFAULT_CUSTOM_EVENT_OPTIONS;
-  event.initEvent(name, bubbles, cancelable);
+  event.initEvent(name, /* bubbles */ true, /* cancelable */ true);
   node.dispatchEvent(event);
 }

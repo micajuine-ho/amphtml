@@ -17,11 +17,10 @@
 
 const checkDependencies = require('check-dependencies');
 const colors = require('ansi-colors');
-const del = require('del');
 const fs = require('fs-extra');
 const log = require('fancy-log');
 const {execOrDie} = require('../common/exec');
-const {isCiBuild} = require('../common/ci');
+const {isTravisBuild} = require('../common/travis');
 
 /**
  * Writes the given contents to the patched file if updated
@@ -31,7 +30,7 @@ const {isCiBuild} = require('../common/ci');
 function writeIfUpdated(patchedName, file) {
   if (!fs.existsSync(patchedName) || fs.readFileSync(patchedName) != file) {
     fs.writeFileSync(patchedName, file);
-    if (!isCiBuild()) {
+    if (!isTravisBuild()) {
       log(colors.green('Patched'), colors.cyan(patchedName));
     }
   }
@@ -96,18 +95,26 @@ function patchIntersectionObserver() {
 }
 
 /**
- * Deletes the map file for rrule, which breaks closure compiler.
- * TODO(rsimha): Remove this workaround after a fix is merged for
- * https://github.com/google/closure-compiler/issues/3720.
+ * TODO(samouri): remove this patch when a better fix is upstreamed (https://github.com/jakubroztocil/rrule/pull/410).
+ *
+ * Patches rrule to remove references to luxon. Even though rrule marks luxon as an optional dependency,
+ * it is used as if it's a required one (static import). rrule relies on its consumers either
+ * installing luxon or adding it as a webpack-style external. We don't want the former and
+ * can't yet do the latter.
+ *
+ * This function replaces the reference to luxon with a mock that throws (which the code handles well).
  */
-function removeRruleSourcemap() {
-  const rruleMapFile = 'node_modules/rrule/dist/es5/rrule.js.map';
-  if (fs.existsSync(rruleMapFile)) {
-    del.sync(rruleMapFile);
-    if (!isCiBuild()) {
-      log(colors.green('Deleted'), colors.cyan(rruleMapFile));
-    }
-  }
+function patchRRule() {
+  const path = 'node_modules/rrule/dist/es5/rrule.min.js';
+  const patchedContents = fs
+    .readFileSync(path)
+    .toString()
+    .replace(
+      /require\("luxon"\)/g,
+      `{ DateTime: { fromJSDate() { throw TypeError() } } }`
+    );
+
+  writeIfUpdated(path, patchedContents);
 }
 
 /**
@@ -142,7 +149,7 @@ function runNpmCheck() {
  * Used as a pre-requisite by several gulp tasks.
  */
 function maybeUpdatePackages() {
-  if (!isCiBuild()) {
+  if (!isTravisBuild()) {
     updatePackages();
   }
 }
@@ -152,12 +159,12 @@ function maybeUpdatePackages() {
  * polyfills if necessary.
  */
 async function updatePackages() {
-  if (!isCiBuild()) {
+  if (!isTravisBuild()) {
     runNpmCheck();
   }
   patchWebAnimations();
   patchIntersectionObserver();
-  removeRruleSourcemap();
+  patchRRule();
 }
 
 module.exports = {

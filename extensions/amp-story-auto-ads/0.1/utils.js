@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import {CtaTypes} from './story-ad-localization';
 import {getCryptoRandomBytesArray} from '../../../src/utils/bytes';
 
 /**
@@ -40,22 +39,6 @@ export function getUniqueId(win) {
       win.screen.width +
       win.screen.height
   );
-}
-
-/**
- * Localizes CTA text if it is chosen from our predefined types.a
- * @param {string} ctaType
- * @param {!./story-ad-localization.StoryAdLocalization} localizationService
- * @return {string|null}
- */
-export function localizeCtaText(ctaType, localizationService) {
-  // CTA picked from predefined choices.
-  if (CtaTypes[ctaType]) {
-    const ctaLocalizedStringId = CtaTypes[ctaType];
-    return localizationService.getLocalizedString(ctaLocalizedStringId);
-  }
-  // Custom CTA text - Should already be localized.
-  return ctaType;
 }
 
 /**

@@ -31,7 +31,7 @@ const {
   timedExecOrThrow: timedExecOrThrowBase,
 } = require('./utils');
 const {determineBuildTargets} = require('./build-targets');
-const {isPullRequestBuild} = require('../common/ci');
+const {isTravisPullRequestBuild} = require('../common/travis');
 
 const FILENAME = 'e2e-tests.js';
 const FILELOGPREFIX = colors.bold(colors.yellow(`${FILENAME}:`));
@@ -41,7 +41,7 @@ const timedExecOrThrow = (cmd, msg) => timedExecOrThrowBase(cmd, FILENAME, msg);
 async function main() {
   const startTime = startTimer(FILENAME, FILENAME);
 
-  if (!isPullRequestBuild()) {
+  if (!isTravisPullRequestBuild()) {
     downloadDistOutput(FILENAME);
     timedExecOrDie('gulp update-packages');
 

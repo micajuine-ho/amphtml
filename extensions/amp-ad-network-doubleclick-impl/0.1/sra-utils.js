@@ -17,7 +17,6 @@
 import {RENDERING_TYPE_HEADER, XORIGIN_MODE} from '../../amp-a4a/0.1/amp-a4a';
 import {dev, devAssert} from '../../../src/log';
 import {getEnclosingContainerTypes} from '../../../ads/google/a4a/utils';
-import {getPageLayoutBoxBlocking} from '../../../src/utils/page-layout-box';
 import {isInManualExperiment} from '../../../ads/google/a4a/traffic-experiments';
 import {isObject} from '../../../src/types';
 import {tryResolve} from '../../../src/utils/promise';
@@ -307,7 +306,7 @@ export function getPageOffsets(impls) {
   const adxs = [];
   const adys = [];
   impls.forEach((impl) => {
-    const layoutBox = getPageLayoutBoxBlocking(impl.element);
+    const layoutBox = impl.getPageLayoutBox();
     adxs.push(layoutBox.left);
     adys.push(layoutBox.top);
   });

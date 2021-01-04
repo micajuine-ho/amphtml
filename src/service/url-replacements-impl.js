@@ -35,7 +35,7 @@ import {
 } from '../url';
 import {dev, devAssert, user, userAssert} from '../log';
 import {
-  installServiceInEmbedDoc,
+  installServiceInEmbedScope,
   registerServiceBuilderForDoc,
 } from '../service';
 
@@ -762,7 +762,7 @@ export class UrlReplacements {
    * variables or override existing ones.  Any async bindings are ignored.
    * @param {string} source
    * @param {!Object<string, (ResolverReturnDef|!SyncResolverDef)>=} opt_bindings
-   * @param {!Object<string, boolean>=} opt_allowlist Optional allowlist of
+   * @param {!Object<string, boolean>=} opt_allowlist Optional white list of
    *     names that can be substituted.
    * @return {string}
    */
@@ -803,7 +803,7 @@ export class UrlReplacements {
    * variables or override existing ones.  Any async bindings are ignored.
    * @param {string} url
    * @param {!Object<string, (ResolverReturnDef|!SyncResolverDef)>=} opt_bindings
-   * @param {!Object<string, boolean>=} opt_allowlist Optional allowlist of
+   * @param {!Object<string, boolean>=} opt_allowlist Optional white list of
    *     names that can be substituted.
    * @return {string}
    */
@@ -826,7 +826,7 @@ export class UrlReplacements {
    * or override existing ones.
    * @param {string} url
    * @param {!Object<string, *>=} opt_bindings
-   * @param {!Object<string, boolean>=} opt_allowlist Optional allowlist of names
+   * @param {!Object<string, boolean>=} opt_allowlist Optional white list of names
    *     that can be substituted.
    * @param {boolean=} opt_noEncode should not encode URL
    * @return {!Promise<string>}
@@ -1149,11 +1149,12 @@ export function installUrlReplacementsServiceForDoc(ampdoc) {
 
 /**
  * @param {!./ampdoc-impl.AmpDoc} ampdoc
+ * @param {!Window} embedWin
  * @param {!VariableSource} varSource
  */
-export function installUrlReplacementsForEmbed(ampdoc, varSource) {
-  installServiceInEmbedDoc(
-    ampdoc,
+export function installUrlReplacementsForEmbed(ampdoc, embedWin, varSource) {
+  installServiceInEmbedScope(
+    embedWin,
     'url-replace',
     new UrlReplacements(ampdoc, varSource)
   );

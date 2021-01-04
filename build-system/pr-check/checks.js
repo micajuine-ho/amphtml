@@ -30,7 +30,7 @@ const {
   timedExecOrDie: timedExecOrDieBase,
 } = require('./utils');
 const {determineBuildTargets} = require('./build-targets');
-const {isPullRequestBuild} = require('../common/ci');
+const {isTravisPullRequestBuild} = require('../common/travis');
 const {reportAllExpectedTests} = require('../tasks/report-test-status');
 const {runNpmChecks} = require('./npm-checks');
 
@@ -44,7 +44,7 @@ async function main() {
     return;
   }
 
-  if (!isPullRequestBuild()) {
+  if (!isTravisPullRequestBuild()) {
     timedExecOrDie('gulp update-packages');
     timedExecOrDie('gulp check-exact-versions');
     timedExecOrDie('gulp lint');

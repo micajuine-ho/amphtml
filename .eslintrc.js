@@ -34,7 +34,7 @@ function getExperimentGlobals() {
 
 module.exports = {
   'root': true,
-  'parser': '@babel/eslint-parser',
+  'parser': 'babel-eslint',
   'plugins': [
     'chai-expect',
     'google-camelcase',

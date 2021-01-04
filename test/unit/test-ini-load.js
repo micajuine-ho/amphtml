@@ -79,6 +79,7 @@ function resource(win, tagName, overlaps = true, displayed = true) {
     prerenderAllowed: () => true,
     hasBeenMeasured: () => true,
     hasOwner: () => false,
+    getPageLayoutBoxAsync: () => Promise.resolve(),
     hostWin: win,
   };
 }

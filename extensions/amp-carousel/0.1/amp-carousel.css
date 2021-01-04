@@ -92,13 +92,8 @@ amp-carousel.i-amphtml-carousel-has-controls .amp-carousel-button,
 
 amp-carousel .amp-carousel-button.amp-disabled {
   animation: none;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
+  opacity: 0;
+  visibility: hidden;
 }
 
 amp-carousel[i-amphtml-carousel-hide-buttons] .amp-carousel-button-prev,

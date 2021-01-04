@@ -19,7 +19,6 @@ import {dict} from './utils/object.js';
 import {experimentToggles, isCanary} from './experiments';
 import {getLengthNumeral} from './layout';
 import {getModeObject} from './mode-object';
-import {getPageLayoutBoxBlocking} from './utils/page-layout-box';
 import {internalRuntimeVersion} from './internal-version';
 import {urls} from './config';
 
@@ -59,7 +58,9 @@ export function getContextMetadata(
   const viewer = Services.viewerForDoc(element);
   const referrer = viewer.getUnconfirmedReferrerUrl();
 
-  const layoutRect = getPageLayoutBoxBlocking(element);
+  // TODO(alanorozco): Redesign data structure so that fields not exposed by
+  // AmpContext are not part of this object.
+  const layoutRect = element.getPageLayoutBox();
 
   // Use JsonObject to preserve field names so that ampContext can access
   // values with name

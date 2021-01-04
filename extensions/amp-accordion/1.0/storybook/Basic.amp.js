@@ -25,7 +25,7 @@ export default {
 
   parameters: {
     extensions: [{name: 'amp-accordion', version: '1.0'}],
-    experiments: ['bento'],
+    experiments: ['amp-accordion-bento'],
   },
 };
 
@@ -41,15 +41,15 @@ export const _default = () => {
       >
         <section id="section1">
           <h2>Section 1</h2>
-          <div>Puppies are cute.</div>
+          <p>Content in section 1.</p>
         </section>
         <section>
           <h2>Section 2</h2>
-          <div>Kittens are furry.</div>
+          <div>Content in section 2.</div>
         </section>
         <section expanded>
           <h2>Section 3</h2>
-          <div>Elephants have great memory.</div>
+          <div>Content in section 3.</div>
         </section>
       </amp-accordion>
 
@@ -83,18 +83,18 @@ export const events = () => {
       >
         <section id="section1">
           <h2>Section 1</h2>
-          <div>Puppies are cute.</div>
+          <p>Content in section 1.</p>
         </section>
         <section id="section2" on="expand:accordion.expand(section='section3')">
           <h2>Section 2</h2>
-          <div>Kittens are furry.</div>
+          <div>Content in section 2.</div>
         </section>
         <section
           id="section3"
           on="collapse:accordion.collapse(section='section2')"
         >
           <h2>Section 3</h2>
-          <div>Elephants have great memory.</div>
+          <div>Content in section 3.</div>
         </section>
       </amp-accordion>
 

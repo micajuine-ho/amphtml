@@ -118,7 +118,6 @@ export const EMAIL_ALLOWLISTED_AMP_TAGS = {
  */
 export const TRIPLE_MUSTACHE_ALLOWLISTED_TAGS = [
   'a',
-  'amp-img',
   'b',
   'br',
   'caption',
@@ -131,9 +130,6 @@ export const TRIPLE_MUSTACHE_ALLOWLISTED_TAGS = [
   'dl',
   'dt',
   'em',
-  'h1',
-  'h2',
-  'h3',
   'hr',
   'i',
   'ins',

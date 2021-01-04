@@ -27,7 +27,6 @@ var VideoIframeDef = {};
  *   origin: (RegExp|undefined),
  *   onMessage: function(!MessageEvent),
  *   makeMethodMessage: function(string):(!Object|string),
- *   onIframeLoad: (function(!Event)|undefined),
  * }}
  */
 VideoIframeDef.Props;

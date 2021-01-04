@@ -19,11 +19,11 @@ const colors = require('ansi-colors');
 const fs = require('fs-extra');
 const log = require('fancy-log');
 const {
-  ciCommitSha,
-  ciPullRequestSha,
-  isCiBuild,
-  isPullRequestBuild,
-} = require('../common/ci');
+  isTravisBuild,
+  isTravisPullRequestBuild,
+  travisCommitSha,
+  travisPullRequestSha,
+} = require('../common/travis');
 const {getStdout} = require('../common/exec');
 const {shortSha} = require('../common/git');
 
@@ -57,19 +57,20 @@ function uploadReport(file, flags) {
 }
 
 /**
- * Uploads code coverage reports for unit / integration tests during CI builds.
+ * Uploads code coverage reports for unit and integration tests during Travis
+ * jobs.
  */
 async function codecovUpload() {
-  if (!isCiBuild()) {
+  if (!isTravisBuild()) {
     log(
       yellow('WARNING:'),
-      'Code coverage reports can only be uploaded by CI builds.'
+      'Code coverage reports can only be uploaded by Travis builds.'
     );
     return;
   }
 
   const commitSha = shortSha(
-    isPullRequestBuild() ? ciPullRequestSha() : ciCommitSha()
+    isTravisPullRequestBuild() ? travisPullRequestSha() : travisCommitSha()
   );
   log(
     green('INFO:'),
@@ -87,4 +88,4 @@ module.exports = {
 };
 
 codecovUpload.description =
-  'Uploads code coverage reports to codecov.io during CI builds.';
+  'Uploads code coverage reports to codecov.io during Travis builds.';

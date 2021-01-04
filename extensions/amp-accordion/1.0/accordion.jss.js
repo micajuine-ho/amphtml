@@ -27,6 +27,7 @@ const sectionChild = {
   position: 'relative !important',
 };
 
+// TODO(#30445): update these styles after team agrees on styling
 const header = {
   cursor: 'pointer',
   backgroundColor: '#efefef',
@@ -34,23 +35,14 @@ const header = {
   border: 'solid 1px #dfdfdf',
 };
 
-const contentHidden = {
-  '&:not(.i-amphtml-animating)': {
-    display: 'none !important',
-  },
-};
-
-const contentHiddenMatchable = {
-  '&:not(.i-amphtml-animating)': {
-    contentVisibility: 'hidden-matchable !important',
-  },
-};
+// TODO(#30445): update these styles after team agrees on styling
+// or delete if not used
+const content = {};
 
 const JSS = {
   sectionChild,
   header,
-  contentHidden,
-  contentHiddenMatchable,
+  content,
 };
 
 // useStyles gets replaced for AMP builds via `babel-plugin-transform-jss`.

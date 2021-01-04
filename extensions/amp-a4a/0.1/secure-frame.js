@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {Services} from '../../../src/services';
 import {createElementWithAttributes, escapeHtml} from '../../../src/dom';
 import {dict} from '../../../src/utils/object';
 
@@ -35,7 +36,6 @@ const sandboxVals =
   'allow-popups ' +
   'allow-popups-to-escape-sandbox ' +
   'allow-same-origin ' +
-  'allow-scripts ' +
   'allow-top-navigation';
 
 export const createSecureDocSkeleton = (url, sanitizedHeadElements, body) =>
@@ -69,6 +69,10 @@ export const createSecureDocSkeleton = (url, sanitizedHeadElements, body) =>
  * @return {!HTMLIFrameElement}
  */
 export function createSecureFrame(win, title, height, width) {
+  const sandbox = Services.platformFor(win).isSafari()
+    ? sandboxVals + ' allow-scripts'
+    : sandboxVals;
+
   const {document} = win;
   const iframe = /** @type {!HTMLIFrameElement} */ (createElementWithAttributes(
     document,
@@ -83,7 +87,7 @@ export function createSecureFrame(win, title, height, width) {
       'allowfullscreen': '',
       'allowtransparency': '',
       'scrolling': 'no',
-      'sandbox': sandboxVals,
+      'sandbox': sandbox,
     })
   ));
   return iframe;

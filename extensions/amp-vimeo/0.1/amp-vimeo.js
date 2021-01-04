@@ -68,8 +68,6 @@ const VIMEO_EVENTS = {
   'volumechange': null,
 };
 
-const DO_NOT_TRACK_ATTRIBUTE = 'do-not-track';
-
 /** @implements {../../../src/video-interface.VideoInterface} */
 class AmpVimeo extends AMP.BaseElement {
   /** @param {!AmpElement} element */
@@ -123,17 +121,16 @@ class AmpVimeo extends AMP.BaseElement {
   /** @override */
   layoutCallback() {
     return this.isAutoplay_().then((isAutoplay) =>
-      this.buildIframe_(isAutoplay, this.isDoNotTrack_())
+      this.buildIframe_(isAutoplay)
     );
   }
 
   /**
    * @param {boolean} isAutoplay
-   * @param {boolean} isDoNotTrack
    * @return {!Promise}
    * @private
    */
-  buildIframe_(isAutoplay, isDoNotTrack) {
+  buildIframe_(isAutoplay) {
     const {element} = this;
     const vidId = userAssert(
       element.getAttribute('data-videoid'),
@@ -150,10 +147,6 @@ class AmpVimeo extends AMP.BaseElement {
       // Only muted videos are allowed to autoplay
       this.muted_ = true;
       src = addParamToUrl(src, 'muted', '1');
-    }
-
-    if (isDoNotTrack) {
-      src = addParamToUrl(src, 'dnt', '1');
     }
 
     const iframe = createFrameFor(this, src);
@@ -194,14 +187,6 @@ class AmpVimeo extends AMP.BaseElement {
     }
     const {win} = this;
     return VideoUtils.isAutoplaySupported(win, getMode(win).lite);
-  }
-
-  /**
-   * @return {boolean}
-   * @private
-   */
-  isDoNotTrack_() {
-    return this.element.hasAttribute(DO_NOT_TRACK_ATTRIBUTE);
   }
 
   /** @private */

@@ -30,12 +30,13 @@ module.exports = function (context) {
       return;
     }
 
-    const leadingComments = context.getCommentsBefore(property);
-    const ok = leadingComments.some((comment) => {
-      return comment.value === 'OK';
-    });
-    if (ok) {
-      return;
+    if (property.leadingComments) {
+      const ok = property.leadingComments.some((comment) => {
+        return comment.value === 'OK';
+      });
+      if (ok) {
+        return;
+      }
     }
 
     const selector = getSelector(node, 0);
@@ -84,12 +85,13 @@ module.exports = function (context) {
       return;
     }
 
-    const leadingComments = context.getCommentsBefore(node);
-    const ok = leadingComments.some((comment) => {
-      return comment.value === 'OK';
-    });
-    if (ok) {
-      return;
+    if (node.leadingComments) {
+      const ok = node.leadingComments.some((comment) => {
+        return comment.value === 'OK';
+      });
+      if (ok) {
+        return;
+      }
     }
 
     const selector = getSelector(node, 1);

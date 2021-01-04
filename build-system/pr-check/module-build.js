@@ -32,7 +32,7 @@ const {
   uploadEsmDistOutput,
 } = require('./utils');
 const {determineBuildTargets} = require('./build-targets');
-const {isPullRequestBuild} = require('../common/ci');
+const {isTravisPullRequestBuild} = require('../common/travis');
 const {runNpmChecks} = require('./npm-checks');
 
 const FILENAME = 'module-build.js';
@@ -46,21 +46,14 @@ function main() {
     return;
   }
 
-  if (!isPullRequestBuild()) {
+  if (!isTravisPullRequestBuild()) {
     timedExecOrDie('gulp update-packages');
     timedExecOrDie('gulp dist --esm --fortesting');
     uploadEsmDistOutput(FILENAME);
   } else {
     printChangeSummary(FILENAME);
     const buildTargets = determineBuildTargets(FILENAME);
-    // TODO(#31102): This list must eventually match the same buildTargets check
-    // found in pr-check/nomodule-build.js as we turn on the systems that
-    // run against the module build. (ex. visual diffs, e2e, etc.)
-    if (
-      buildTargets.has('RUNTIME') ||
-      buildTargets.has('FLAG_CONFIG') ||
-      buildTargets.has('INTEGRATION_TEST')
-    ) {
+    if (buildTargets.has('RUNTIME') || buildTargets.has('FLAG_CONFIG')) {
       timedExecOrDie('gulp update-packages');
       timedExecOrDie('gulp dist --esm --fortesting');
       uploadEsmDistOutput(FILENAME);

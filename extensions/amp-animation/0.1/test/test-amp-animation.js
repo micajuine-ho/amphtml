@@ -34,14 +34,10 @@ describes.sandboxed('AmpAnimation', {}, (env) => {
         ioCallbacks.push(callback);
       }
       observe(target) {
-        const isIntersecting = (config && config.isIntersecting) ?? true;
-        const intersectionRatio =
-          (config && config.intersectionRatio) ?? (isIntersecting ? 1 : 0);
         ioCallback([
           {
             target,
-            isIntersecting,
-            intersectionRatio,
+            isIntersecting: (config && config.isIntersecting) ?? true,
             boundingClientRect: target.getBoundingClientRect(),
           },
         ]);
@@ -73,13 +69,12 @@ describes.sandboxed('AmpAnimation', {}, (env) => {
     return element.build().then(() => element.implementation_);
   }
 
-  function updateIntersection(target, intersectionRatio) {
+  function updateIntersection(target, isIntersecting) {
     ioCallbacks.forEach((callback) => {
       callback([
         {
           target,
-          isIntersecting: intersectionRatio > 0,
-          intersectionRatio,
+          isIntersecting,
           boundingClientRect: target.getBoundingClientRect(),
         },
       ]);
@@ -191,7 +186,7 @@ describes.sandboxed('AmpAnimation', {}, (env) => {
         viewer.setVisibilityState_('visible');
         expect(anim.visible_).to.be.false;
 
-        updateIntersection(anim.element.parentElement, 1);
+        updateIntersection(anim.element.parentElement, true);
         expect(anim.visible_).to.be.true;
       });
 

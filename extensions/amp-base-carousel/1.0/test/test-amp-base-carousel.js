@@ -20,8 +20,6 @@ import {
   createElementWithAttributes,
   waitForChildPromise,
 } from '../../../../src/dom';
-import {mod} from '../../../../src/utils/math';
-import {poll} from '../../../../testing/iframe';
 import {setStyles} from '../../../../src/style';
 import {toArray} from '../../../../src/types';
 import {toggleExperiment} from '../../../../src/experiments';
@@ -97,7 +95,7 @@ describes.realWin(
 
     beforeEach(() => {
       win = env.win;
-      toggleExperiment(win, 'bento-carousel', true, true);
+      toggleExperiment(win, 'amp-base-carousel-bento', true, true);
       element = createElementWithAttributes(win.document, 'amp-base-carousel', {
         'layout': 'fixed',
         'width': '300px',
@@ -106,7 +104,7 @@ describes.realWin(
     });
 
     afterEach(() => {
-      toggleExperiment(win, 'bento-carousel', false, true);
+      toggleExperiment(win, 'amp-base-carousel-bento', false, true);
     });
 
     it('should render slides and arrows when built', async () => {
@@ -172,76 +170,54 @@ describes.realWin(
       ).to.deep.equal([userSuppliedChildren[1]]);
     });
 
-    describe('snapping', () => {
-      it('should snap to slides by default', async () => {
-        const userSuppliedChildren = setSlides(3);
-        userSuppliedChildren.forEach((child) => element.appendChild(child));
-        win.document.body.appendChild(element);
+    it('should snap to slides by default', async () => {
+      const userSuppliedChildren = setSlides(3);
+      userSuppliedChildren.forEach((child) => element.appendChild(child));
+      win.document.body.appendChild(element);
 
-        const renderedSlideWrappers = await getSlideWrappersFromShadow();
-        expect(renderedSlideWrappers).to.have.lengthOf(3);
-        renderedSlideWrappers.forEach((slide) => {
-          expect(slide.classList.contains(styles.enableSnap)).to.be.true;
-        });
+      const renderedSlideWrappers = await getSlideWrappersFromShadow();
+      expect(renderedSlideWrappers).to.have.lengthOf(3);
+      renderedSlideWrappers.forEach((slide) => {
+        expect(slide.classList.contains(styles.enableSnap)).to.be.true;
       });
+    });
 
-      it('should snap to slides with snap attribute', async () => {
-        element.setAttribute('snap', '');
-        const userSuppliedChildren = setSlides(3);
-        userSuppliedChildren.forEach((child) => element.appendChild(child));
-        win.document.body.appendChild(element);
+    it('should snap to slides with snap attribute', async () => {
+      element.setAttribute('snap', '');
+      const userSuppliedChildren = setSlides(3);
+      userSuppliedChildren.forEach((child) => element.appendChild(child));
+      win.document.body.appendChild(element);
 
-        const renderedSlideWrappers = await getSlideWrappersFromShadow();
-        expect(renderedSlideWrappers).to.have.lengthOf(3);
-        renderedSlideWrappers.forEach((slide) => {
-          expect(slide.classList.contains(styles.enableSnap)).to.be.true;
-        });
+      const renderedSlideWrappers = await getSlideWrappersFromShadow();
+      expect(renderedSlideWrappers).to.have.lengthOf(3);
+      renderedSlideWrappers.forEach((slide) => {
+        expect(slide.classList.contains(styles.enableSnap)).to.be.true;
       });
+    });
 
-      it('should snap to slides with snap="true"', async () => {
-        element.setAttribute('snap', 'true');
-        const userSuppliedChildren = setSlides(3);
-        userSuppliedChildren.forEach((child) => element.appendChild(child));
-        win.document.body.appendChild(element);
+    it('should snap to slides with snap="true"', async () => {
+      element.setAttribute('snap', 'true');
+      const userSuppliedChildren = setSlides(3);
+      userSuppliedChildren.forEach((child) => element.appendChild(child));
+      win.document.body.appendChild(element);
 
-        const renderedSlideWrappers = await getSlideWrappersFromShadow();
-        expect(renderedSlideWrappers).to.have.lengthOf(3);
-        renderedSlideWrappers.forEach((slide) => {
-          expect(slide.classList.contains(styles.enableSnap)).to.be.true;
-        });
+      const renderedSlideWrappers = await getSlideWrappersFromShadow();
+      expect(renderedSlideWrappers).to.have.lengthOf(3);
+      renderedSlideWrappers.forEach((slide) => {
+        expect(slide.classList.contains(styles.enableSnap)).to.be.true;
       });
+    });
 
-      it('should not snap to slides with snap="false"', async () => {
-        element.setAttribute('snap', 'false');
-        const userSuppliedChildren = setSlides(3);
-        userSuppliedChildren.forEach((child) => element.appendChild(child));
-        win.document.body.appendChild(element);
+    it('should not snap to slides with snap="false"', async () => {
+      element.setAttribute('snap', 'false');
+      const userSuppliedChildren = setSlides(3);
+      userSuppliedChildren.forEach((child) => element.appendChild(child));
+      win.document.body.appendChild(element);
 
-        const renderedSlideWrappers = await getSlideWrappersFromShadow();
-        expect(renderedSlideWrappers).to.have.lengthOf(3);
-        renderedSlideWrappers.forEach((slide) => {
-          expect(slide.classList.contains(styles.disableSnap)).to.be.true;
-        });
-      });
-
-      it('should only set snap on slides according to snap-by', async () => {
-        element.setAttribute('snap', '');
-        element.setAttribute('snap-by', '2');
-        const userSuppliedChildren = setSlides(4);
-        userSuppliedChildren.forEach((child) => element.appendChild(child));
-        win.document.body.appendChild(element);
-
-        const renderedSlideWrappers = await getSlideWrappersFromShadow();
-        expect(renderedSlideWrappers).to.have.lengthOf(4);
-        renderedSlideWrappers.forEach((slide, index) => {
-          if (mod(index, 2) === 0) {
-            expect(slide.classList.contains(styles.enableSnap)).to.be.true;
-            expect(slide.classList.contains(styles.disableSnap)).to.be.false;
-          } else {
-            expect(slide.classList.contains(styles.enableSnap)).to.be.false;
-            expect(slide.classList.contains(styles.disableSnap)).to.be.true;
-          }
-        });
+      const renderedSlideWrappers = await getSlideWrappersFromShadow();
+      expect(renderedSlideWrappers).to.have.lengthOf(3);
+      renderedSlideWrappers.forEach((slide) => {
+        expect(slide.classList.contains(styles.disableSnap)).to.be.true;
       });
     });
 
@@ -279,20 +255,8 @@ describes.realWin(
         element.enqueAction(invocation('next'));
         await waitFor(() => scroller.scrollLeft > 0, 'advanced to next slide');
 
-        // Make sure internal state index is updated before attempting to call prev(),
-        // Since this is typically updated automatically on debounce, there is a risk that
-        // the test will call prev() on the slide at the 0th index unless we force is here.
-        element.enqueAction(invocation('goToSlide', {index: 1}));
-        await waitFor(() => scroller.scrollLeft > 0, 'to slide 1');
-
         element.enqueAction(invocation('prev'));
-        // Wait for a longer timeout than the 200 default in waitFor.
-        await poll(
-          'returned to prev slide',
-          () => scroller.scrollLeft == 0,
-          undefined /* opt_onError */,
-          400 /* opt_timeout */
-        );
+        await waitFor(() => scroller.scrollLeft == 0, 'returned to prev slide');
       });
 
       it('should execute goToSlide action', async () => {
@@ -358,40 +322,10 @@ describes.realWin(
       }
 
       element.enqueAction(invocation('goToSlide', {index: 1}));
-      await waitFor(() => scroller.scrollLeft > 0, 'go to slide 1');
+      await waitFor(() => scroller.scrollLeft > 0, 'to to slide 1');
 
       element.enqueAction(invocation('goToSlide', {index: 0}));
       await waitFor(() => scroller.scrollLeft == 0, 'returned to first slide');
-    });
-
-    it('should go to slide 0 when slide attr is mutated to 0', async () => {
-      const userSuppliedChildren = setSlides(3);
-      userSuppliedChildren.forEach((child) => element.appendChild(child));
-      win.document.body.appendChild(element);
-      await getSlidesFromShadow();
-
-      const scroller = element.shadowRoot.querySelector(
-        `[class*=${styles.scrollContainer}]`
-      );
-
-      element.setAttribute('slide', '1');
-      await waitFor(() => scroller.scrollLeft > 0, 'go to slide 1');
-
-      element.setAttribute('slide', '0');
-      await waitFor(() => scroller.scrollLeft == 0, 'returned to first slide');
-    });
-
-    it('should start at slide 1 with slide attr set to 1', async () => {
-      element.setAttribute('slide', '1');
-      const userSuppliedChildren = setSlides(3);
-      userSuppliedChildren.forEach((child) => element.appendChild(child));
-      win.document.body.appendChild(element);
-      await getSlidesFromShadow();
-
-      const scroller = element.shadowRoot.querySelector(
-        `[class*=${styles.scrollContainer}]`
-      );
-      await waitFor(() => scroller.scrollLeft > 0, 'render at slide 1');
     });
 
     it('should respect outset-arrows even if controls=never', async () => {

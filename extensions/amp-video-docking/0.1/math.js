@@ -163,7 +163,7 @@ export function topCornerRect(
  * @return {boolean}
  */
 export const isVisibleBySize = (element) =>
-  isSizedRect(element./*OK*/ getBoundingClientRect());
+  isSizedRect(element.getPageLayoutBox());
 
 /**
  * @param {!LayoutRectDef|!ClientRect|!DOMRect} rect

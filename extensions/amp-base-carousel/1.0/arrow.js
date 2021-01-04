@@ -27,7 +27,6 @@ export function Arrow({
   customArrow = <DefaultArrow by={by} />,
   disabled,
   outsetArrows,
-  rtl,
 }) {
   const {
     'disabled': customDisabled,
@@ -48,7 +47,7 @@ export function Arrow({
     by < 0 ? classes.arrowPrev : classes.arrowNext
   } ${isDisabled ? classes.arrowDisabled : ''} ${
     outsetArrows ? classes.outsetArrow : classes.insetArrow
-  } ${rtl ? classes.rtl : classes.ltr}`;
+  }`;
 
   return (
     <div class={classNames}>

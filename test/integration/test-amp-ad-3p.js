@@ -182,7 +182,11 @@ describe('amp-ad 3P', () => {
           lastIO = changes[changes.length - 1];
         });
         await poll('wait for initial IO entry', () => {
-          return lastIO != null && lastIO.boundingClientRect.top == 1000;
+          return (
+            lastIO != null &&
+            lastIO.boundingClientRect.top == 1000 &&
+            lastIO.intersectionRatio == 1
+          );
         });
         await new Promise((resolve) => {
           setTimeout(resolve, 110);

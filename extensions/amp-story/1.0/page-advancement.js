@@ -19,7 +19,6 @@ import {
   EmbeddedComponentState,
   InteractiveComponentDef,
   StateProperty,
-  UIType,
   getStoreService,
 } from './amp-story-store-service';
 import {AdvancementMode} from './story-analytics';
@@ -47,29 +46,12 @@ const PREVIOUS_SCREEN_AREA_RATIO = 0.25;
 const TOP_REGION = 0.8;
 
 /**
- * Protected edges of the screen as a percent of page width. When tapped on these areas, we will
+ * Protected edges of the screen in pixels. When tapped on these areas, we will
  * always perform navigation. Even if a clickable element is there.
  * @const {number}
  * @private
  */
-const PROTECTED_SCREEN_EDGE_PERCENT = 12;
-
-/**
- * Minimum protected edges of the screen in pixels.
- * If PROTECTED_SCREEN_EDGE_PERCENT results in a protected edge value less than MINIMUM_PROTECTED_SCREEN_EDGE_PX,
- * we will use MINIMUM_PROTECTED_SCREEN_EDGE_PX.
- * @const {number}
- * @private
- */
-const MINIMUM_PROTECTED_SCREEN_EDGE_PX = 48;
-
-/**
- * Maximum percent of screen that can be occupied by a single link
- * before the link is considered navigation blocking and ignored.
- * @const {number}
- * @private
- */
-const MAX_LINK_SCREEN_PERCENT = 0.8;
+const PROTECTED_SCREEN_EDGE_PX = 48;
 
 const INTERACTIVE_EMBEDDED_COMPONENTS_SELECTORS = Object.values(
   interactiveElementsSelectors()
@@ -481,7 +463,7 @@ export class ManualAdvancement extends AdvancementConfig {
 
         if (
           tagName.startsWith('amp-story-interactive-') &&
-          !this.isInStoryPageSideEdge_(event, this.getStoryPageRect_())
+          !this.isInScreenSideEdge_(event, this.element_.getLayoutBox())
         ) {
           shouldHandleEvent = false;
           return true;
@@ -518,10 +500,7 @@ export class ManualAdvancement extends AdvancementConfig {
     // <span>).
     const target = dev().assertElement(event.target);
 
-    if (
-      this.isInStoryPageSideEdge_(event, pageRect) ||
-      this.isTooLargeOnPage_(event, pageRect)
-    ) {
+    if (this.isInScreenSideEdge_(event, pageRect)) {
       event.preventDefault();
       return false;
     }
@@ -567,61 +546,17 @@ export class ManualAdvancement extends AdvancementConfig {
   }
 
   /**
-   * Checks if click was inside of one of the side edges of the page.
+   * Checks if click was inside of one of the side edges of the screen.
    * @param {!Event} event
    * @param {!ClientRect} pageRect
    * @return {boolean}
    * @private
    */
-  isInStoryPageSideEdge_(event, pageRect) {
-    // Clicks with coordinates (0,0) are assumed to be from keyboard or Talkback.
-    // These clicks should never be overriden for navigation.
-    if (event.clientX === 0 && event.clientY === 0) {
-      return false;
-    }
-
-    const sideEdgeWidthFromPercent =
-      pageRect.width * (PROTECTED_SCREEN_EDGE_PERCENT / 100);
-    const sideEdgeLimit = Math.max(
-      sideEdgeWidthFromPercent,
-      MINIMUM_PROTECTED_SCREEN_EDGE_PX
-    );
-
+  isInScreenSideEdge_(event, pageRect) {
     return (
-      event.clientX <= pageRect.x + sideEdgeLimit ||
-      event.clientX >= pageRect.x + pageRect.width - sideEdgeLimit
+      event.clientX <= PROTECTED_SCREEN_EDGE_PX ||
+      event.clientX >= pageRect.width - PROTECTED_SCREEN_EDGE_PX
     );
-  }
-
-  /**
-   * Checks if click target is too large on the page and preventing navigation.
-   * If yes, the link is ignored & logged.
-   * @param {!Event} event
-   * @param {!ClientRect} pageRect
-   * @return {boolean}
-   * @private
-   */
-  isTooLargeOnPage_(event, pageRect) {
-    // Clicks with coordinates (0,0) are assumed to be from keyboard or Talkback.
-    // These clicks should never be overriden for navigation.
-    if (event.clientX === 0 && event.clientY === 0) {
-      return false;
-    }
-
-    const target = dev().assertElement(event.target);
-    const targetRect = target./*OK*/ getBoundingClientRect();
-    if (
-      (targetRect.height * targetRect.width) /
-        (pageRect.width * pageRect.height) >=
-      MAX_LINK_SCREEN_PERCENT
-    ) {
-      user().error(
-        'AMP-STORY-PAGE',
-        'Link was too large; skipped for navigation. For more information, see https://github.com/ampproject/amphtml/issues/31108'
-      );
-      return true;
-    }
-    return false;
   }
 
   /**
@@ -675,8 +610,7 @@ export class ManualAdvancement extends AdvancementConfig {
    */
   maybePerformNavigation_(event) {
     const target = dev().assertElement(event.target);
-
-    const pageRect = this.getStoryPageRect_();
+    const pageRect = this.element_.getLayoutBox();
 
     if (this.isHandledByEmbeddedComponent_(event, pageRect)) {
       event.stopPropagation();
@@ -735,25 +669,6 @@ export class ManualAdvancement extends AdvancementConfig {
     };
 
     this.onTapNavigation(this.getTapDirection_(page));
-  }
-
-  /**
-   * Calculates the pageRect based on the UIType.
-   * We can an use LayoutBox for mobile since the story page occupies entire screen.
-   * Desktop UI needs the most recent value from the getBoundingClientRect function.
-   * @return {DOMRect | LayoutBox}
-   * @private
-   */
-  getStoryPageRect_() {
-    if (
-      this.storeService_.get(StateProperty.UI_STATE) !== UIType.DESKTOP_PANELS
-    ) {
-      return this.element_.getLayoutBox();
-    } else {
-      return this.element_
-        .querySelector('amp-story-page[active]')
-        ./*OK*/ getBoundingClientRect();
-    }
   }
 
   /**

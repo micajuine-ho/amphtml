@@ -26,9 +26,8 @@ class AmpFitText extends PreactBaseElement {
   /** @override */
   isLayoutSupported(layout) {
     userAssert(
-      isExperimentOn(this.win, 'bento') ||
-        isExperimentOn(this.win, 'bento-fit-text'),
-      'expected global "bento" or specific "bento-fit-text" experiment to be enabled'
+      isExperimentOn(this.win, 'amp-fit-text-bento'),
+      'expected amp-fit-text-bento experiment to be enabled'
     );
     return super.isLayoutSupported(layout);
   }

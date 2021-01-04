@@ -115,7 +115,6 @@ export class Renderer {
       stencil: false,
       antialias: false,
       premultipliedAlpha: true,
-      preserveDrawingBuffer: window.__AMP_TEST || false,
     };
     this.gl = canvas.getContext('webgl', params) ||
         canvas.getContext('experimental-webgl', params);

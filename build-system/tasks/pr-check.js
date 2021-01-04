@@ -130,7 +130,8 @@ module.exports = {
   prCheck,
 };
 
-prCheck.description = 'Runs a subset of the CI checks against local changes.';
+prCheck.description =
+  'Runs a subset of the Travis CI checks against local changes.';
 prCheck.flags = {
   'nobuild': '  Skips building the runtime via `gulp dist`.',
 };
