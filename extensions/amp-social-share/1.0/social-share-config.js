@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 
 /**
  * Get social share configurations by supported type.

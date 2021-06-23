@@ -15,7 +15,7 @@
  */
 
 import {AmpInstallServiceWorker} from '../amp-install-serviceworker';
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 import {
   assertHttpsUrl,
   getSourceOrigin,
@@ -27,7 +27,7 @@ import {loadPromise} from '../../../../src/event-helper';
 import {
   registerServiceBuilderForDoc,
   resetServiceForTesting,
-} from '../../../../src/service-helpers';
+} from '../../../../src/service';
 
 function stubUrlService(sandbox) {
   sandbox.stub(Services, 'urlForDoc').returns({

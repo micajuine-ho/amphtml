@@ -19,19 +19,19 @@ import {
   StateProperty,
   getStoreService,
 } from './amp-story-store-service';
-import {ActionTrust} from '#core/constants/action-constants';
+import {ActionTrust} from '../../../src/core/constants/action-constants';
 import {CSS} from '../../../build/amp-story-consent-1.0.css';
-import {Layout} from '#core/dom/layout';
+import {Layout} from '../../../src/layout';
 import {LocalizedStringId} from '../../../src/localized-strings';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {assertAbsoluteHttpOrHttpsUrl, assertHttpsUrl} from '../../../src/url';
 import {
   childElementByTag,
   closest,
   closestAncestorElementBySelector,
   matches,
-} from '#core/dom/query';
-import {computedStyle, setImportantStyles} from '#core/dom/style';
+} from '../../../src/core/dom/query';
+import {computedStyle, setImportantStyles} from '../../../src/style';
 import {
   createShadowRootWithStyle,
   getRGBFromCssColorValue,
@@ -39,11 +39,11 @@ import {
   triggerClickFromLightDom,
 } from './utils';
 import {dev, user, userAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
-import {isArray} from '#core/types';
-import {isJsonScriptTag} from '#core/dom';
+import {dict} from './../../../src/core/types/object';
+import {isArray} from '../../../src/core/types';
+import {isJsonScriptTag} from '../../../src/dom';
 
-import {parseJson} from '#core/types/object/json';
+import {parseJson} from '../../../src/core/types/object/json';
 import {renderAsElement} from './simple-template';
 
 /** @const {string} */

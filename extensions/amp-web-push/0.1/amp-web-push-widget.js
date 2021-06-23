@@ -14,7 +14,7 @@
  * the License.
  */
 
-import {Layout} from '#core/dom/layout';
+import {Layout} from '../../../src/layout';
 
 /**
  * @fileoverview

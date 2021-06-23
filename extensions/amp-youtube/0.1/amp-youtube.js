@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Deferred} from '#core/data-structures/promise';
-import {PauseHelper} from '#core/dom/video/pause-helper';
-import {Services} from '#service';
+import {Deferred} from '../../../src/core/data-structures/promise';
+import {PauseHelper} from '../../../src/utils/pause-helper';
+import {Services} from '../../../src/services';
 import {VideoEvents} from '../../../src/video-interface';
 import {addParamsToUrl} from '../../../src/url';
 import {
@@ -28,24 +28,23 @@ import {
   originMatches,
   redispatch,
 } from '../../../src/iframe-video';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
 import {dev, userAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {
   dispatchCustomEvent,
   getDataParamsFromAttributes,
   removeElement,
-} from '#core/dom';
+} from '../../../src/dom';
 import {
   fullscreenEnter,
   fullscreenExit,
   isFullscreenElement,
-} from '#core/dom/fullscreen';
+} from '../../../src/core/dom/fullscreen';
 import {getData, listen} from '../../../src/event-helper';
-import {htmlFor} from '#core/dom/static-template';
-import {installVideoManagerForDoc} from '#service/video-manager-impl';
-import {propagateAttributes} from '#core/dom/propagate-attributes';
-import {setStyles} from '#core/dom/style';
+import {htmlFor} from '../../../src/static-template';
+import {installVideoManagerForDoc} from '../../../src/service/video-manager-impl';
+import {isLayoutSizeDefined} from '../../../src/layout';
+import {setStyles} from '../../../src/style';
 
 const TAG = 'amp-youtube';
 
@@ -500,7 +499,7 @@ class AmpYoutube extends AMP.BaseElement {
       // the object-fit: cover.
       'visibility': 'hidden',
     });
-    propagateAttributes(['aria-label'], this.element, imgPlaceholder);
+    this.propagateAttributes(['aria-label'], imgPlaceholder);
     // TODO(mkhatib): Maybe add srcset to allow the browser to
     // load the needed size or even better match YTPlayer logic for loading
     // player thumbnails for different screen sizes for a cache win!
@@ -516,7 +515,7 @@ class AmpYoutube extends AMP.BaseElement {
     } else {
       imgPlaceholder.setAttribute('alt', 'Loading video');
     }
-    applyFillContent(imgPlaceholder);
+    this.applyFillContent(imgPlaceholder);
 
     // Because sddefault.jpg isn't available for all videos, we try to load
     // it and fallback to hqdefault.jpg.

@@ -101,4 +101,4 @@ module.exports = {
 };
 
 checkRenovateConfig.description =
-  'Check the Renovate config file for correctness';
+  'Checks the Renovate config file for correctness';

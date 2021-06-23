@@ -139,5 +139,4 @@ module.exports = {
   testReportUpload,
 };
 
-testReportUpload.description =
-  'Send results from a test run to the AMP test result database';
+testReportUpload.description = 'Sends test results to test result database';

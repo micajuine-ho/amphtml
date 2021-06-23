@@ -92,4 +92,4 @@ module.exports = {
   analyticsVendorConfigs,
 };
 
-analyticsVendorConfigs.description = 'Compile all analytics vendor configs';
+analyticsVendorConfigs.description = 'Compile analytics vendor configs to dist';

@@ -17,13 +17,12 @@
 import {
   CONSENT_POLICY_STATE,
   CONSENT_STRING_TYPE,
-} from '#core/constants/consent-state';
-import {Deferred} from '#core/data-structures/promise';
-import {PauseHelper} from '#core/dom/video/pause-helper';
-import {Services} from '#service';
+} from '../../../src/core/constants/consent-state';
+import {Deferred} from '../../../src/core/data-structures/promise';
+import {PauseHelper} from '../../../src/utils/pause-helper';
+import {Services} from '../../../src/services';
 import {addParamsToUrl} from '../../../src/url';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {
   getConsentMetadata,
   getConsentPolicyInfo,
@@ -31,13 +30,14 @@ import {
   getConsentPolicyState,
 } from '../../../src/consent';
 import {getData} from '../../../src/event-helper';
+import {isLayoutSizeDefined} from '../../../src/layout';
 import {
   observeContentSize,
   unobserveContentSize,
-} from '#core/dom/layout/size-observer';
-import {removeElement} from '#core/dom';
+} from '../../../src/utils/size-observer';
+import {removeElement} from '../../../src/dom';
 import {setIsMediaComponent} from '../../../src/video-interface';
-import {tryParseJson} from '#core/types/object/json';
+import {tryParseJson} from '../../../src/core/types/object/json';
 import {userAssert} from '../../../src/log';
 
 /**
@@ -292,7 +292,7 @@ export class AmpConnatixPlayer extends AMP.BaseElement {
     iframe.src = src;
 
     // applyFillContent so that frame covers the entire component.
-    applyFillContent(iframe, /* replacedContent */ true);
+    this.applyFillContent(iframe, /* replacedContent */ true);
 
     // append child iframe for element
     element.appendChild(iframe);

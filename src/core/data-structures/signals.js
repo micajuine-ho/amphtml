@@ -15,10 +15,10 @@
  */
 
 import {Deferred} from './promise';
-import {map} from '#core/types/object';
+import {map} from '../types/object';
 
 // typedef imports
-import {TimestampDef} from '#core/types/date';
+import {TimestampDef} from '../types/date';
 
 /**
  * This object tracts signals and allows blocking until a signal has been

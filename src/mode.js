@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import * as coreMode from './core/mode';
 import {internalRuntimeVersion} from './internal-version';
 import {parseQueryString} from './core/types/string/url';
 
@@ -61,28 +60,45 @@ export function getMode(opt_win) {
  * @return {!ModeDef}
  */
 function getMode_(win) {
+  // TODO(erwinmombay): simplify the logic here
+  const AMP_CONFIG = self.AMP_CONFIG || {};
+
+  // Magic constants that are replaced by closure compiler.
+  // IS_MINIFIED is always replaced with true when closure compiler is used
+  // while IS_FORTESTING is only replaced when `amp dist` is called without the
+  // --fortesting flag.
+  const IS_FORTESTING = true;
+  const IS_MINIFIED = false;
+
+  const runningTests =
+    IS_FORTESTING && !!(AMP_CONFIG.test || win.__AMP_TEST || win['__karma__']);
+  const isLocalDev = IS_FORTESTING && (!!AMP_CONFIG.localDev || runningTests);
   const hashQuery = parseQueryString(
     // location.originalHash is set by the viewer when it removes the fragment
     // from the URL.
     win.location['originalHash'] || win.location.hash
   );
 
+  if (!rtvVersion) {
+    rtvVersion = getRtvVersion(win);
+  }
+
   // The `minified`, `test` and `localDev` properties are replaced
   // as boolean literals when we run `amp dist` without the `--fortesting`
   // flags. This improved DCE on the production file we deploy as the code
   // paths for localhost/testing/development are eliminated.
   return {
-    localDev: coreMode.isLocalDev(win),
+    localDev: isLocalDev,
     development: isModeDevelopment(win),
     examiner: hashQuery['development'] == '2',
     esm: IS_ESM,
     // amp-geo override
     geoOverride: hashQuery['amp-geo'],
-    minified: coreMode.isMinified(),
-    test: coreMode.isTest(win),
+    minified: IS_MINIFIED,
+    test: runningTests,
     log: hashQuery['log'],
     version: internalRuntimeVersion(),
-    rtvVersion: getRtvVersion(win),
+    rtvVersion,
   };
 }
 
@@ -94,16 +110,16 @@ function getMode_(win) {
  * @return {string}
  */
 function getRtvVersion(win) {
-  // Ignore memoized copy during testing to allow override.
-  if (!rtvVersion && !coreMode.isTest(win)) {
-    // Currently `internalRuntimeVersion` and thus `mode.version` contain only
-    // major version. The full version however must also carry the minor version.
-    // We will default to production default `01` minor version for now.
-    // TODO(erwinmombay): decide whether internalRuntimeVersion should contain
-    // minor version.
-    rtvVersion = win.AMP_CONFIG?.v || `01${internalRuntimeVersion()}`;
+  if (win.AMP_CONFIG && win.AMP_CONFIG.v) {
+    return win.AMP_CONFIG.v;
   }
-  return rtvVersion;
+
+  // Currently `internalRuntimeVersion` and thus `mode.version` contain only
+  // major version. The full version however must also carry the minor version.
+  // We will default to production default `01` minor version for now.
+  // TODO(erwinmombay): decide whether internalRuntimeVersion should contain
+  // minor version.
+  return `01${internalRuntimeVersion()}`;
 }
 
 /**

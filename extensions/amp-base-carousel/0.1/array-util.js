@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {mod} from '#core/math';
+import {mod} from '../../../src/core/math';
 
 /**
  * Calculates the forwards distance between two indicies in an Array, treating

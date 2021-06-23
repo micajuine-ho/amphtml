@@ -15,7 +15,10 @@
  */
 
 import '../amp-imgur';
-import {createElementWithAttributes, waitForChildPromise} from '#core/dom';
+import {
+  createElementWithAttributes,
+  waitForChildPromise,
+} from '../../../../src/dom';
 import {user} from '../../../../src/log';
 
 describes.realWin(

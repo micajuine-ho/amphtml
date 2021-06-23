@@ -17,13 +17,13 @@ import {
   LayoutRectDef,
   layoutRectFromDomRect,
   layoutRectLtwh,
-} from '#core/dom/layout/rect';
+} from '../../src/core/math/layout-rect';
 import {
   centerFrameUnderVsyncMutate,
   collapseFrameUnderVsyncMutate,
   expandFrameUnderVsyncMutate,
-} from './full-overlay-frame-helper';
-import {resetStyles, setImportantStyles} from '#core/dom/style';
+} from '../../src/full-overlay-frame-helper';
+import {resetStyles, setImportantStyles} from '../../src/style';
 import {restrictedVsync, timer} from './util';
 
 const CENTER_TRANSITION_TIME_MS = 150;

@@ -18,7 +18,7 @@ import {getMode} from '../mode';
 import {
   registerServiceBuilder,
   registerServiceBuilderInEmbedWin,
-} from '../service-helpers';
+} from '../service';
 import {reportError} from '../error-reporting';
 import {user} from '../log';
 

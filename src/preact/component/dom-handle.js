@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {useImperativeHandle} from '#preact';
+import {useImperativeHandle} from '../';
 
 /**
  * @param {{current: ?T}} ref

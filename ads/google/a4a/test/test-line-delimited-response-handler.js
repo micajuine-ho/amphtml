@@ -17,7 +17,7 @@
 import {
   lineDelimitedStreamer,
   metaJsonCreativeGrouper,
-} from '#ads/google/a4a/line-delimited-response-handler';
+} from '../line-delimited-response-handler';
 
 describes.sandboxed('#line-delimited-response-handler', {}, (env) => {
   let chunkHandlerStub;

@@ -36,13 +36,13 @@
  */
 
 import {CSS} from '../../../build/amp-instagram-0.1.css';
-import {Services} from '#service';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
+import {Services} from '../../../src/services';
 import {getData, listen} from '../../../src/event-helper';
-import {isObject} from '#core/types';
-import {removeElement} from '#core/dom';
-import {setStyle} from '#core/dom/style';
-import {tryParseJson} from '#core/types/object/json';
+import {isLayoutSizeDefined} from '../../../src/layout';
+import {isObject} from '../../../src/core/types';
+import {removeElement} from '../../../src/dom';
+import {setStyle} from '../../../src/style';
+import {tryParseJson} from '../../../src/core/types/object/json';
 import {userAssert} from '../../../src/log';
 
 export class AmpInstagram extends AMP.BaseElement {
@@ -137,7 +137,7 @@ export class AmpInstagram extends AMP.BaseElement {
       '/embed/' +
       this.captioned_ +
       '?cr=1&v=12';
-    applyFillContent(iframe);
+    this.applyFillContent(iframe);
     this.element.appendChild(iframe);
     setStyle(iframe, 'opacity', 0);
     return (this.iframePromise_ = this.loadPromise(iframe).then(() => {

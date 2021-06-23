@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {isElement, isString} from '#core/types';
+import {isElement, isString} from '../types';
 
 /** @type {!Array<string>} */
 const excludedTags = ['script', 'style'];

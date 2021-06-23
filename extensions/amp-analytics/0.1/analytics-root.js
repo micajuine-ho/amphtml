@@ -15,14 +15,14 @@
  */
 
 import {ScrollManager} from './scroll-manager';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {
   closestAncestorElementBySelector,
   matches,
   scopedQuerySelector,
-} from '#core/dom/query';
+} from '../../../src/core/dom/query';
 import {dev, user, userAssert} from '../../../src/log';
-import {getDataParamsFromAttributes} from '#core/dom';
+import {getDataParamsFromAttributes} from '../../../src/dom';
 import {getMode} from '../../../src/mode';
 import {isArray} from '#core/types';
 import {layoutRectLtwh} from '#core/dom/layout/rect';
@@ -30,7 +30,7 @@ import {map} from '#core/types/object';
 
 import {provideVisibilityManager} from './visibility-manager';
 
-import {tryResolve} from '#core/data-structures/promise';
+import {tryResolve} from '../../../src/core/data-structures/promise';
 import {whenContentIniLoad} from '../../../src/ini-load';
 
 const TAG = 'amp-analytics/analytics-root';

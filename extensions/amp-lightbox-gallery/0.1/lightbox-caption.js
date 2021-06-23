@@ -15,7 +15,7 @@
  */
 
 import {dev} from '../../../src/log';
-import {htmlFor} from '#core/dom/static-template';
+import {htmlFor} from '../../../src/static-template';
 
 /**
  * @enum {string}

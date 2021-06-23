@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {isString} from '#core/types';
+import {isString} from '../types';
 
 /**
  * Number between 0 and 1 that designates normalized time, as in "from start to

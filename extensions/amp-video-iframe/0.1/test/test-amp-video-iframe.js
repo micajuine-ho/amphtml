@@ -15,13 +15,15 @@
  */
 
 import '../amp-video-iframe';
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 import {VideoEvents} from '../../../../src/video-interface';
-import {createElementWithAttributes} from '#core/dom';
-import {installResizeObserverStub} from '#testing/resize-observer-stub';
+import {
+  createElementWithAttributes,
+  whenUpgradedToCustomElement,
+} from '../../../../src/dom';
+import {installResizeObserverStub} from '../../../../testing/resize-observer-stub';
 import {listenOncePromise} from '../../../../src/event-helper';
-import {macroTask} from '#testing/yield';
-import {whenUpgradedToCustomElement} from '../../../../src/amp-element-helpers';
+import {macroTask} from '../../../../testing/yield';
 
 describes.realWin(
   'amp-video-iframe',

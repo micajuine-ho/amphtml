@@ -33,12 +33,12 @@ import {ConsentPolicyManager} from './consent-policy-manager';
 import {ConsentStateManager} from './consent-state-manager';
 import {ConsentUI} from './consent-ui';
 import {CookieWriter} from './cookie-writer';
-import {Deferred} from '#core/data-structures/promise';
+import {Deferred} from '../../../src/core/data-structures/promise';
 import {
   NOTIFICATION_UI_MANAGER,
   NotificationUiManager,
-} from '#service/notification-ui-manager';
-import {Services} from '#service';
+} from '../../../src/service/notification-ui-manager';
+import {Services} from '../../../src/services';
 import {TcfApiCommandManager} from './tcf-api-command-manager';
 import {
   assertHttpsUrl,
@@ -46,15 +46,14 @@ import {
   resolveRelativeUrl,
 } from '../../../src/url';
 import {dev, devAssert, user, userAssert} from '../../../src/log';
-import {dict, hasOwn} from '#core/types/object';
+import {dict, hasOwn} from '../../../src/core/types/object';
 import {getData} from '../../../src/event-helper';
-import {getServicePromiseForDoc} from '../../../src/service-helpers';
-import {isArray, isEnumValue, isObject} from '#core/types';
-import {realChildElements} from '#core/dom/query';
+import {getServicePromiseForDoc} from '../../../src/service';
+import {isArray, isEnumValue, isObject} from '../../../src/core/types';
 
-import {isExperimentOn} from '#experiments';
+import {isExperimentOn} from '../../../src/experiments';
 
-import {toggle} from '#core/dom/style';
+import {toggle} from '../../../src/style';
 
 const CONSENT_STATE_MANAGER = 'consentStateManager';
 const CONSENT_POLICY_MANAGER = 'consentPolicyManager';
@@ -224,7 +223,7 @@ export class AmpConsent extends AMP.BaseElement {
       /** @type {string} */ (this.consentId_)
     );
 
-    const children = realChildElements(this.element);
+    const children = this.getRealChildren();
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
       toggle(child, false);

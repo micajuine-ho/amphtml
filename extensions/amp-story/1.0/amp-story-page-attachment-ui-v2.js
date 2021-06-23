@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {isExperimentOn} from '#experiments';
+import {isExperimentOn} from '../../../src/experiments';
 
 /**
  * Returns true if new inline attachment UI is enabled.

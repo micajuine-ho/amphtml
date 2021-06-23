@@ -11,9 +11,10 @@ requirement: {
 
 requirement: {
   type: BANNED_PROPERTY_READ
-  error_message: 'Use getStyle, setStyle, or setStyles in src/core/dom/style.js'
+  error_message: 'Use getStyle, setStyle, or setStyles in src/style.js'
   value: 'Element.prototype.style'
-  allowlist: 'src/core/dom/style.js'
+  allowlist: 'src/style.js'
+  allowlist: 'src/layout.js'
 }
 
 requirement: {
@@ -33,9 +34,9 @@ requirement: {
 
 requirement: {
   type: BANNED_PROPERTY_CALL
-  error_message: 'Use setStyle or setStyles in src/core/dom/style.js'
+  error_message: 'Use setStyle or setStyles in src/style.js'
   value: 'CSSStyleDeclaration.prototype.setProperty'
-  allowlist: 'src/core/dom/style.js'
+  allowlist: 'src/style.js'
 }
 
 # History

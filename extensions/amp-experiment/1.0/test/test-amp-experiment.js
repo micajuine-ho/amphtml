@@ -17,8 +17,8 @@
 import * as applyExperiment from '../apply-experiment';
 import * as variant from '../variant';
 import {AmpExperiment} from '../amp-experiment';
-import {Services} from '#service';
-import {toggleExperiment} from '#experiments';
+import {Services} from '../../../../src/services';
+import {toggleExperiment} from '../../../../src/experiments';
 
 describes.realWin(
   'amp-experiment',

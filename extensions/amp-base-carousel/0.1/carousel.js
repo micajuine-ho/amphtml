@@ -25,23 +25,23 @@ import {
   setTransformTranslateStyle,
   updateLengthStyle,
   updateScrollPosition,
-} from './dimensions';
+} from './dimensions.js';
 import {AutoAdvance} from './auto-advance';
 import {CarouselAccessibility} from './carousel-accessibility';
 import {CarouselEvents} from './carousel-events';
 import {backwardWrappingDistance, forwardWrappingDistance} from './array-util';
-import {clamp, mod} from '#core/math';
+import {clamp, mod} from '../../../src/core/math';
 import {createCustomEvent, listen, listenOnce} from '../../../src/event-helper';
-import {debounce} from '#core/types/function';
+import {debounce} from '../../../src/core/types/function';
 import {dev} from '../../../src/log';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {
   getStyle,
   setImportantStyles,
   setStyle,
   setStyles,
-} from '#core/dom/style';
-import {iterateCursor} from '#core/dom';
+} from '../../../src/style';
+import {iterateCursor} from '../../../src/dom';
 
 /**
  * How long to wait prior to resetting the scrolling position after the last

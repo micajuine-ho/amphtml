@@ -20,8 +20,11 @@ import {
   resetStubsForTesting,
   shouldLoadPolyfill,
   upgradePolyfill,
-} from '#polyfills/stubs/resize-observer-stub';
-import {install, installForChildWin} from '#polyfills/resize-observer';
+} from '../../../src/polyfills/stubs/resize-observer-stub';
+import {
+  install,
+  installForChildWin,
+} from '../../../src/polyfills/resize-observer';
 
 class NativeResizeObserver {
   constructor(callback) {

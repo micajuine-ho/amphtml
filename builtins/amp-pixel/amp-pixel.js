@@ -15,10 +15,10 @@
  */
 
 import {BaseElement} from '../../src/base-element';
-import {Services} from '#service';
+import {Services} from '../../src/services';
 import {createPixel} from '../../src/pixel';
 import {dev, userAssert} from '../../src/log';
-import {registerElement} from '#service/custom-element-registry';
+import {registerElement} from '../../src/service/custom-element-registry';
 
 const TAG = 'amp-pixel';
 

@@ -19,9 +19,9 @@
  * to Google Assistant.
  */
 
-import {Services} from '#service';
-import {addAttributesToElement} from '#core/dom';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
+import {Services} from '../../../src/services';
+import {addAttributesToElement} from '../../../src/dom';
+import {isLayoutSizeDefined} from '../../../src/layout';
 
 export class AmpGoogleAssistantVoiceButton extends AMP.BaseElement {
   /** @param {!AmpElement} element */
@@ -57,7 +57,7 @@ export class AmpGoogleAssistantVoiceButton extends AMP.BaseElement {
       });
 
       // applyFillContent so that frame covers the entire component.
-      applyFillContent(iframe, /* replacedContent */ true);
+      this.applyFillContent(iframe, /* replacedContent */ true);
 
       this.element.appendChild(iframe);
     });

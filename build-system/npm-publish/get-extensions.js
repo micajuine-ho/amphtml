@@ -22,9 +22,6 @@
 const bundles = require('../compile/bundles.config.extensions.json');
 const extensions = bundles
   .filter((bundle) => bundle.options?.npm)
-  .map((bundle) => ({
-    'extension': bundle.name,
-    'version': bundle.version,
-  }));
+  .map((bundle) => ({'extension': bundle.name}));
 console /*OK*/
   .log(JSON.stringify(extensions));

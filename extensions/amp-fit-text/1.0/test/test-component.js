@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
+import * as Preact from '../../../../src/preact';
 import {FitText, calculateFontSize, setOverflowStyle} from '../component';
-import {computedStyle} from '#core/dom/style';
+import {computedStyle} from '../../../../src/style';
 import {mount} from 'enzyme';
 import {useStyles} from '../component.jss';
-import {waitFor} from '#testing/test-helper';
+import {waitFor} from '../../../../testing/test-helper';
 
 describes.realWin('FitText preact component v1.0', {}, (env) => {
   let win;

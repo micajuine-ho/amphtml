@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AmpdocAnalyticsRoot} from '../analytics-root';
+import {AmpdocAnalyticsRoot} from '../analytics-root.js';
 import {
   AnalyticsEventType,
   ClickEventTracker,
@@ -25,8 +25,8 @@ import {
   TimerEventTracker,
   VisibilityTracker,
 } from '../events';
-import {AnalyticsGroup} from '../analytics-group';
-import {toggleExperiment} from '#experiments';
+import {AnalyticsGroup} from '../analytics-group.js';
+import {toggleExperiment} from '../../../../src/experiments';
 
 describes.realWin('AnalyticsGroup', {amp: 1}, (env) => {
   let win;

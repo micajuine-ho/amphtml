@@ -15,7 +15,7 @@
  */
 
 import {AmpStoryCtaLayer} from '../amp-story-cta-layer';
-import {registerServiceBuilder} from '../../../../src/service-helpers';
+import {registerServiceBuilder} from '../../../../src/service';
 
 describes.realWin(
   'amp-story-cta-layer',

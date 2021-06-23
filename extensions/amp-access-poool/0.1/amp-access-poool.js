@@ -15,7 +15,7 @@
  */
 
 import {PooolVendor} from './poool-impl';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 
 AMP.extension('amp-access-poool', '0.1', function (AMP) {
   AMP.registerServiceForDoc(

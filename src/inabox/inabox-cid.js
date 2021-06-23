@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {CidDef} from '#service/cid-impl';
-import {registerServiceBuilderForDoc} from '../service-helpers';
+import {CidDef} from '../service/cid-impl';
+import {registerServiceBuilderForDoc} from '../service';
 
 /**
  * A dummy impl of CID service as CLIENT_ID is not supported

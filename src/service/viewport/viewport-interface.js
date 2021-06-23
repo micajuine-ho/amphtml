@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Disposable} from '../../service-helpers';
+import {Disposable} from '../../service';
 
 /**
  * @typedef {{

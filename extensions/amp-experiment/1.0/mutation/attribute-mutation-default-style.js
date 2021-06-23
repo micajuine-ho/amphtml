@@ -15,11 +15,10 @@
  */
 
 import {assertAttributeMutationFormat} from './mutation';
-import {assertDoesNotContainDisplay} from '../../../../src/assert-display';
+import {assertDoesNotContainDisplay, setStyles} from '../../../../src/style';
 import {dev, user} from '../../../../src/log';
-import {dict, hasOwn} from '#core/types/object';
-import {isAmpElement} from '../../../../src/amp-element-helpers';
-import {setStyles} from '#core/dom/style';
+import {dict, hasOwn} from '../../../../src/core/types/object';
+import {isAmpElement} from '../../../../src/dom';
 
 /** @const {RegExp} */
 const NON_SPACE_REGEX = /\S/;

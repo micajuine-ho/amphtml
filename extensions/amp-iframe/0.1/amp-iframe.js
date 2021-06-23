@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-import {AMPDOC_SINGLETON_NAME} from '#core/constants/enums';
-import {ActionTrust} from '#core/constants/action-constants';
+import {AMPDOC_SINGLETON_NAME} from '../../../src/core/constants/enums';
+import {ActionTrust} from '../../../src/core/constants/action-constants';
 import {IntersectionObserver3pHost} from '../../../src/utils/intersection-observer-3p-host';
-import {
-  LayoutPriority,
-  applyFillContent,
-  isLayoutSizeDefined,
-} from '#core/dom/layout';
+import {LayoutPriority, isLayoutSizeDefined} from '../../../src/layout';
 import {MessageType} from '../../../src/3p-frame-messaging';
-import {PauseHelper} from '#core/dom/video/pause-helper';
-import {Services} from '#service';
-import {base64EncodeFromBytes} from '#core/types/string/base64';
+import {PauseHelper} from '../../../src/utils/pause-helper';
+import {Services} from '../../../src/services';
+import {base64EncodeFromBytes} from '../../../src/core/types/string/base64.js';
 import {createCustomEvent, getData, listen} from '../../../src/event-helper';
 import {devAssert, user, userAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
-import {endsWith} from '#core/types/string';
+import {dict} from '../../../src/core/types/object';
+import {endsWith} from '../../../src/core/types/string';
 import {getConsentDataToForward} from '../../../src/consent';
 import {
   isAdLike,
@@ -37,15 +33,14 @@ import {
   looksLikeTrackingIframe,
 } from '../../../src/iframe-helper';
 import {isAdPositionAllowed} from '../../../src/ad-helper';
-import {isExperimentOn} from '#experiments';
-import {moveLayoutRect} from '#core/dom/layout/rect';
-import {parseJson} from '#core/types/object/json';
-import {propagateAttributes} from '#core/dom/propagate-attributes';
-import {removeElement} from '#core/dom';
+import {isExperimentOn} from '../../../src/experiments';
+import {moveLayoutRect} from '../../../src/core/math/layout-rect';
+import {parseJson} from '../../../src/core/types/object/json';
+import {removeElement} from '../../../src/dom';
 import {removeFragment} from '../../../src/url';
-import {setStyle} from '#core/dom/style';
+import {setStyle} from '../../../src/style';
 import {urls} from '../../../src/config';
-import {utf8Encode} from '#core/types/string/bytes';
+import {utf8Encode} from '../../../src/core/types/string/bytes.js';
 
 /** @const {string} */
 const TAG_ = 'amp-iframe';
@@ -412,14 +407,14 @@ export class AmpIframe extends AMP.BaseElement {
 
     this.iframe_ = /** @type {HTMLIFrameElement} */ (iframe);
 
-    applyFillContent(iframe);
+    this.applyFillContent(iframe);
     iframe.name = 'amp_iframe' + count++;
 
     if (this.isClickToPlay_) {
       setStyle(iframe, 'zIndex', -1);
     }
 
-    propagateAttributes(ATTRIBUTES_TO_PROPAGATE, this.element, iframe);
+    this.propagateAttributes(ATTRIBUTES_TO_PROPAGATE, iframe);
 
     // TEMPORARY: disable `allow=autoplay`
     // This is a workaround for M72-M74 user-activation breakage.
@@ -624,7 +619,7 @@ export class AmpIframe extends AMP.BaseElement {
     }
     if (this.iframe_ && mutations['title']) {
       // only propagating title because propagating all causes e2e error:
-      propagateAttributes(['title'], this.element, this.iframe_);
+      this.propagateAttributes(['title'], this.iframe_);
     }
   }
 

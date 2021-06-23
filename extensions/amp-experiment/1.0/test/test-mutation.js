@@ -18,7 +18,7 @@ import {
   assertAttributeMutationFormat,
   assertCharacterDataMutationFormat,
 } from '../mutation/mutation';
-import {toggleExperiment} from '#experiments';
+import {toggleExperiment} from '../../../../src/experiments';
 
 describes.realWin(
   'amp-experiment mutation',

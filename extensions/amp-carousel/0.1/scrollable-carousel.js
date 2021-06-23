@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-import {ActionTrust} from '#core/constants/action-constants';
+import {ActionTrust} from '../../../src/core/constants/action-constants';
 import {Animation} from '../../../src/animation';
 import {BaseCarousel} from './base-carousel';
-import {Keys} from '#core/constants/key-codes';
-import {Services} from '#service';
+import {Keys} from '../../../src/core/constants/key-codes';
+import {Services} from '../../../src/services';
 import {dev} from '../../../src/log';
-import {isLayoutSizeFixed} from '#core/dom/layout';
+import {isLayoutSizeFixed} from '../../../src/layout';
 import {listen} from '../../../src/event-helper';
 import {numeric} from '../../../src/transition';
 import {
   observeWithSharedInOb,
   unobserveWithSharedInOb,
-} from '#core/dom/layout/viewport-observer';
-import {realChildElements} from '#core/dom/query';
+} from '../../../src/viewport-observer';
 
 /** @const {string} */
 const TAG = 'amp-scrollable-carousel';
@@ -60,7 +59,7 @@ export class AmpScrollableCarousel extends BaseCarousel {
 
   /** @override */
   buildCarousel() {
-    this.cells_ = realChildElements(this.element);
+    this.cells_ = this.getRealChildren();
 
     this.container_ = this.element.ownerDocument.createElement('div');
     this.container_.classList.add('i-amphtml-scrollable-carousel-container');

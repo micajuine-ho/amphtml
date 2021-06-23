@@ -15,10 +15,10 @@
  */
 
 import {Observable} from './core/data-structures/observable';
-import {Services} from './service';
+import {Services} from './services';
 import {dev} from './log';
 import {listenOnce, listenOncePromise} from './event-helper';
-import {registerServiceBuilder} from './service-helpers';
+import {registerServiceBuilder} from './service';
 
 const TAG_ = 'Input';
 

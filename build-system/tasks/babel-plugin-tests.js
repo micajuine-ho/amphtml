@@ -56,4 +56,4 @@ module.exports = {
 };
 
 babelPluginTests.description =
-  "Run the Jest based tests for AMP's custom babel plugins";
+  "Runs the Jest based tests for AMP's custom babel plugins.";

@@ -77,4 +77,4 @@ module.exports = {
 };
 
 checkExactVersions.description =
-  'Check all package.json files in the repo to make sure they use exact versions';
+  'Checks that all package.json files in the repo use exact versions.';

@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-import * as dom from '#core/dom';
+import * as dom from '../../../src/dom';
 import {CSS} from '../../../build/amp-viz-vega-0.1.css';
-import {Services} from '#service';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
+import {Services} from '../../../src/services';
 import {assertHttpsUrl} from '../../../src/url';
-import {childElementsByTag} from '#core/dom/query';
+import {childElementsByTag} from '../../../src/core/dom/query';
 import {dev, devAssert, userAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
-import {isExperimentOn} from '#experiments';
-import {isFiniteNumber, isObject} from '#core/types';
+import {dict} from '../../../src/core/types/object';
+import {isExperimentOn} from '../../../src/experiments';
+import {isFiniteNumber, isObject} from '../../../src/core/types';
+import {isLayoutSizeDefined} from '../../../src/layout';
 
 import {
   observeContentSize,
   unobserveContentSize,
-} from '#core/dom/layout/size-observer';
-import {tryParseJson} from '#core/types/object/json';
+} from '../../../src/utils/size-observer';
+import {tryParseJson} from '../../../src/core/types/object/json';
 
 export class AmpVizVega extends AMP.BaseElement {
   /** @param {!AmpElement} element */
@@ -155,7 +155,7 @@ export class AmpVizVega extends AMP.BaseElement {
   initialize_() {
     this.container_ = this.element.ownerDocument.createElement('div');
 
-    applyFillContent(this.container_, true);
+    this.applyFillContent(this.container_, true);
     this.element.appendChild(this.container_);
   }
 

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Services} from './service';
+import {Services} from './services';
 import {getFormAsObject, getSubmitButtonUsed} from './form';
-import {iterateCursor} from './core/dom';
+import {iterateCursor} from './dom';
 import {map} from './core/types/object';
 
 /**

@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
-import {MessageType, ProxyIframeEmbed} from '#preact/component/3p-frame';
-import {dashToUnderline} from '#core/types/string';
+import * as Preact from '../../../src/preact';
+import {
+  MessageType,
+  ProxyIframeEmbed,
+} from '../../../src/preact/component/3p-frame';
+import {dashToUnderline} from '../../../src/core/types/string';
 import {deserializeMessage} from '../../../src/3p-frame-messaging';
-import {forwardRef} from '#preact/compat';
-import {tryParseJson} from '#core/types/object/json';
-import {useCallback, useLayoutEffect, useState} from '#preact';
+import {forwardRef} from '../../../src/preact/compat';
+import {tryParseJson} from '../../../src/core/types/object/json';
+import {useCallback, useLayoutEffect, useState} from '../../../src/preact';
 
 /** @const {string} */
 const TYPE = 'facebook';

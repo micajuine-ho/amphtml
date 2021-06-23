@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {buildUrl} from '#ads/google/a4a/shared/url-builder';
+import {buildUrl} from '../url-builder';
 
 describes.sandboxed('buildUrl', {}, () => {
   it('should build a simple URL', () => {

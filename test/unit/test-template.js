@@ -15,12 +15,12 @@
  */
 
 import {BaseTemplate} from '../../src/base-template';
-import {Services} from '#service';
-import {getServiceForDoc} from '../../src/service-helpers';
+import {Services} from '../../src/services';
+import {getServiceForDoc} from '../../src/service';
 import {
   installTemplatesServiceForDoc,
   registerExtendedTemplateForDoc,
-} from '#service/template-impl';
+} from '../../src/service/template-impl';
 
 describes.realWin('Template', {amp: true}, (env) => {
   let templates;

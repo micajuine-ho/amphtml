@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import {ADS_INITIAL_INTERSECTION_EXP} from '#experiments/ads-initial-intersection-exp';
+import {ADS_INITIAL_INTERSECTION_EXP} from '../../../src/experiments/ads-initial-intersection-exp';
 import {Renderer} from './amp-ad-type-defs';
-import {createElementWithAttributes} from '#core/dom';
-import {dict} from '#core/types/object';
+import {createElementWithAttributes} from '../../../src/dom';
+import {dict} from '../../../src/core/types/object';
 import {getContextMetadata} from '../../../src/iframe-attributes';
 import {getDefaultBootstrapBaseUrl} from '../../../src/3p-frame';
-import {getExperimentBranch} from '#experiments';
+import {getExperimentBranch} from '../../../src/experiments';
 import {
   intersectionEntryToJson,
   measureIntersection,
-} from '#core/dom/layout/intersection';
-import {utf8Decode} from '#core/types/string/bytes';
+} from '../../../src/utils/intersection';
+import {utf8Decode} from '../../../src/core/types/string/bytes';
 
 /**
  * Render a non-AMP creative into a NameFrame.

@@ -15,7 +15,7 @@
  */
 
 import {childElementsByTag} from './core/dom/query';
-import {isJsonScriptTag} from './core/dom';
+import {isJsonScriptTag} from './dom';
 import {parseJson} from './core/types/object/json';
 
 /**

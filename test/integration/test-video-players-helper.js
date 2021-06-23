@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../src/services';
 import {
   VideoAnalyticsEvents,
   VideoEvents,
@@ -24,11 +24,11 @@ import {
   createFixtureIframe,
   expectBodyToBecomeVisible,
   poll,
-} from '#testing/iframe';
-import {detectIsAutoplaySupported} from '#core/dom/video';
+} from '../../testing/iframe';
+import {detectIsAutoplaySupported} from '../../src/utils/video';
 import {getData, listenOncePromise} from '../../src/event-helper';
-import {removeElement} from '#core/dom';
-import {toggleExperiment} from '#experiments';
+import {removeElement} from '../../src/dom';
+import {toggleExperiment} from '../../src/experiments';
 
 function skipIfAutoplayUnsupported(win) {
   return detectIsAutoplaySupported(win).then((isSupported) => {

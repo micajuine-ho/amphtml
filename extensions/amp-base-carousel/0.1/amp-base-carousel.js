@@ -15,30 +15,30 @@
  */
 
 import {ActionSource} from './action-source';
-import {ActionTrust} from '#core/constants/action-constants';
+import {ActionTrust} from '../../../src/core/constants/action-constants';
 import {CSS} from '../../../build/amp-base-carousel-0.1.css';
-import {Carousel} from './carousel';
+import {Carousel} from './carousel.js';
 import {CarouselEvents} from './carousel-events';
 import {ChildLayoutManager} from './child-layout-manager';
-import {Keys} from '#core/constants/key-codes';
+import {Keys} from '../../../src/core/constants/key-codes';
 import {
   ResponsiveAttributes,
   getResponsiveAttributeValue,
 } from './responsive-attributes';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {createCustomEvent, getDetail} from '../../../src/event-helper';
 import {dev, devAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {
   dispatchCustomEvent,
   isRTL,
   iterateCursor,
   toggleAttribute,
-} from '#core/dom';
-import {htmlFor} from '#core/dom/static-template';
-import {isLayoutSizeDefined} from '#core/dom/layout';
-import {scopedQuerySelectorAll} from '#core/dom/query';
-import {toArray} from '#core/types/array';
+} from '../../../src/dom';
+import {htmlFor} from '../../../src/static-template';
+import {isLayoutSizeDefined} from '../../../src/layout';
+import {scopedQuerySelectorAll} from '../../../src/core/dom/query';
+import {toArray} from '../../../src/core/types/array';
 
 /**
  * @enum {number}

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import {PauseHelper} from '#core/dom/video/pause-helper';
-import {Services} from '#service';
+import {PauseHelper} from '../../../src/utils/pause-helper';
+import {Services} from '../../../src/services';
 import {addParamsToUrl} from '../../../src/url';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
-import {dict} from '#core/types/object';
-import {getDataParamsFromAttributes} from '#core/dom';
-import {propagateAttributes} from '#core/dom/propagate-attributes';
+import {dict} from '../../../src/core/types/object';
+import {getDataParamsFromAttributes} from '../../../src/dom';
+import {isLayoutSizeDefined} from '../../../src/layout';
 import {setIsMediaComponent} from '../../../src/video-interface';
 import {userAssert} from '../../../src/log';
 
@@ -103,7 +102,7 @@ class AmpKaltura extends AMP.BaseElement {
     iframe.setAttribute('frameborder', '0');
     iframe.setAttribute('allowfullscreen', 'true');
     iframe.src = src;
-    applyFillContent(iframe);
+    this.applyFillContent(iframe);
     this.element.appendChild(iframe);
     this.iframe_ = /** @type {HTMLIFrameElement} */ (iframe);
 
@@ -126,8 +125,8 @@ class AmpKaltura extends AMP.BaseElement {
   /** @override */
   createPlaceholderCallback() {
     const placeholder = this.win.document.createElement('img');
-    propagateAttributes(['aria-label'], this.element, placeholder);
-    applyFillContent(placeholder);
+    this.propagateAttributes(['aria-label'], placeholder);
+    this.applyFillContent(placeholder);
     placeholder.setAttribute('loading', 'lazy');
     placeholder.setAttribute('placeholder', '');
     placeholder.setAttribute('referrerpolicy', 'origin');

@@ -15,7 +15,7 @@
  */
 
 import {ScrollAccessVendor} from './scroll-impl';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 
 AMP.extension('amp-access-scroll', '0.1', function (AMP) {
   AMP.registerServiceForDoc(

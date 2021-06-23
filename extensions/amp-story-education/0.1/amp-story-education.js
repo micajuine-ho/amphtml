@@ -20,17 +20,17 @@ import {
   UIType,
 } from '../../amp-story/1.0/amp-story-store-service';
 import {CSS} from '../../../build/amp-story-education-0.1.css';
-import {Layout} from '#core/dom/layout';
+import {Layout} from '../../../src/layout';
 import {LocalizedStringId} from '../../../src/localized-strings';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {createShadowRootWithStyle} from '../../amp-story/1.0/utils';
 import {dev} from '../../../src/log';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {getLocalizationService} from '../../amp-story/1.0/amp-story-localization-service';
-import {htmlFor} from '#core/dom/static-template';
-import {removeChildren} from '#core/dom';
+import {htmlFor} from '../../../src/static-template';
+import {removeChildren} from '../../../src/dom';
 import {setModalAsClosed, setModalAsOpen} from '../../../src/modal';
-import {toggle} from '#core/dom/style';
+import {toggle} from '../../../src/style';
 
 /** @type {string} */
 const TAG = 'amp-story-education';

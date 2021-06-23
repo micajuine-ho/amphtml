@@ -35,7 +35,6 @@ module.exports = {
     'Key': false,
   },
   'rules': {
-    'import/no-unresolved': 0,
     'local/no-array-destructuring': 0,
     'local/no-bigint': 0,
     'local/no-dynamic-import': 0,

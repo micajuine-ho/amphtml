@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Services} from './service';
+import {Services} from './services';
 import {VideoEvents} from './video-interface';
-import {applyFillContent} from '#core/dom/layout';
 import {dev} from './log';
-import {dispatchCustomEvent} from './core/dom';
-import {htmlFor} from './core/dom/static-template';
+import {dispatchCustomEvent} from './dom';
+import {htmlFor} from './static-template';
 import {isArray, isObject} from './core/types';
-import {propagateAttributes} from './core/dom/propagate-attributes';
 import {tryParseJson} from './core/types/object/json';
 
 /** @enum {string} */
@@ -92,11 +90,11 @@ export function createFrameFor(video, src, opt_name, opt_sandbox) {
 
   // Will propagate for every component, but only validation rules will actually
   // allow the attribute to be set.
-  propagateAttributes(['referrerpolicy'], video.element, frame);
+  video.propagateAttributes(['referrerpolicy'], frame);
 
   frame.src = Services.urlForDoc(element).assertHttpsUrl(src, element);
 
-  applyFillContent(frame);
+  video.applyFillContent(frame);
   element.appendChild(frame);
 
   return frame;

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
+import * as Preact from '../../../src/preact';
 import {Option, Selector} from './component';
-import {PreactBaseElement} from '#preact/base-element';
-import {closestAncestorElementBySelector} from '#core/dom/query';
+import {PreactBaseElement} from '../../../src/preact/base-element';
+import {closestAncestorElementBySelector} from '../../../src/core/dom/query';
 import {
   createElementWithAttributes,
   toggleAttribute,
   tryFocus,
-} from '#core/dom';
+} from '../../../src/dom';
 import {devAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
-import {toArray} from '#core/types/array';
-import {useCallback, useLayoutEffect, useRef} from '#preact';
+import {dict} from '../../../src/core/types/object';
+import {toArray} from '../../../src/core/types/array';
+import {useCallback, useLayoutEffect, useRef} from '../../../src/preact';
 
 export class BaseElement extends PreactBaseElement {
   /** @override */

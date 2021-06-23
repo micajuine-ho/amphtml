@@ -21,18 +21,18 @@ import {
   getStoreService,
 } from './amp-story-store-service';
 import {CSS} from '../../../build/amp-story-draggable-drawer-header-1.0.css';
-import {Layout} from '#core/dom/layout';
+import {Layout} from '../../../src/layout';
 import {LocalizedStringId} from '../../../src/localized-strings';
-import {Services} from '#service';
-import {closest} from '#core/dom/query';
+import {Services} from '../../../src/services';
+import {closest} from '../../../src/core/dom/query';
 import {createShadowRootWithStyle} from './utils';
 import {dev, devAssert} from '../../../src/log';
 import {getLocalizationService} from './amp-story-localization-service';
-import {htmlFor} from '#core/dom/static-template';
-import {isAmpElement} from '../../../src/amp-element-helpers';
+import {htmlFor} from '../../../src/static-template';
+import {isAmpElement} from '../../../src/dom';
 import {isPageAttachmentUiV2ExperimentOn} from './amp-story-page-attachment-ui-v2';
 import {listen} from '../../../src/event-helper';
-import {resetStyles, setImportantStyles, toggle} from '#core/dom/style';
+import {resetStyles, setImportantStyles, toggle} from '../../../src/style';
 
 /** @const {number} */
 const TOGGLE_THRESHOLD_PX = 50;

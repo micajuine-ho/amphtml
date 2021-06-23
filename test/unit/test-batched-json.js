@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../src/services';
 import {UrlReplacementPolicy, batchFetchJsonFor} from '../../src/batched-json';
 import {user} from '../../src/log';
 

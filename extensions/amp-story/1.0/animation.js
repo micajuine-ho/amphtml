@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {Deferred} from '#core/data-structures/promise';
+import {Deferred} from '../../../src/core/data-structures/promise';
 import {
   PRESET_OPTION_ATTRIBUTES,
   presets,
   setStyleForPreset,
 } from './animation-presets';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {
   StoryAnimationConfigDef,
   StoryAnimationDimsDef,
@@ -32,13 +32,15 @@ import {
   WebKeyframesCreateFnDef,
   WebKeyframesDef,
 } from './animation-types';
-import {assertDoesNotContainDisplay} from '../../../src/assert-display';
+import {assertDoesNotContainDisplay, setStyles} from '../../../src/style';
 import {dev, devAssert, user, userAssert} from '../../../src/log';
-import {escapeCssSelectorIdent} from '#core/dom/css-selectors';
+import {escapeCssSelectorIdent} from '../../../src/core/dom/css-selectors';
 import {getChildJsonConfig} from '../../../src/json';
-import {map, omit} from '#core/types/object';
-import {scopedQuerySelector, scopedQuerySelectorAll} from '#core/dom/query';
-import {setStyles} from '#core/dom/style';
+import {map, omit} from '../../../src/core/types/object';
+import {
+  scopedQuerySelector,
+  scopedQuerySelectorAll,
+} from '../../../src/core/dom/query';
 import {timeStrToMillis, unscaledClientRect} from './utils';
 
 const TAG = 'AMP-STORY';

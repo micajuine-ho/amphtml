@@ -255,8 +255,8 @@ module.exports = {
 };
 
 getZindex.description =
-  'Run through all css files in the repo to gather z-index values';
+  'Runs through all css files of project to gather z-index values';
 
 getZindex.flags = {
-  'fix': 'Write the results to file',
+  'fix': 'Write to file',
 };

@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-import {ActionService} from '#service/action-impl';
-import {ActionTrust} from '#core/constants/action-constants';
-import {AmpDocService} from '#service/ampdoc-impl';
-import {AmpEvents} from '#core/constants/amp-events';
+import {ActionService} from '../../../../src/service/action-impl';
+import {ActionTrust} from '../../../../src/core/constants/action-constants';
+import {AmpDocService} from '../../../../src/service/ampdoc-impl';
+import {AmpEvents} from '../../../../src/core/constants/amp-events';
 import {AmpList} from '../amp-list';
 import {AmpScriptService} from '../../../amp-script/0.1/amp-script';
-import {Deferred} from '#core/data-structures/promise';
-import {Services} from '#service';
-import {createElementWithAttributes} from '#core/dom';
-import {resetExperimentTogglesForTesting, toggleExperiment} from '#experiments';
-import {whenUpgradedToCustomElement} from '../../../../src/amp-element-helpers';
+import {Deferred} from '../../../../src/core/data-structures/promise';
+import {Services} from '../../../../src/services';
+import {
+  createElementWithAttributes,
+  whenUpgradedToCustomElement,
+} from '../../../../src/dom';
+import {
+  resetExperimentTogglesForTesting,
+  toggleExperiment,
+} from '../../../../src/experiments';
 
 describes.repeated(
   'amp-list',

@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
-import {bytesToString, stringToBytes} from '#core/types/string/bytes';
-import {
-  getServiceForDoc,
-  registerServiceBuilderForDoc,
-} from '../service-helpers';
+import {Services} from '../services';
+import {bytesToString, stringToBytes} from '../core/types/string/bytes';
+import {getServiceForDoc, registerServiceBuilderForDoc} from '../service';
 import {getSourceOrigin} from '../url';
-import {parseJson} from '#core/types/object/json';
+import {parseJson} from '../core/types/object/json';
 import {user} from '../log';
 
 /** @const {string} */

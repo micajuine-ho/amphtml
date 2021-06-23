@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../src/services';
 import {SsrTemplateHelper} from '../../src/ssr-template-helper';
 
 describes.fakeWin(

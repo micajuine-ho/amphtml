@@ -15,7 +15,7 @@
  */
 
 import {useAmpContext} from './context';
-import {useLayoutEffect} from '#preact';
+import {useLayoutEffect} from './index';
 
 /**
  * Notifies Resources (if present) of a rerender in the component.

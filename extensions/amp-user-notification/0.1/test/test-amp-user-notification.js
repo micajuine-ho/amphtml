@@ -19,12 +19,12 @@ import {
   UserNotificationManager,
 } from '../amp-user-notification';
 import {GEO_IN_GROUP} from '../../../amp-geo/0.1/amp-geo-in-group';
-import {Services} from '#service';
-import {macroTask} from '#testing/yield';
+import {Services} from '../../../../src/services';
+import {macroTask} from '../../../../testing/yield';
 import {
   registerServiceBuilder,
   resetServiceForTesting,
-} from '../../../../src/service-helpers';
+} from '../../../../src/service';
 
 describes.realWin(
   'amp-user-notification',

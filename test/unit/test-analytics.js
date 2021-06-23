@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../src/services';
 import {
   getServiceForDoc,
   registerServiceBuilderForDoc,
   resetServiceForTesting,
-} from '../../src/service-helpers';
+} from '../../src/service';
 import {triggerAnalyticsEvent} from '../../src/analytics';
 
 describes.realWin(

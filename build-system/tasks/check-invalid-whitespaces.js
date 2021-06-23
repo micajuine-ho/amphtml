@@ -59,10 +59,10 @@ function checkInvalidWhitespaces() {
 }
 
 checkInvalidWhitespaces.description =
-  'Check multiple types of non-JS source files for invalid whitespaces';
+  'Checks different types of files for invalid whitespaces.';
 checkInvalidWhitespaces.flags = {
-  'files': 'Check just the specified files',
-  'local_changes': 'Check just the files changed in the local branch',
+  'files': 'Checks just the specified files',
+  'local_changes': 'Checks just the files changed in the local branch',
 };
 
 module.exports = {

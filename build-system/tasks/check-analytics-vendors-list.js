@@ -98,9 +98,8 @@ module.exports = {
   checkAnalyticsVendorsList,
 };
 
-checkAnalyticsVendorsList.description =
-  'Check the list of vendors in analytics-vendors-list.md';
+checkAnalyticsVendorsList.description = `Checks or updates list on ${filepath}`;
 
 checkAnalyticsVendorsList.flags = {
-  'fix': 'Update the list and write results to file',
+  'fix': 'Write to file',
 };

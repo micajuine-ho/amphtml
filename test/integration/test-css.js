@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-import {AmpEvents} from '#core/constants/amp-events';
-import {computedStyle} from '#core/dom/style';
-import {createFixtureIframe, expectBodyToBecomeVisible} from '#testing/iframe';
+import {AmpEvents} from '../../src/core/constants/amp-events.js';
+import {computedStyle} from '../../src/style.js';
+import {
+  createFixtureIframe,
+  expectBodyToBecomeVisible,
+} from '../../testing/iframe.js';
 
 describes.sandboxed.configure().run('CSS', {}, () => {
   it('should include height of [overflow] child in size before build', async () => {

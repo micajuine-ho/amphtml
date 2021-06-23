@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {PauseHelper} from '#core/dom/video/pause-helper';
-import {Services} from '#service';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
-import {propagateAttributes} from '#core/dom/propagate-attributes';
+import {PauseHelper} from '../../../src/utils/pause-helper';
+import {Services} from '../../../src/services';
+import {isLayoutSizeDefined} from '../../../src/layout';
 import {setIsMediaComponent} from '../../../src/video-interface';
 import {userAssert} from '../../../src/log';
 
@@ -125,7 +124,7 @@ class AmpSpringboardPlayer extends AMP.BaseElement {
       encodeURIComponent(this.domain_) +
       '/' +
       encodeURIComponent(items);
-    applyFillContent(iframe);
+    this.applyFillContent(iframe);
     this.iframe_ = /** @type {HTMLIFrameElement} */ (iframe);
     this.element.appendChild(iframe);
 
@@ -155,8 +154,8 @@ class AmpSpringboardPlayer extends AMP.BaseElement {
   /** @override */
   createPlaceholderCallback() {
     const placeholder = this.win.document.createElement('img');
-    propagateAttributes(['aria-label'], this.element, placeholder);
-    applyFillContent(placeholder);
+    this.propagateAttributes(['aria-label'], placeholder);
+    this.applyFillContent(placeholder);
     placeholder.setAttribute('placeholder', '');
     placeholder.setAttribute('referrerpolicy', 'origin');
     if (placeholder.hasAttribute('aria-label')) {

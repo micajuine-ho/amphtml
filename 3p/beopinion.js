@@ -15,7 +15,7 @@
  */
 
 import {loadScript} from './3p';
-import {setStyles} from '#core/dom/style';
+import {setStyles} from '../src/style';
 
 /**
  * Produces the Twitter API object for the passed in callback. If the current

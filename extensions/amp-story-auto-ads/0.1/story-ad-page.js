@@ -25,17 +25,13 @@ import {
 import {
   AdvanceExpToTime,
   StoryAdAutoAdvance,
-} from '#experiments/story-ad-auto-advance';
+} from '../../../src/experiments/story-ad-auto-advance';
 import {
   AnalyticsEvents,
   AnalyticsVars,
   STORY_AD_ANALYTICS,
 } from './story-ad-analytics';
-import {
-  BranchToTimeValues,
-  StoryAdSegmentExp,
-} from '#experiments/story-ad-progress-segment';
-import {CommonSignals} from '#core/constants/common-signals';
+import {CommonSignals} from '../../../src/core/constants/common-signals';
 import {Gestures} from '../../../src/gesture';
 import {
   StateProperty,
@@ -47,16 +43,16 @@ import {
   createElementWithAttributes,
   isJsonScriptTag,
   toggleAttribute,
-} from '#core/dom';
+} from '../../../src/dom';
 import {dev, devAssert, userAssert} from '../../../src/log';
-import {dict, map} from '#core/types/object';
-import {elementByTag} from '#core/dom/query';
+import {dict, map} from '../../../src/core/types/object';
+import {elementByTag} from '../../../src/core/dom/query';
 import {getData, listen} from '../../../src/event-helper';
-import {getExperimentBranch} from '#experiments';
+import {getExperimentBranch} from '../../../src/experiments';
 import {getFrameDoc, localizeCtaText} from './utils';
-import {getServicePromiseForDoc} from '../../../src/service-helpers';
-import {parseJson} from '#core/types/object/json';
-import {setStyle} from '#core/dom/style';
+import {getServicePromiseForDoc} from '../../../src/service';
+import {parseJson} from '../../../src/core/types/object/json';
+import {setStyle} from '../../../src/style';
 
 /** @const {string} */
 const TAG = 'amp-story-auto-ads:page';
@@ -325,14 +321,7 @@ export class StoryAdPage {
       this.win_,
       StoryAdAutoAdvance.ID
     );
-    const segmentExpBranch = getExperimentBranch(
-      this.win_,
-      StoryAdSegmentExp.ID
-    );
-
-    if (segmentExpBranch && segmentExpBranch !== StoryAdSegmentExp.CONTROL) {
-      attributes['auto-advance-after'] = BranchToTimeValues[segmentExpBranch];
-    } else if (
+    if (
       autoAdvanceExpBranch &&
       autoAdvanceExpBranch !== StoryAdAutoAdvance.CONTROL
     ) {

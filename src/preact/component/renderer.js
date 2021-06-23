@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {useLayoutEffect, useState} from '#preact';
+import {useLayoutEffect, useState} from '../';
 
 /**
  * Runs the renderer. It's critical that the `data` argument is stable - it

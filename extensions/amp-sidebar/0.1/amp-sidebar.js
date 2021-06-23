@@ -14,34 +14,31 @@
  * limitations under the License.
  */
 
-import {ActionTrust} from '#core/constants/action-constants';
-import {AmpEvents} from '#core/constants/amp-events';
+import {ActionTrust} from '../../../src/core/constants/action-constants';
+import {AmpEvents} from '../../../src/core/constants/amp-events';
 import {CSS} from '../../../build/amp-sidebar-0.1.css';
 import {Direction, Orientation, SwipeToDismiss} from './swipe-to-dismiss';
 import {Gestures} from '../../../src/gesture';
-import {Keys} from '#core/constants/key-codes';
-import {Services} from '#service';
+import {Keys} from '../../../src/core/constants/key-codes';
+import {Services} from '../../../src/services';
 import {SwipeDef, SwipeXRecognizer} from '../../../src/gesture-recognizers';
 import {Toolbar} from './toolbar';
-import {
-  closestAncestorElementBySelector,
-  realChildElements,
-} from '#core/dom/query';
+import {closestAncestorElementBySelector} from '../../../src/core/dom/query';
 import {createCustomEvent} from '../../../src/event-helper';
-import {debounce} from '#core/types/function';
+import {debounce} from '../../../src/core/types/function';
 import {descendsFromStory} from '../../../src/utils/story';
 import {dev, devAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {handleAutoscroll} from './autoscroll';
-import {isRTL, tryFocus} from '#core/dom';
+import {isRTL, tryFocus} from '../../../src/dom';
 import {
   observeContentSize,
   unobserveContentSize,
-} from '#core/dom/layout/size-observer';
+} from '../../../src/utils/size-observer';
 import {removeFragment} from '../../../src/url';
 import {setModalAsClosed, setModalAsOpen} from '../../../src/modal';
-import {setStyles, toggle} from '#core/dom/style';
-import {toArray} from '#core/types/array';
+import {setStyles, toggle} from '../../../src/style';
+import {toArray} from '../../../src/core/types/array';
 import {unmountAll} from '../../../src/utils/resource-container-helper';
 
 /** @private @const {string} */
@@ -455,7 +452,7 @@ export class AmpSidebar extends AMP.BaseElement {
    */
   updateForOpened_(trust) {
     // On open sidebar
-    const children = realChildElements(this.element);
+    const children = this.getRealChildren();
     const owners = Services.ownersForDoc(this.element);
     owners.scheduleLayout(this.element, children);
     owners.scheduleResume(this.element, children);
@@ -505,7 +502,7 @@ export class AmpSidebar extends AMP.BaseElement {
     toggle(this.getMaskElement_(), /* display */ false);
     Services.ownersForDoc(this.element).schedulePause(
       this.element,
-      realChildElements(this.element)
+      this.getRealChildren()
     );
     this.triggerEvent_(SidebarEvents.CLOSE, trust);
 

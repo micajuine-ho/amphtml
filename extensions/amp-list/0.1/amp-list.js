@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-import {ActionTrust} from '#core/constants/action-constants';
-import {AmpEvents} from '#core/constants/amp-events';
+import {ActionTrust} from '../../../src/core/constants/action-constants';
+import {AmpEvents} from '../../../src/core/constants/amp-events';
 import {CSS} from '../../../build/amp-list-0.1.css';
 import {
   DIFFABLE_AMP_ELEMENTS,
   DIFF_IGNORE,
   DIFF_KEY,
   markElementForDiffing,
-} from '#purifier/sanitation';
-import {Deferred} from '#core/data-structures/promise';
+} from '../../../src/purifier/sanitation';
+import {Deferred} from '../../../src/core/data-structures/promise';
 import {
   Layout,
-  applyFillContent,
   getLayoutClass,
   isLayoutSizeDefined,
   parseLayout,
-} from '#core/dom/layout';
+} from '../../../src/layout';
 import {LoadMoreService} from './service/load-more-service';
 import {Pass} from '../../../src/pass';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {SsrTemplateHelper} from '../../../src/ssr-template-helper';
 import {
   UrlReplacementPolicy,
@@ -44,19 +43,19 @@ import {
   childElementByAttr,
   scopedQuerySelector,
   scopedQuerySelectorAll,
-} from '#core/dom/query';
+} from '../../../src/core/dom/query';
 import {createCustomEvent, listen} from '../../../src/event-helper';
 import {dev, devAssert, user, userAssert} from '../../../src/log';
-import {dict, getValueForExpr} from '#core/types/object';
+import {dict, getValueForExpr} from '../../../src/core/types/object';
 import {getMode} from '../../../src/mode';
 import {getSourceOrigin, isAmpScriptUri} from '../../../src/url';
-import {removeChildren, tryFocus} from '#core/dom';
+import {removeChildren, tryFocus} from '../../../src/dom';
 
 import {isAmp4Email} from '../../../src/format';
-import {isArray, toArray} from '#core/types/array';
-import {isExperimentOn} from '#experiments';
-import {px, setImportantStyles, setStyles, toggle} from '#core/dom/style';
-import {setDOM} from '#third_party/set-dom/set-dom';
+import {isArray, toArray} from '../../../src/core/types/array';
+import {isExperimentOn} from '../../../src/experiments';
+import {px, setImportantStyles, setStyles, toggle} from '../../../src/style';
+import {setDOM} from '../../../third_party/set-dom/set-dom';
 import {
   setupAMPCors,
   setupInput,
@@ -560,7 +559,7 @@ export class AmpList extends AMP.BaseElement {
     // to take the height of its children instead,
     // whereas fill-content forces height:0
     if (!this.loadMoreEnabled_ && !this.enableManagedResizing_) {
-      applyFillContent(container, true);
+      this.applyFillContent(container, true);
     }
     return container;
   }
@@ -1405,7 +1404,7 @@ export class AmpList extends AMP.BaseElement {
   /**
    * Undoes previous size-defined layout, must be called in mutation context.
    * @param {string} layoutString
-   * @see src/core/dom/layout/index.js
+   * @see src/layout.js
    */
   undoLayout_(layoutString) {
     const layout = parseLayout(layoutString);

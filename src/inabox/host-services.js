@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../services';
 import {
   getServicePromiseForDoc,
   registerServiceBuilderForDoc,
   rejectServicePromiseForDoc,
-} from '../service-helpers';
+} from '../service';
 
 const ServiceNames = {
   VISIBILITY: 'host-visibility',

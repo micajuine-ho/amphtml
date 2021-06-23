@@ -15,7 +15,7 @@
  */
 
 import * as assertions from './base';
-import * as mode from '#core/mode';
+import {isMinifiedMode} from '../minified-mode';
 
 /**
  * @fileoverview This file provides the entrypoint for dev assertions. It's
@@ -67,7 +67,7 @@ export function devAssert(
   opt_8,
   opt_9
 ) {
-  if (mode.isMinified()) {
+  if (isMinifiedMode()) {
     return shouldBeTruthy;
   }
   devAssertDceCheck();
@@ -100,7 +100,7 @@ export function devAssert(
  * @closurePrimitive {asserts.matchesReturn}
  */
 export function devAssertElement(shouldBeElement, opt_message) {
-  if (mode.isMinified()) {
+  if (isMinifiedMode()) {
     return /** @type {!Element} */ (shouldBeElement);
   }
   devAssertDceCheck();
@@ -125,7 +125,7 @@ export function devAssertElement(shouldBeElement, opt_message) {
  * @closurePrimitive {asserts.matchesReturn}
  */
 export function devAssertString(shouldBeString, opt_message) {
-  if (mode.isMinified()) {
+  if (isMinifiedMode()) {
     return /** @type {string} */ (shouldBeString);
   }
   devAssertDceCheck();
@@ -151,7 +151,7 @@ export function devAssertString(shouldBeString, opt_message) {
  * @closurePrimitive {asserts.matchesReturn}
  */
 export function devAssertNumber(shouldBeNumber, opt_message) {
-  if (mode.isMinified()) {
+  if (isMinifiedMode()) {
     return /** @type {number} */ (shouldBeNumber);
   }
   devAssertDceCheck();
@@ -176,7 +176,7 @@ export function devAssertNumber(shouldBeNumber, opt_message) {
  * @closurePrimitive {asserts.matchesReturn}
  */
 export function devAssertArray(shouldBeArray, opt_message) {
-  if (mode.isMinified()) {
+  if (isMinifiedMode()) {
     return /** @type {!Array} */ (shouldBeArray);
   }
   devAssertDceCheck();
@@ -200,7 +200,7 @@ export function devAssertArray(shouldBeArray, opt_message) {
  * @closurePrimitive {asserts.matchesReturn}
  */
 export function devAssertBoolean(shouldBeBoolean, opt_message) {
-  if (mode.isMinified()) {
+  if (isMinifiedMode()) {
     return /** @type {boolean} */ (shouldBeBoolean);
   }
   devAssertDceCheck();

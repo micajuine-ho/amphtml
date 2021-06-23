@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {VideoEvents} from '../../../src/video-interface';
 import {addParamsToUrl} from '../../../src/url';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
 import {dev, userAssert} from '../../../src/log';
 import {
   dispatchCustomEvent,
   getDataParamsFromAttributes,
   removeElement,
-} from '#core/dom';
+} from '../../../src/dom';
 import {getData, listen} from '../../../src/event-helper';
-import {installVideoManagerForDoc} from '#service/video-manager-impl';
-import {propagateAttributes} from '#core/dom/propagate-attributes';
+import {installVideoManagerForDoc} from '../../../src/service/video-manager-impl';
+import {isLayoutSizeDefined} from '../../../src/layout';
 
 const TAG = 'amp-gfycat';
 
@@ -90,8 +89,8 @@ class AmpGfycat extends AMP.BaseElement {
   createPlaceholderCallback() {
     const placeholder = this.win.document.createElement('img');
     const videoid = dev().assertString(this.videoid_);
-    applyFillContent(placeholder);
-    propagateAttributes(['alt', 'aria-label'], this.element, placeholder);
+    this.applyFillContent(placeholder);
+    this.propagateAttributes(['alt', 'aria-label'], placeholder);
     placeholder.setAttribute('loading', 'lazy');
     placeholder.setAttribute('placeholder', '');
     placeholder.setAttribute('referrerpolicy', 'origin');
@@ -154,7 +153,7 @@ class AmpGfycat extends AMP.BaseElement {
 
     iframe.setAttribute('frameborder', '0');
     iframe.src = src;
-    applyFillContent(iframe);
+    this.applyFillContent(iframe);
     this.iframe_ = iframe;
 
     this.unlistenMessage_ = listen(

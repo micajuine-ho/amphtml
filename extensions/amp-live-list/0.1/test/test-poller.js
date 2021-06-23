@@ -15,7 +15,7 @@
  */
 
 import {Poller} from '../poller';
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 
 describes.sandboxed('Poller', {}, (env) => {
   let clock;

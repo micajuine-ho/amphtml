@@ -60,7 +60,7 @@ The final code should like:
 
 ```html
 <!DOCTYPE html>
-<html ⚡ lang="en">
+<html ⚡>
   <head>
     ...
     <script

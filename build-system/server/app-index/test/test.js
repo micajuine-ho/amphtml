@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-const test = require('ava');
-const {serveIndexForTesting} = require('../');
+const {expect} = require('chai');
+const {serveIndexForTesting} = require('../index');
 
 const NOOP = () => {};
 
-test('renders HTML', async (t) => {
-  const renderedHtml = await serveIndexForTesting({url: '/'}, {end: NOOP});
-  t.truthy(renderedHtml);
+describe('devdash', () => {
+  describe('express middleware', () => {
+    it('renders HTML', async () => {
+      const renderedHtml = await serveIndexForTesting({url: '/'}, {end: NOOP});
+      expect(renderedHtml).to.be.ok;
+    });
+  });
 });

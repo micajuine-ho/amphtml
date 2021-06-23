@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
+import * as Preact from '../../../../src/preact';
 import {VideoIframeInternal} from '../video-iframe';
-import {createRef} from '#preact';
+import {createRef} from '../../../../src/preact';
 import {mount} from 'enzyme';
 
 function dispatchMessage(window, opt_event) {

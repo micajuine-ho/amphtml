@@ -15,11 +15,11 @@
  */
 
 import {BaseElement} from './base-element';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {getBootstrapBaseUrl, getBootstrapUrl} from '../../../src/3p-frame';
-import {htmlFor} from '#core/dom/static-template';
-import {isExperimentOn} from '#experiments';
-import {userAssert} from '#core/assert';
+import {htmlFor} from '../../../src/static-template';
+import {isExperimentOn} from '../../../src/experiments';
+import {userAssert} from '../../../src/core/assert';
 
 /** @const {string} */
 const TAG = 'amp-twitter';

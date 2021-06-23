@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {AutoFullscreenManager} from '#service/video-manager-impl';
+import {AutoFullscreenManager} from '../../src/service/video-manager-impl';
 import {PlayingStates} from '../../src/video-interface';
-import {Services} from '#service';
+import {Services} from '../../src/services';
 
 describes.fakeWin('Rotate-to-fullscreen', {amp: true}, (env) => {
   let ampdoc;

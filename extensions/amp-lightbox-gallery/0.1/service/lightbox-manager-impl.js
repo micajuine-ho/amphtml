@@ -14,41 +14,49 @@
  * limitations under the License.
  */
 
-import {AmpEvents} from '#core/constants/amp-events';
+import {AmpEvents} from '../../../../src/core/constants/amp-events';
 import {
   AutoLightboxEvents,
   isActionableByTap,
 } from '../../../../src/auto-lightbox';
-import {CommonSignals} from '#core/constants/common-signals';
+import {CommonSignals} from '../../../../src/core/constants/common-signals';
 import {
   LIGHTBOX_THUMBNAIL_AD,
   LIGHTBOX_THUMBNAIL_UNKNOWN,
   LIGHTBOX_THUMBNAIL_VIDEO,
 } from './lightbox-placeholders';
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 import {
   childElement,
   childElementByAttr,
   closestAncestorElementBySelector,
   elementByTag,
-} from '#core/dom/query';
+} from '../../../../src/core/dom/query';
 import {dev, devAssert, userAssert} from '../../../../src/log';
 
-import {iterateCursor} from '#core/dom';
-import {map} from '#core/types/object';
-import {srcsetFromElement, srcsetFromSrc} from '#core/dom/srcset';
-import {toArray} from '#core/types/array';
+import {iterateCursor} from '../../../../src/dom';
+import {map} from '../../../../src/core/types/object';
+import {
+  srcsetFromElement,
+  srcsetFromSrc,
+} from '../../../../src/core/dom/srcset';
+import {toArray} from '../../../../src/core/types/array';
 
-const LIGHTBOX_ELIGIBLE_TAGS = new Set(['AMP-IMG', 'IMG']);
+const LIGHTBOX_ELIGIBLE_TAGS = {
+  'AMP-IMG': true,
+};
 
-// eslint-disable-next-line local/no-export-side-effect
-export const ELIGIBLE_TAP_TAGS = new Set(['AMP-IMG', 'IMG']);
+export const ELIGIBLE_TAP_TAGS = {
+  'AMP-IMG': true,
+};
 
-// eslint-disable-next-line local/no-export-side-effect
-export const VIDEO_TAGS = new Set(['AMP-YOUTUBE', 'AMP-VIDEO']);
+export const VIDEO_TAGS = {
+  'AMP-YOUTUBE': true,
+  'AMP-VIDEO': true,
+};
 
 const GALLERY_TAG = 'amp-lightbox-gallery';
-const CAROUSEL_TAGS = new Set(['AMP-CAROUSEL', 'AMP-BASE-CAROUSEL']);
+const CAROUSEL_TAGS = ['AMP-CAROUSEL', 'AMP-BASE-CAROUSEL'];
 const FIGURE_TAG = 'FIGURE';
 const SLIDE_SELECTOR = '.amp-carousel-slide, .i-amphtml-carousel-slotted';
 
@@ -122,9 +130,9 @@ export class LightboxManager {
     // mapped unique ids.
     /**
      * List of lightbox elements that have already been scanned.
-     * @private {!Set<!Element>}
+     * @private {!Array<!Element>}
      */
-    this.seen_ = new Set();
+    this.seen_ = [];
   }
 
   /**
@@ -162,9 +170,7 @@ export class LightboxManager {
    */
   scanLightboxables_() {
     return this.ampdoc_.whenReady().then(() => {
-      const matches = this.ampdoc_
-        .getRootNode()
-        .querySelectorAll('[lightbox],[data-lightbox]');
+      const matches = this.ampdoc_.getRootNode().querySelectorAll('[lightbox]');
       const processLightboxElement = this.processLightboxElement_.bind(this);
       iterateCursor(matches, processLightboxElement);
     });
@@ -177,7 +183,7 @@ export class LightboxManager {
    * @private
    */
   baseElementIsSupported_(element) {
-    return LIGHTBOX_ELIGIBLE_TAGS.has(element.tagName);
+    return LIGHTBOX_ELIGIBLE_TAGS[element.tagName];
   }
 
   /**
@@ -201,11 +207,11 @@ export class LightboxManager {
           return;
         }
         const baseElement = getBaseElementForSlide(slide);
-        if (this.seen_.has(baseElement)) {
+        if (this.seen_.includes(baseElement)) {
           return;
         }
         baseElement.setAttribute('lightbox', lightboxGroupId);
-        this.seen_.add(baseElement);
+        this.seen_.push(baseElement);
         this.processBaseLightboxElement_(baseElement, lightboxGroupId);
       });
     });
@@ -216,11 +222,11 @@ export class LightboxManager {
    * @private
    */
   processLightboxElement_(element) {
-    if (this.seen_.has(element)) {
+    if (this.seen_.includes(element)) {
       return;
     }
-    this.seen_.add(element);
-    if (CAROUSEL_TAGS.has(element.tagName)) {
+    this.seen_.push(element);
+    if (CAROUSEL_TAGS.includes(element.tagName)) {
       this.processLightboxCarousel_(element);
     } else {
       const lightboxGroupId = element.getAttribute('lightbox') || 'default';
@@ -403,7 +409,7 @@ export class LightboxManager {
     if (element.hasAttribute('lightbox-thumbnail-id')) {
       const thumbnailId = element.getAttribute('lightbox-thumbnail-id');
       const thumbnailImage = this.ampdoc_.getElementById(thumbnailId);
-      if (LIGHTBOX_ELIGIBLE_TAGS.has(thumbnailImage?.tagName)) {
+      if (thumbnailImage && thumbnailImage.tagName == 'AMP-IMG') {
         return srcsetFromElement(thumbnailImage);
       }
     }
@@ -417,7 +423,7 @@ export class LightboxManager {
    * @private
    */
   getUserPlaceholderSrcset_(element) {
-    if (LIGHTBOX_ELIGIBLE_TAGS.has(element.tagName)) {
+    if (element.tagName == 'AMP-IMG') {
       return srcsetFromElement(element);
     }
     if (element.tagName == 'AMP-VIDEO') {

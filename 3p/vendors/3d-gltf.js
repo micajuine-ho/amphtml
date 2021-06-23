@@ -15,12 +15,12 @@
  */
 
 // src/polyfills.js must be the first import.
-import '#3p/polyfills';
+import '../polyfills';
 
-import {draw3p, init} from '#3p/integration-lib';
-import {register} from '#3p/3p';
+import {draw3p, init} from '../integration-lib';
+import {register} from '../3p';
 
-import {gltfViewer} from '#3p/3d-gltf';
+import {gltfViewer} from '../3d-gltf/index';
 
 init(window);
 register('3d-gltf', gltfViewer);

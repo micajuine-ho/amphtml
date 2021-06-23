@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 import {API_SERVER} from '../constants';
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 
 import {addParamsToUrl} from '../../../../src/url';
-import {dict} from '#core/types/object';
+import {dict} from '../../../../src/core/types/object';
 import {getSessionId} from './session';
 import {pixelDrop} from './pixel';
 

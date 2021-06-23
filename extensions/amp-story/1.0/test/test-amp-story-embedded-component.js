@@ -22,11 +22,11 @@ import {
 } from '../amp-story-store-service';
 import {AmpStoryEmbeddedComponent} from '../amp-story-embedded-component';
 import {EventType} from '../events';
-import {LocalizationService} from '#service/localization';
-import {Services} from '#service';
+import {LocalizationService} from '../../../../src/service/localization';
+import {Services} from '../../../../src/services';
 import {StoryAnalyticsEvent} from '../story-analytics';
-import {addAttributesToElement} from '#core/dom';
-import {registerServiceBuilder} from '../../../../src/service-helpers';
+import {addAttributesToElement} from '../../../../src/dom';
+import {registerServiceBuilder} from '../../../../src/service';
 
 describes.realWin('amp-story-embedded-component', {amp: true}, (env) => {
   let component;

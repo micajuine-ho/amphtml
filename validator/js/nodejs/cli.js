@@ -18,7 +18,7 @@
 
 'use strict';
 
-const {main} = require('./');
+const {main} = require('./index');
 
 main();
 

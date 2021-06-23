@@ -15,44 +15,43 @@
  */
 
 import {EMPTY_METADATA} from '../../../src/mediasession-helper';
-import {PauseHelper} from '#core/dom/video/pause-helper';
-import {Services} from '#service';
+import {PauseHelper} from '../../../src/utils/pause-helper';
+import {Services} from '../../../src/services';
 import {VideoEvents} from '../../../src/video-interface';
-import {VisibilityState} from '#core/constants/visibility-state';
+import {VisibilityState} from '../../../src/core/constants/visibility-state';
 import {addParamsToUrl} from '../../../src/url';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
 import {
   childElement,
   childElementByTag,
   childElementsByTag,
-} from '#core/dom/query';
+} from '../../../src/core/dom/query';
 import {descendsFromStory} from '../../../src/utils/story';
 import {dev, devAssert, user} from '../../../src/log';
 import {
   dispatchCustomEvent,
   insertAfterOrAtStart,
   removeElement,
-} from '#core/dom';
+} from '../../../src/dom';
 import {fetchCachedSources} from './video-cache';
 import {
   fullscreenEnter,
   fullscreenExit,
   isFullscreenElement,
-} from '#core/dom/fullscreen';
+} from '../../../src/core/dom/fullscreen';
 import {getBitrateManager} from './flexible-bitrate';
 import {getMode} from '../../../src/mode';
-import {htmlFor} from '#core/dom/static-template';
-import {installVideoManagerForDoc} from '#service/video-manager-impl';
+import {htmlFor} from '../../../src/static-template';
+import {installVideoManagerForDoc} from '../../../src/service/video-manager-impl';
+import {isLayoutSizeDefined} from '../../../src/layout';
 import {listen, listenOncePromise} from '../../../src/event-helper';
 import {mutedOrUnmutedEvent} from '../../../src/iframe-video';
-import {propagateAttributes} from '#core/dom/propagate-attributes';
 import {
   propagateObjectFitStyles,
   setImportantStyles,
   setInitialDisplay,
   setStyles,
-} from '#core/dom/style';
-import {toArray} from '#core/types/array';
+} from '../../../src/style';
+import {toArray} from '../../../src/core/types/array';
 
 const TAG = 'amp-video';
 
@@ -239,14 +238,13 @@ export class AmpVideo extends AMP.BaseElement {
     // Disable video preload in prerender mode.
     this.video_.setAttribute('preload', 'none');
     this.checkA11yAttributeText_();
-    propagateAttributes(
+    this.propagateAttributes(
       ATTRS_TO_PROPAGATE_ON_BUILD,
-      this.element,
       this.video_,
       /* opt_removeMissingAttrs */ true
     );
     this.installEventHandlers_();
-    applyFillContent(this.video_, true);
+    this.applyFillContent(this.video_, true);
     propagateObjectFitStyles(this.element, this.video_);
 
     element.appendChild(this.video_);
@@ -319,18 +317,13 @@ export class AmpVideo extends AMP.BaseElement {
     if (mutations['src']) {
       const urlService = this.getUrlService_();
       urlService.assertHttpsUrl(element.getAttribute('src'), element);
-      propagateAttributes(
-        ['src'],
-        this.element,
-        dev().assertElement(this.video_)
-      );
+      this.propagateAttributes(['src'], dev().assertElement(this.video_));
     }
     const attrs = ATTRS_TO_PROPAGATE.filter(
       (value) => mutations[value] !== undefined
     );
-    propagateAttributes(
+    this.propagateAttributes(
       attrs,
-      this.element,
       dev().assertElement(this.video_),
       /* opt_removeMissingAttrs */ true
     );
@@ -368,9 +361,8 @@ export class AmpVideo extends AMP.BaseElement {
       return Promise.resolve();
     }
 
-    propagateAttributes(
+    this.propagateAttributes(
       ATTRS_TO_PROPAGATE_ON_LAYOUT,
-      this.element,
       dev().assertElement(this.video_),
       /* opt_removeMissingAttrs */ true
     );
@@ -551,11 +543,7 @@ export class AmpVideo extends AMP.BaseElement {
     // If the `src` of `amp-video` itself is NOT cached, set it on video
     if (element.hasAttribute('src') && !isCachedByCdn(element)) {
       urlService.assertHttpsUrl(element.getAttribute('src'), element);
-      propagateAttributes(
-        ['src'],
-        this.element,
-        dev().assertElement(this.video_)
-      );
+      this.propagateAttributes(['src'], dev().assertElement(this.video_));
     }
 
     sources.forEach((source) => {
@@ -782,7 +770,7 @@ export class AmpVideo extends AMP.BaseElement {
       'background-position': 'center',
     });
     poster.classList.add('i-amphtml-android-poster-bug');
-    applyFillContent(poster);
+    this.applyFillContent(poster);
     element.appendChild(poster);
   }
 

@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-import '../amp-vk';
-import {Layout} from '#core/dom/layout';
-import {Resource} from '#service/resource';
-
 const POST_PARAMS = {
   'embedtype': 'post',
   'hash': 'Yc8_Z9pnpg8aKMZbVcD-jK45eAk',
@@ -30,6 +26,10 @@ const POLL_PARAMS = {
   'api-id': '6183531',
   'poll-id': '274086843_1a2a465f60fff4699f',
 };
+
+import '../amp-vk';
+import {Layout} from '../../../../src/layout';
+import {Resource} from '../../../../src/service/resource';
 
 describes.realWin(
   'amp-vk',

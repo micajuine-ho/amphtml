@@ -15,7 +15,7 @@
  */
 
 import '../amp-recaptcha-input';
-import {createElementWithAttributes} from '#core/dom';
+import {createElementWithAttributes} from '../../../../src/dom';
 
 describes.realWin(
   'amp-recaptcha-input',

@@ -16,7 +16,7 @@
 
 import {AmpdocAnalyticsRoot, EmbedAnalyticsRoot} from '../analytics-root';
 import {AnalyticsEventType, CustomEventTracker} from '../events';
-import {InstrumentationService} from '../instrumentation';
+import {InstrumentationService} from '../instrumentation.js';
 
 describes.realWin('InstrumentationService', {amp: 1}, (env) => {
   let win;

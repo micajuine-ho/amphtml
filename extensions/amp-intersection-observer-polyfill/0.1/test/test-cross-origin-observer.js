@@ -15,13 +15,13 @@
  */
 
 import {MessageType} from '../../../../src/3p-frame-messaging';
-import {WindowInterface} from '#core/window/interface';
+import {WindowInterface} from '../../../../src/core/window/interface';
 import {
   calculateIntersectionRect,
   maybeSetupCrossOriginObserver,
 } from '../cross-origin-observer';
-import {layoutRectLtwh} from '#core/dom/layout/rect';
-import {registerServiceBuilder} from '../../../../src/service-helpers';
+import {layoutRectLtwh} from '../../../../src/core/math/layout-rect';
+import {registerServiceBuilder} from '../../../../src/service';
 
 describes.sandboxed('calculateIntersectionRect', {}, () => {
   it('when on screen', () => {

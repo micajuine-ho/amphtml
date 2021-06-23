@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Resource, ResourceState} from '#service/resource';
-import {Services} from '#service';
+import {Resource, ResourceState} from '../../src/service/resource';
+import {Services} from '../../src/services';
 
 describes.realWin(
   'owners-impl',

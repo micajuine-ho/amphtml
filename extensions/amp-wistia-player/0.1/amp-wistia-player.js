@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Deferred} from '#core/data-structures/promise';
-import {Services} from '#service';
+import {Deferred} from '../../../src/core/data-structures/promise';
+import {Services} from '../../../src/services';
 import {VideoEvents} from '../../../src/video-interface';
 import {
   createFrameFor,
@@ -26,15 +26,15 @@ import {
   redispatch,
 } from '../../../src/iframe-video';
 import {dev, userAssert} from '../../../src/log';
-import {dispatchCustomEvent, removeElement} from '#core/dom';
+import {dispatchCustomEvent, removeElement} from '../../../src/dom';
 import {
   fullscreenEnter,
   fullscreenExit,
   isFullscreenElement,
-} from '#core/dom/fullscreen';
+} from '../../../src/core/dom/fullscreen';
 import {getData, listen} from '../../../src/event-helper';
-import {installVideoManagerForDoc} from '#service/video-manager-impl';
-import {isLayoutSizeDefined} from '#core/dom/layout';
+import {installVideoManagerForDoc} from '../../../src/service/video-manager-impl';
+import {isLayoutSizeDefined} from '../../../src/layout';
 
 const TAG = 'amp-wistia-player';
 

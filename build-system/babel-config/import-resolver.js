@@ -18,11 +18,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const TSCONFIG_PATH = path.join(__dirname, '..', '..', 'tsconfig.json');
-let tsConfigPaths = null;
+const JSCONFIG_PATH = path.join(__dirname, '..', '..', 'jsconfig.json');
+let aliasPaths = null;
 
 /**
- * Reads import paths from tsconfig.json. This file is used by VSCode for
+ * Reads import paths from jsconfig.json. This file is used by VSCode for
  * Intellisense/auto-import. Rather than duplicate and require updating both
  * files, we can read from it directly. JSConfig format looks like:
  * { compilerOptions: { paths: {
@@ -38,20 +38,18 @@ let tsConfigPaths = null;
  * @return {!Object<string, string>}
  */
 function readJsconfigPaths() {
-  if (!tsConfigPaths) {
-    const tsConfig = JSON.parse(fs.readFileSync(TSCONFIG_PATH, 'utf8'));
-    const aliasPaths = tsConfig.compilerOptions.paths;
-
-    const stripSuffix = (s) => s.replace(/\/\*$/, '');
-    const aliases = Object.entries(aliasPaths).map(([alias, [dest]]) => [
-      stripSuffix(alias),
-      stripSuffix(dest),
-    ]);
-
-    tsConfigPaths = Object.fromEntries(aliases);
+  if (!aliasPaths) {
+    const jsConfig = JSON.parse(fs.readFileSync(JSCONFIG_PATH, 'utf8'));
+    aliasPaths = jsConfig.compilerOptions.paths;
   }
 
-  return tsConfigPaths;
+  const stripSuffix = (s) => s.replace(/\/\*$/, '');
+  const aliases = Object.entries(aliasPaths).map(([alias, [dest]]) => [
+    stripSuffix(alias),
+    stripSuffix(dest),
+  ]);
+
+  return Object.fromEntries(aliases);
 }
 
 /**
@@ -66,20 +64,6 @@ function getImportResolver() {
 }
 
 /**
- * Produces an alias map with paths relative to the provided root.
- * @param {string} rootDir
- * @return {!Object<string, string>}
- */
-function getRelativeAliasMap(rootDir) {
-  return Object.fromEntries(
-    Object.entries(getImportResolver().alias).map(([alias, destPath]) => [
-      alias,
-      path.join(rootDir, destPath),
-    ])
-  );
-}
-
-/**
  * Import resolver Babel plugin configuration.
  * @return {!Array}
  */
@@ -87,8 +71,4 @@ function getImportResolverPlugin() {
   return ['module-resolver', getImportResolver()];
 }
 
-module.exports = {
-  getImportResolver,
-  getImportResolverPlugin,
-  getRelativeAliasMap,
-};
+module.exports = {getImportResolver, getImportResolverPlugin};

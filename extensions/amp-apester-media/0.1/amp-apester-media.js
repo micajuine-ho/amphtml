@@ -15,15 +15,10 @@
  */
 import {CSS} from '../../../build/amp-apester-media-0.1.css';
 import {IntersectionObserver3pHost} from '../../../src/utils/intersection-observer-3p-host';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {addParamsToUrl} from '../../../src/url';
-import {
-  applyFillContent,
-  getLengthNumeral,
-  isLayoutSizeDefined,
-} from '#core/dom/layout';
 import {dev, userAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {
   extractTags,
   getPlatform,
@@ -31,13 +26,14 @@ import {
   setFullscreenOff,
   setFullscreenOn,
 } from './utils';
+import {getLengthNumeral, isLayoutSizeDefined} from '../../../src/layout';
 import {handleCompanionAds} from './monetization';
 import {
   observeWithSharedInOb,
   unobserveWithSharedInOb,
-} from '#core/dom/layout/viewport-observer';
-import {px, setStyles} from '#core/dom/style';
-import {removeElement} from '#core/dom';
+} from '../../../src/viewport-observer';
+import {px, setStyles} from '../../../src/style';
+import {removeElement} from '../../../src/dom';
 
 /** @const */
 const TAG = 'amp-apester-media';
@@ -249,7 +245,7 @@ class AmpApesterMedia extends AMP.BaseElement {
     iframe.height = this.height_;
     iframe.width = this.width_;
     iframe.classList.add('amp-apester-iframe');
-    applyFillContent(iframe);
+    this.applyFillContent(iframe);
     return iframe;
   }
 

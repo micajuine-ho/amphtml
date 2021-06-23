@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import {DomFingerprint, domFingerprintPlain} from '#core/dom/fingerprint';
+import {
+  DomFingerprint,
+  domFingerprintPlain,
+} from '../../../../src/core/dom/fingerprint';
 
 describes.realWin('DOM - fingerprint', {}, (env) => {
   let body;

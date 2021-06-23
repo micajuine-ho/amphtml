@@ -16,8 +16,8 @@
 
 import {CountPagesAlgorithm} from './algorithm-count-pages';
 import {PredeterminedPositionAlgorithm} from './algorithm-predetermined';
-import {StoryAdPlacements} from '#experiments/story-ad-placements';
-import {getExperimentBranch} from '#experiments';
+import {StoryAdPlacements} from '../../../src/experiments/story-ad-placements';
+import {getExperimentBranch} from '../../../src/experiments';
 
 /**
  * Choose placement algorithm implementation.

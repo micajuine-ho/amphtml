@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Services} from './service';
+import {Services} from './services';
 import {devAssert} from './log';
-import {getServicePromise} from './service-helpers';
+import {getServicePromise} from './service';
 
 /**
  * A map of services that delay rendering. The key is the name of the service

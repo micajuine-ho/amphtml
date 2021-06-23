@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {TimestampDef, parseDate} from '#core/types/date';
-import {devAssert, userAssert} from '#core/assert';
+import {TimestampDef, parseDate} from '../types/date';
+import {devAssert, userAssert} from '../assert';
 
 /** @typedef {function(string):!TimestampDef} */
 let DateParserDef;

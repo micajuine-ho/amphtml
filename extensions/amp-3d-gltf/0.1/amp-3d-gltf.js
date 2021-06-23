@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ActionTrust} from '#core/constants/action-constants';
-import {Deferred} from '#core/data-structures/promise';
-import {Services} from '#service';
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
+import {ActionTrust} from '../../../src/core/constants/action-constants';
+import {Deferred} from '../../../src/core/data-structures/promise';
+import {Services} from '../../../src/services';
 import {assertHttpsUrl, resolveRelativeUrl} from '../../../src/url';
 import {dev, devAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {getIframe, preloadBootstrap} from '../../../src/3p-frame';
+import {isLayoutSizeDefined} from '../../../src/layout';
 import {listenFor, postMessage} from '../../../src/iframe-helper';
 import {
   observeContentSize,
   unobserveContentSize,
-} from '#core/dom/layout/size-observer';
+} from '../../../src/utils/size-observer';
 import {
   observeWithSharedInOb,
   unobserveWithSharedInOb,
-} from '#core/dom/layout/viewport-observer';
-import {removeElement} from '#core/dom';
+} from '../../../src/viewport-observer';
+import {removeElement} from '../../../src/dom';
 
 const TAG = 'amp-3d-gltf';
 const TYPE = '3d-gltf';
@@ -166,7 +166,7 @@ export class Amp3dGltf extends AMP.BaseElement {
 
     const iframe = getIframe(this.win, this.element, TYPE, this.context_);
     iframe.title = this.element.title || 'GLTF 3D model';
-    applyFillContent(iframe, true);
+    this.applyFillContent(iframe, true);
     this.iframe_ = iframe;
     this.unlistenMessage_ = devAssert(this.listenGltfViewerMessages_());
 

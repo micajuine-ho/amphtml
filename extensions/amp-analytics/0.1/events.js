@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-import {CommonSignals} from '#core/constants/common-signals';
-import {Deferred} from '#core/data-structures/promise';
-import {Observable} from '#core/data-structures/observable';
+import {CommonSignals} from '../../../src/core/constants/common-signals';
+import {Deferred} from '../../../src/core/data-structures/promise';
+import {Observable} from '../../../src/core/data-structures/observable';
 import {
   PlayingStates,
   VideoAnalyticsEvents,
   videoAnalyticsCustomEventTypeKey,
 } from '../../../src/video-interface';
-import {deepMerge, dict, hasOwn} from '#core/types/object';
+import {deepMerge, dict, hasOwn} from '../../../src/core/types/object';
 import {dev, devAssert, user, userAssert} from '../../../src/log';
 import {getData} from '../../../src/event-helper';
-import {getDataParamsFromAttributes} from '#core/dom';
-import {isAmpElement} from '../../../src/amp-element-helpers';
-import {isArray, isEnumValue, isFiniteNumber} from '#core/types';
+import {getDataParamsFromAttributes, isAmpElement} from '../../../src/dom';
+import {isArray, isEnumValue, isFiniteNumber} from '../../../src/core/types';
 
 const SCROLL_PRECISION_PERCENT = 5;
 const VAR_H_SCROLL_BOUNDARY = 'horizontalScrollBoundary';

@@ -20,11 +20,9 @@ import {
   UrlReplacementPolicy,
   batchFetchJsonFor,
 } from '../../../src/batched-json';
-import {Layout} from '#core/dom/layout';
-import {Services} from '#service';
-import {computedStyle, setStyles} from '#core/dom/style';
+import {Services} from '../../../src/services';
 import {dev, user, userAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {getSourceOrigin, isAmpScriptUri} from '../../../src/url';
 
 /** @const {string} */
@@ -183,17 +181,6 @@ export class AmpRender extends BaseElement {
   }
 
   /** @override */
-  isLayoutSupported(layout) {
-    if (layout === Layout.CONTAINER) {
-      userAssert(
-        this.getPlaceholder(),
-        'placeholder required with layout="container"'
-      );
-    }
-    return super.isLayoutSupported(layout);
-  }
-
-  /** @override */
   init() {
     this.initialSrc_ = this.element.getAttribute('src');
     this.src_ = this.initialSrc_;
@@ -225,41 +212,7 @@ export class AmpRender extends BaseElement {
       },
       'onReady': () => {
         this.toggleLoading(false);
-        if (this.element.getAttribute('layout') !== Layout.CONTAINER) {
-          this.togglePlaceholder(false);
-          return;
-        }
-
-        let componentHeight, contentHeight;
-        // TODO(dmanek): Look into using measureIntersection instead
-        this.measureMutateElement(
-          () => {
-            componentHeight = computedStyle(
-              this.getAmpDoc().win,
-              this.element
-            ).getPropertyValue('height');
-            contentHeight = this.element.querySelector(
-              '[i-amphtml-rendered]'
-            )./*OK*/ scrollHeight;
-          },
-          () => {
-            setStyles(this.element, {
-              'overflow': 'hidden',
-              'height': componentHeight,
-            });
-          }
-        ).then(() => {
-          return this.attemptChangeHeight(contentHeight)
-            .then(() => {
-              this.togglePlaceholder(false);
-              setStyles(this.element, {
-                'overflow': '',
-              });
-            })
-            .catch(() => {
-              this.togglePlaceholder(false);
-            });
-        });
+        this.togglePlaceholder(false);
       },
       'onError': () => {
         this.toggleLoading(false);

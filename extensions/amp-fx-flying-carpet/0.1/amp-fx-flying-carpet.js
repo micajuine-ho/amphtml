@@ -15,12 +15,11 @@
  */
 
 import {CSS} from '../../../build/amp-fx-flying-carpet-0.1.css';
-import {CommonSignals} from '#core/constants/common-signals';
-import {Layout} from '#core/dom/layout';
-import {Services} from '#service';
+import {CommonSignals} from '../../../src/core/constants/common-signals';
+import {Layout} from '../../../src/layout';
+import {Services} from '../../../src/services';
 import {dev, userAssert} from '../../../src/log';
-import {realChildElements, realChildNodes} from '#core/dom/query';
-import {setStyle} from '#core/dom/style';
+import {setStyle} from '../../../src/style';
 
 const TAG = 'amp-fx-flying-carpet';
 
@@ -76,10 +75,10 @@ export class AmpFlyingCarpet extends AMP.BaseElement {
     const doc = this.element.ownerDocument;
     const container = doc.createElement('div');
 
-    this.children_ = realChildElements(this.element);
+    this.children_ = this.getRealChildren();
     this.container_ = container;
 
-    const childNodes = realChildNodes(this.element);
+    const childNodes = this.getRealChildNodes();
     this.totalChildren_ = this.visibileChildren_(childNodes).length;
 
     const owners = Services.ownersForDoc(this.element);

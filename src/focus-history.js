@@ -15,7 +15,7 @@
  */
 
 import {Observable} from './core/data-structures/observable';
-import {Services} from './service';
+import {Services} from './services';
 import {dev} from './log';
 import {isElement} from './core/types';
 

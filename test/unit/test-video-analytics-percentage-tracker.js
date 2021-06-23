@@ -18,9 +18,9 @@ import {
   AnalyticsPercentageTracker,
   PERCENTAGE_FREQUENCY_WHEN_PAUSED_MS,
   PERCENTAGE_INTERVAL,
-} from '#service/video-manager-impl';
+} from '../../src/service/video-manager-impl';
 import {PlayingStates, VideoEvents} from '../../src/video-interface';
-import {Services} from '#service';
+import {Services} from '../../src/services';
 import {createCustomEvent} from '../../src/event-helper';
 
 describes.fakeWin(

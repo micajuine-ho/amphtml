@@ -15,7 +15,7 @@
  */
 
 import * as IniLoad from '../../../../src/ini-load';
-import {AmpDocShadow} from '#service/ampdoc-impl';
+import {AmpDocShadow} from '../../../../src/service/ampdoc-impl';
 import {AmpdocAnalyticsRoot, EmbedAnalyticsRoot} from '../analytics-root';
 import {AnalyticsEventType, CustomEventTracker} from '../events';
 import {ScrollManager} from '../scroll-manager';

@@ -15,7 +15,7 @@
  */
 
 import {Pass} from '../../src/pass';
-import {Services} from '#service';
+import {Services} from '../../src/services';
 
 describes.sandboxed('Pass', {}, (env) => {
   let pass;

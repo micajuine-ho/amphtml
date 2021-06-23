@@ -542,12 +542,12 @@ module.exports = {
 };
 
 sweepExperiments.description =
-  'Remove outdated experiments from the AMP config';
+  'Sweep experiments whose configuration is too old, or specified with --experiment.';
 
 sweepExperiments.flags = {
   'days_ago':
-    'Age at which experiments are removed (default: 365 days, unless using --experiment)',
+    'How old experiment configuration flips must be for an experiment to be removed. Default is 365 days. This is ignored when using --experiment.',
   'dry_run':
-    'List experiments that will be removed without actually removing them',
-  'experiment': 'Remove a specific experiment id, no matter what its age is',
+    "Don't write, but only list the experiments that would be removed by this command.",
+  'experiment': 'Remove a specific experiment id.',
 };

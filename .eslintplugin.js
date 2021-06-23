@@ -16,6 +16,6 @@
 
 /* global require, module */
 
-const {rules} = require('./build-system/eslint-rules');
+const {rules} = require('./build-system/eslint-rules/index');
 
 module.exports = {rules};

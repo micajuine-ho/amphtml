@@ -19,7 +19,7 @@ PASS
 |    Tests for the amp-beopinion tag.
 |  -->
 |  <!doctype html>
-|  <html ⚡ lang="en">
+|  <html ⚡>
 |  <head>
 |    <meta charset="utf-8">
 |    <title>BeOpinion examples</title>

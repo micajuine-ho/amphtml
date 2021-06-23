@@ -15,7 +15,7 @@
  */
 
 import {PlayingStates, VideoEvents} from '../../../../src/video-interface';
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 import {listenOncePromise} from '../../../../src/event-helper';
 import AmpViqeoPlayer from '../amp-viqeo-player';
 

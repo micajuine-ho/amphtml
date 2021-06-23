@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {removeItem} from '#core/types/array';
+import {removeItem} from '../types/array';
 
 /**
  * This class helps to manage observers. Observers can be added, removed or

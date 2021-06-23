@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {FakeMutationObserver} from '#testing/fake-dom';
-import {Services} from '#service';
+import {FakeMutationObserver} from '../../testing/fake-dom';
+import {Services} from '../../src/services';
 
 describes.fakeWin(
   'HiddenObserver',

@@ -55,7 +55,7 @@ let ArgsDef;
  *   name: string,
  *   version: string,
  *   latestVersion?: (string|undefined)
- *   options?: ({hasCss?: boolean, wrapper?: string}|undefined)
+ *   options?: ({hasCss: boolean}|undefined)
  * }}
  */
 let BundleDef;
@@ -305,10 +305,7 @@ async function makeExtensionFromTemplates(
   };
 
   if (!options.nocss) {
-    bundleConfig.options = {...bundleConfig.options, hasCss: true};
-  }
-  if (options.bento) {
-    bundleConfig.options = {...bundleConfig.options, wrapper: 'bento'};
+    bundleConfig.options = {hasCss: true};
   }
 
   await insertExtensionBundlesConfig(
@@ -453,16 +450,16 @@ module.exports = {
   writeFromTemplateDir,
 };
 
-makeExtension.description = 'Create the skeleton for a new extension';
+makeExtension.description = 'Create an extension skeleton';
 makeExtension.flags = {
-  name: 'Name of the extension (the amp-* prefix is added if necessary)',
-  cleanup: 'Undo file changes before exiting (useful with --test)',
+  name: 'The name of the extension. The prefix `amp-*` is added if necessary',
+  cleanup: 'Undo file changes before exiting. This is useful alongside --test',
   bento: 'Generate a Bento component',
   nocss:
-    'Exclude extension-specific CSS (JSS is generated for --bento unless combined with --nojss)',
-  nojss: 'Exclude extension-specific JSS (used with --bento)',
+    'Exclude extension-specific CSS. (If specifying --bento, JSS is still generated unless combined with --nojss)',
+  nojss: 'Exclude extension-specific JSS when specifying --bento.',
   test: 'Build and test the generated extension',
-  version: 'Set the version number (default: 0.1; or 1.0 with --bento)',
+  version: 'Sets the version number (default: 0.1; or 1.0 with --bento)',
   overwrite:
-    'Overwrite existing files at the destination if present, otherwise skip',
+    'Overwrites existing files at the destination, if present. Otherwise skips them',
 };

@@ -19,8 +19,11 @@
 // always available for them. However, when we test an impl in isolation,
 // AmpAd is not loaded already, so we need to load it separately.
 import '../../../amp-ad/0.1/amp-ad';
-import * as bytesUtils from '#core/types/string/bytes';
-import {AMP_EXPERIMENT_ATTRIBUTE, QQID_HEADER} from '#ads/google/a4a/utils';
+import * as bytesUtils from '../../../../src/core/types/string/bytes';
+import {
+  AMP_EXPERIMENT_ATTRIBUTE,
+  QQID_HEADER,
+} from '../../../../ads/google/a4a/utils';
 import {
   AMP_SIGNATURE_HEADER,
   VerificationStatus,
@@ -43,14 +46,14 @@ import {
 import {
   CONSENT_POLICY_STATE,
   CONSENT_STRING_TYPE,
-} from '#core/constants/consent-state';
-import {Deferred} from '#core/data-structures/promise';
+} from '../../../../src/core/constants/consent-state';
+import {Deferred} from '../../../../src/core/data-structures/promise';
 import {FriendlyIframeEmbed} from '../../../../src/friendly-iframe-embed';
-import {Layout} from '#core/dom/layout';
+import {Layout} from '../../../../src/layout';
 import {SafeframeHostApi} from '../safeframe-host';
-import {Services} from '#service';
-import {createElementWithAttributes} from '#core/dom';
-import {toggleExperiment} from '#experiments';
+import {Services} from '../../../../src/services';
+import {createElementWithAttributes} from '../../../../src/dom';
+import {toggleExperiment} from '../../../../src/experiments';
 
 /**
  * We're allowing external resources because otherwise using realWin causes

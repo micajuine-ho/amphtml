@@ -17,7 +17,7 @@
 const argv = require('minimist')(process.argv.slice(2));
 const {doDist} = require('../dist');
 const {EXPERIMENT, urlToCachePath} = require('./helpers');
-const {setExtensionsToBuildFromDocuments} = require('../extension-helpers');
+const {setExtensionsToBuildFromDocuments} = require('../extension-helpers.js');
 
 /**
  * Compiles and minifies AMP runtime and components required by the urls

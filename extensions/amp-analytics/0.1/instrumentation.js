@@ -23,15 +23,15 @@ import {
 } from './events';
 import {AmpdocAnalyticsRoot, EmbedAnalyticsRoot} from './analytics-root';
 import {AnalyticsGroup} from './analytics-group';
-import {Services} from '#service';
-import {dict} from '#core/types/object';
+import {Services} from '../../../src/services';
+import {dict} from '../../../src/core/types/object';
 import {getFriendlyIframeEmbedOptional} from '../../../src/iframe-helper';
 import {
   getParentWindowFrameElement,
   getServiceForDoc,
   getServicePromiseForDoc,
   registerServiceBuilderForDoc,
-} from '../../../src/service-helpers';
+} from '../../../src/service';
 
 const PROP = '__AMP_AN_ROOT';
 

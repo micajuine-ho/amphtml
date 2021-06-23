@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
-import {registerServiceBuilderForDoc} from '../service-helpers';
+import {Services} from '../services';
+import {registerServiceBuilderForDoc} from '../service';
 
 /**
  * @implements {../service/mutator-interface.MutatorInterface}

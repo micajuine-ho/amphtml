@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
+import * as Preact from '../../../src/preact';
 import {useStyles} from './component.jss';
 import objstr from 'obj-str';
 

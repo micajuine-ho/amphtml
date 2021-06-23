@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {getStyle, setStyles} from '#core/dom/style';
+import {getStyle, setStyles} from '../../../src/style';
 
 const MAX_TRANSITION_DURATION = 500; // ms
 const MIN_TRANSITION_DURATION = 200; // ms

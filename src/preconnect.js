@@ -19,11 +19,11 @@
  * connection before the real request can be made.
  */
 
-import {Services} from './service';
+import {Services} from './services';
 import {dev} from './log';
-import {htmlFor} from './core/dom/static-template';
+import {htmlFor} from './static-template';
 import {parseUrlDeprecated} from './url';
-import {registerServiceBuilder} from './service-helpers';
+import {registerServiceBuilder} from './service';
 import {whenDocumentComplete} from './core/document-ready';
 
 const ACTIVE_CONNECTION_TIMEOUT_MS = 180 * 1000;

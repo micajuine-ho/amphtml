@@ -21,7 +21,7 @@ import {
   RefreshManager,
   getPublisherSpecifiedRefreshInterval,
 } from '../refresh-manager';
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 
 describes.sandboxed('refresh', {}, (env) => {
   let mockA4a;

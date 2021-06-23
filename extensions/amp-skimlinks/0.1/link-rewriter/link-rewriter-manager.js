@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {AmpEvents} from '#core/constants/amp-events';
+import {AmpEvents} from '../../../../src/core/constants/amp-events';
 import {EVENTS, PRIORITY_META_TAG_NAME} from './constants';
 import {LinkRewriter} from './link-rewriter';
-import {Priority} from '#service/navigation';
-import {Services} from '#service';
+import {Priority} from '../../../../src/service/navigation';
+import {Services} from '../../../../src/services';
 
 /**
  * LinkRewriterManager works together with LinkRewriter to allow rewriting

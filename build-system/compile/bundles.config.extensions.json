@@ -55,8 +55,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -193,8 +192,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -284,8 +282,7 @@
     "version": "1.0",
     "latestVersion": "0.1",
     "options": {
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -298,8 +295,7 @@
     "version": "1.0",
     "latestVersion": "0.1",
     "options": {
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -346,23 +342,16 @@
     "version": "1.0",
     "latestVersion": "0.1",
     "options": {
-      "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "hasCss": true
     }
   },
   {
     "name": "amp-facebook-comments",
-    "version": "0.1",
+    "version": [
+      "0.1",
+      "1.0"
+    ],
     "latestVersion": "0.1"
-  },
-  {
-    "name": "amp-facebook-comments",
-    "version": "1.0",
-    "latestVersion": "0.1",
-    "options": {
-      "wrapper": "bento"
-    }
   },
   {
     "name": "amp-facebook-like",
@@ -374,8 +363,7 @@
     "version": "1.0",
     "latestVersion": "0.1",
     "options": {
-      "hasCss": true,
-      "wrapper": "bento"
+      "hasCss": true
     }
   },
   {
@@ -388,8 +376,7 @@
     "version": "1.0",
     "latestVersion": "0.1",
     "options": {
-      "hasCss": true,
-      "wrapper": "bento"
+      "hasCss": true
     }
   },
   {
@@ -406,8 +393,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -545,8 +531,7 @@
       "cssBinaries": [
         "amp-inline-gallery-pagination"
       ],
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -568,8 +553,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -611,8 +595,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -803,10 +786,7 @@
   {
     "name": "amp-render",
     "version": "1.0",
-    "latestVersion": "1.0",
-    "options": {
-      "wrapper": "bento"
-    }
+    "latestVersion": "1.0"
   },
   {
     "name": "amp-resize-observer-polyfill",
@@ -840,8 +820,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -849,27 +828,19 @@
     "version": "0.1",
     "latestVersion": "0.1",
     "options": {
-      "wrapper": "none"
+      "noWrapper": true
     }
   },
   {
     "name": "amp-sidebar",
     "version": [
       "0.1",
-      "0.2"
+      "0.2",
+      "1.0"
     ],
     "latestVersion": "0.1",
     "options": {
       "hasCss": true
-    }
-  },
-  {
-    "name": "amp-sidebar",
-    "version": "1.0",
-    "latestVersion": "0.1",
-    "options": {
-      "hasCss": true,
-      "wrapper": "bento"
     }
   },
   {
@@ -902,9 +873,7 @@
     "version": "1.0",
     "latestVersion": "0.1",
     "options": {
-      "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "hasCss": true
     }
   },
   {
@@ -1040,8 +1009,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -1078,8 +1046,7 @@
     "version": "1.0",
     "latestVersion": "0.1",
     "options": {
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -1104,8 +1071,7 @@
     "version": "1.0",
     "latestVersion": "0.1",
     "options": {
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -1126,8 +1092,7 @@
     "version": "1.0",
     "latestVersion": "0.1",
     "options": {
-      "hasCss": true,
-      "wrapper": "bento"
+      "hasCss": true
     }
   },
   {
@@ -1149,8 +1114,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -1176,8 +1140,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   },
   {
@@ -1232,8 +1195,7 @@
     "latestVersion": "0.1",
     "options": {
       "hasCss": true,
-      "npm": true,
-      "wrapper": "bento"
+      "npm": true
     }
   }
 ]

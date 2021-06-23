@@ -22,7 +22,7 @@ import {
   maybeResizeTextarea,
 } from '../amp-form-textarea';
 import {CSS} from '../../../../build/amp-form-0.1.css';
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 import {installStylesForDoc} from '../../../../src/style-installer';
 
 describes.realWin(

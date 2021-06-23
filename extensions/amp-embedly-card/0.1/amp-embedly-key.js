@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Layout} from '#core/dom/layout';
+import {Layout} from '../../../src/layout';
 import {userAssert} from '../../../src/log';
 
 /** @const {string} */

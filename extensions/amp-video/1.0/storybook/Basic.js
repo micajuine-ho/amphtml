@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
+import * as Preact from '../../../../src/preact';
 import {
   Accordion,
   AccordionContent,
   AccordionHeader,
   AccordionSection,
 } from '../../../amp-accordion/1.0/component';
-import {VideoWrapper} from '../component';
+import {VideoWrapper} from '../video-wrapper';
 import {boolean, number, object, text, withKnobs} from '@storybook/addon-knobs';
 
 export default {

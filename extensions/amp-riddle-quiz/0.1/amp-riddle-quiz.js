@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {applyFillContent, isLayoutSizeDefined} from '#core/dom/layout';
-import {getData, listen} from '../../../src/event-helper';
-import {isFiniteNumber, isObject} from '#core/types';
-import {removeElement} from '#core/dom';
+import {getData, listen} from './../../../src/event-helper';
+import {isFiniteNumber, isObject} from '../../../src/core/types';
+import {isLayoutSizeDefined} from '../../../src/layout';
+
+import {removeElement} from '../../../src/dom';
 import {userAssert} from '../../../src/log';
 
 export class AmpRiddleQuiz extends AMP.BaseElement {
@@ -90,7 +91,7 @@ export class AmpRiddleQuiz extends AMP.BaseElement {
     iframe.src =
       'https://www.riddle.com/a/iframe/' + encodeURIComponent(this.riddleId_);
 
-    applyFillContent(iframe);
+    this.applyFillContent(iframe);
     this.element.appendChild(iframe);
 
     return this.loadPromise(iframe);

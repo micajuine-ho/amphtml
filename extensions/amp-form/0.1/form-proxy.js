@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {dev, devAssert} from '../../../src/log';
-import {toWin} from '#core/window';
+import {toWin} from '../../../src/core/window';
 
 /**
  * denylisted properties. Used mainly fot testing.

@@ -186,7 +186,7 @@ module.exports = {
 };
 
 checkSourcemaps.description =
-  'Check sourcemaps generated during minified compilation for correctness';
+  'Checks sourcemaps generated during minified compilation for correctness.';
 checkSourcemaps.flags = {
-  'nobuild': 'Skip building the runtime (checks previously built code)',
+  'nobuild': 'Skips building the runtime (checks previously built code)',
 };

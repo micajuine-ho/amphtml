@@ -15,7 +15,7 @@
  */
 
 import * as urlRewrite from '../../src/url-rewrite';
-import {Purifier} from '#purifier';
+import {Purifier} from '../../src/purifier/purifier';
 
 describes.sandboxed
   .configure()

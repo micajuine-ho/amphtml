@@ -80,4 +80,4 @@ module.exports = {
 };
 
 codecovUpload.description =
-  'Upload code coverage reports to codecov.io during CI';
+  'Uploads code coverage reports to codecov.io during CI builds.';

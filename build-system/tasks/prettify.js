@@ -160,9 +160,9 @@ module.exports = {
 };
 
 prettify.description =
-  'Check several non-JS files in the repo for formatting using prettier';
+  'Checks several non-JS files in the repo for formatting using prettier';
 prettify.flags = {
-  'files': 'Check only the specified files',
-  'local_changes': 'Check just the files changed in the local branch',
-  'fix': 'Fix all auto-fixable formatting errors',
+  'files': 'Checks only the specified files',
+  'local_changes': 'Checks just the files changed in the local branch',
+  'fix': 'Fixes formatting errors',
 };

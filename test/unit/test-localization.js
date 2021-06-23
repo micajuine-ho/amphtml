@@ -17,12 +17,12 @@
 import {
   LocalizationService,
   getLanguageCodesFromString,
-} from '#service/localization';
+} from '../../src/service/localization';
 import {
   LocalizedStringId,
   createPseudoLocale,
 } from '../../src/localized-strings';
-import {Services} from '#service';
+import {Services} from '../../src/services';
 
 describes.fakeWin('localization', {amp: true}, (env) => {
   let win;

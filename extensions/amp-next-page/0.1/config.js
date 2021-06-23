@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {
   getSourceOrigin,
   getSourceUrl,
   resolveRelativeUrl,
 } from '../../../src/url';
-import {isArray} from '#core/types';
+import {isArray} from '../../../src/core/types';
 import {user, userAssert} from '../../../src/log';
 
 const ADSENSE_REC_ORIGIN = 'https://googleads.g.doubleclick.net';

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
-import {createElementWithAttributes} from '#core/dom';
-import {setImportantStyles, toggle} from '#core/dom/style';
+import {Services} from '../../../src/services';
+import {createElementWithAttributes} from '../../../src/dom';
+import {setImportantStyles, toggle} from '../../../src/style';
 
 export class Dialog {
   /**

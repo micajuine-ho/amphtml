@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
+import * as Preact from '../../../../src/preact';
 import {StreamGallery} from '../component';
 import {mount} from 'enzyme';
 

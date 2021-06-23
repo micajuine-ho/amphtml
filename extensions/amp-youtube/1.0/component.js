@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
+import * as Preact from '../../../src/preact';
 import {VideoEvents} from '../../../src/video-interface';
 import {VideoIframe} from '../../amp-video/1.0/video-iframe';
 import {addParamsToUrl} from '../../../src/url';
-import {dict} from '#core/types/object';
-import {dispatchCustomEvent} from '#core/dom';
-import {forwardRef} from '#preact/compat';
+import {dict} from '../../../src/core/types/object';
+import {dispatchCustomEvent} from '../../../src/dom';
+import {forwardRef} from '../../../src/preact/compat';
 import {mutedOrUnmutedEvent, objOrParseJson} from '../../../src/iframe-video';
-import {useRef} from '#preact';
+import {useRef} from '../../../src/preact';
 
 // Correct PlayerStates taken from
 // https://developers.google.com/youtube/iframe_api_reference#Playback_status
@@ -59,7 +59,7 @@ const PlayerFlags = {
   HIDE_ANNOTATION: 3,
 };
 
-/** @const {!../../../src/core/dom.CustomEventOptionsDef} */
+/** @const {!../../../src/dom.CustomEventOptionsDef} */
 const VIDEO_EVENT_OPTIONS = {bubbles: false, cancelable: false};
 
 /**

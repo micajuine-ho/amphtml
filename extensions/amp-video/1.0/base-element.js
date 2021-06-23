@@ -13,20 +13,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {ActionTrust} from '../../../src/core/constants/action-constants';
 import {CSS} from './autoplay.jss';
-import {PreactBaseElement} from '#preact/base-element';
-import {VideoWrapper} from './component';
+import {PreactBaseElement} from '../../../src/preact/base-element';
+import {VideoWrapper} from './video-wrapper';
 
-export class BaseElement extends PreactBaseElement {}
+/** @extends {PreactBaseElement<VideoWrapperDef.Api>} */
+export class VideoBaseElement extends PreactBaseElement {
+  /** @override */
+  init() {
+    this.registerApiAction_('play', (api) => api.play());
+    this.registerApiAction_('pause', (api) => api.pause());
+    this.registerApiAction_('mute', (api) => api.mute());
+    this.registerApiAction_('unmute', (api) => api.unmute());
+
+    // Ugly that this action has three names, but:
+    // - requestFullscreen for consistency with Element.requestFullscreen
+    // - fullscreenenter / fullscreen are for backwards compatibility
+    const requestFullscreen = (api) => api.requestFullscreen();
+    this.registerApiAction_('requestFullscreen', requestFullscreen);
+    this.registerApiAction_('fullscreenenter', requestFullscreen);
+    this.registerApiAction_('fullscreen', requestFullscreen);
+  }
+
+  /**
+   * @param {string} alias
+   * @param {function(!VideoWrapperDef.Api, !../../../src/service/action-impl.ActionInvocation)} handler
+   * @param {!../../../src/core/constants/action-constants.ActionTrust=} minTrust
+   * @private
+   */
+  registerApiAction_(alias, handler, minTrust = ActionTrust.HIGH) {
+    this.registerApiAction(
+      alias,
+      (api, invocation) => {
+        if (invocation.trust >= ActionTrust.HIGH) {
+          // TODO(alanorozco): There may be a better solution that doesn't
+          // require this method which is not standard in HTMLMediaElement, like
+          // potentially toggling `autoplay` instead.
+          api.userInteracted();
+        }
+        handler(api, invocation);
+      },
+      minTrust
+    );
+  }
+}
 
 /** @override */
-BaseElement['Component'] = VideoWrapper;
+VideoBaseElement['Component'] = VideoWrapper;
 
 /** @override */
-BaseElement['loadable'] = true;
+VideoBaseElement['loadable'] = true;
 
 /** @override */
-BaseElement['layoutSizeDefined'] = true;
+VideoBaseElement['layoutSizeDefined'] = true;
 
 /**
  * Defaults to `{component: 'video'}` from `VideoWrapper` component.
@@ -38,10 +78,10 @@ BaseElement['layoutSizeDefined'] = true;
  * ```
  * @override
  */
-BaseElement['staticProps'];
+VideoBaseElement['staticProps'];
 
 /** @override */
-BaseElement['props'] = {
+VideoBaseElement['props'] = {
   'album': {attr: 'album'},
   'alt': {attr: 'alt'},
   'artist': {attr: 'artist'},
@@ -73,7 +113,7 @@ BaseElement['props'] = {
 };
 
 /** @override */
-BaseElement['shadowCss'] = CSS;
+VideoBaseElement['shadowCss'] = CSS;
 
 /** @override */
-BaseElement['usesShadowDom'] = true;
+VideoBaseElement['usesShadowDom'] = true;

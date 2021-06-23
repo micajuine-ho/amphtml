@@ -21,7 +21,7 @@ const path = require('path');
 const Remapping = require('@ampproject/remapping');
 const terser = require('terser');
 const {CompilationLifecycles, debug} = require('./debug-compilation-lifecycle');
-const {jsBundles} = require('./bundles.config');
+const {jsBundles} = require('./bundles.config.js');
 
 /** @type {Remapping.default} */
 const remapping = /** @type {*} */ (Remapping);

@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-import * as dom from './core/dom';
+import * as dom from './dom';
 import * as query from './core/dom/query';
 import {AmpEvents} from './core/constants/amp-events';
 import {CommonSignals} from './core/constants/common-signals';
 import {ElementStub} from './element-stub';
-import {Layout, LayoutPriority, isLoadingAllowed} from './core/dom/layout';
+import {
+  Layout,
+  LayoutPriority,
+  applyStaticLayout,
+  isInternalElement,
+  isLoadingAllowed,
+} from './layout';
 import {MediaQueryProps} from './core/dom/media-query-props';
 import {ReadyState} from './core/constants/ready-state';
 import {ResourceState} from './service/resource';
-import {Services} from './service';
+import {Services} from './services';
 import {Signals} from './core/data-structures/signals';
-import {
-  UPGRADE_TO_CUSTOMELEMENT_PROMISE,
-  UPGRADE_TO_CUSTOMELEMENT_RESOLVER,
-} from './amp-element-helpers';
-import {applyStaticLayout} from './static-layout';
 import {
   blockedByConsentError,
   cancellation,
@@ -43,7 +44,7 @@ import {getMode} from './mode';
 import {getSchedulerForDoc} from './service/scheduler';
 import {isExperimentOn} from './experiments';
 import {rethrowAsync} from './core/error';
-import {setStyle} from './core/dom/style';
+import {setStyle} from './style';
 import {shouldBlockOnConsentByMeta} from './consent';
 import {startupChunk} from './chunk';
 import {toWin} from './core/window';
@@ -292,10 +293,10 @@ function createBaseCustomElementClass(win, elementConnectedCallback) {
       /** @private {?MediaQueryProps} */
       this.mediaQueryProps_ = null;
 
-      if (nonStructThis[UPGRADE_TO_CUSTOMELEMENT_RESOLVER]) {
-        nonStructThis[UPGRADE_TO_CUSTOMELEMENT_RESOLVER](nonStructThis);
-        delete nonStructThis[UPGRADE_TO_CUSTOMELEMENT_RESOLVER];
-        delete nonStructThis[UPGRADE_TO_CUSTOMELEMENT_PROMISE];
+      if (nonStructThis[dom.UPGRADE_TO_CUSTOMELEMENT_RESOLVER]) {
+        nonStructThis[dom.UPGRADE_TO_CUSTOMELEMENT_RESOLVER](nonStructThis);
+        delete nonStructThis[dom.UPGRADE_TO_CUSTOMELEMENT_RESOLVER];
+        delete nonStructThis[dom.UPGRADE_TO_CUSTOMELEMENT_PROMISE];
       }
     }
 
@@ -1892,6 +1893,30 @@ function createBaseCustomElementClass(win, elementConnectedCallback) {
     }
 
     /**
+     * Returns the original nodes of the custom element without any service
+     * nodes that could have been added for markup. These nodes can include
+     * Text, Comment and other child nodes.
+     * @return {!Array<!Node>}
+     * @package @final
+     */
+    getRealChildNodes() {
+      return query.childNodes(this, (node) => !isInternalOrServiceNode(node));
+    }
+
+    /**
+     * Returns the original children of the custom element without any service
+     * nodes that could have been added for markup.
+     * @return {!Array<!Element>}
+     * @package @final
+     */
+    getRealChildren() {
+      return query.childElements(
+        this,
+        (element) => !isInternalOrServiceNode(element)
+      );
+    }
+
+    /**
      * Returns an optional placeholder element for this custom element.
      * @return {?Element}
      * @package @final
@@ -2013,7 +2038,7 @@ function createBaseCustomElementClass(win, elementConnectedCallback) {
         this.hasAttribute('noloading') ||
         (laidOut && !force) ||
         !isLoadingAllowed(this) ||
-        query.isInternalOrServiceNode(this)
+        isInternalOrServiceNode(this)
       ) {
         return false;
       }
@@ -2140,6 +2165,26 @@ function isInputPlaceholder(element) {
 /** @param {!Element} element */
 function assertNotTemplate(element) {
   devAssert(!element.isInTemplate_, 'Must never be called in template');
+}
+
+/**
+ * Returns "true" for internal AMP nodes or for placeholder elements.
+ * @param {!Node} node
+ * @return {boolean}
+ */
+function isInternalOrServiceNode(node) {
+  if (isInternalElement(node)) {
+    return true;
+  }
+  if (
+    node.tagName &&
+    (node.hasAttribute('placeholder') ||
+      node.hasAttribute('fallback') ||
+      node.hasAttribute('overflow'))
+  ) {
+    return true;
+  }
+  return false;
 }
 
 /**

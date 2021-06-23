@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {
   ampWorkerForTesting,
   invokeWebWorker,
 } from '../../../src/web-worker/amp-worker';
 import {dev} from '../../../src/log';
 import {getMode} from '../../../src/mode';
-import {installXhrService} from '#service/xhr-impl';
+import {installXhrService} from '../../../src/service/xhr-impl';
 
 describes.sandboxed('invokeWebWorker', {}, (env) => {
   let fakeWin;

@@ -19,8 +19,8 @@ import {
   FullscreenInterface,
   VisibilityDataDef,
   VisibilityInterface,
-} from '#inabox/host-services';
-import {layoutRectLtwh} from '#core/dom/layout/rect';
+} from '../../../src/inabox/host-services';
+import {layoutRectLtwh} from '../../../src/core/math/layout-rect';
 
 /**
  * Translates between the AMP HostServices APIs and MRAID.

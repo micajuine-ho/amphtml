@@ -21,8 +21,11 @@ import {asyncStringReplace} from '#core/types/string';
 import {base64UrlEncodeFromString} from '#core/types/string/base64';
 import {cookieReader} from './cookie-reader';
 import {dev, devAssert, user, userAssert} from '../../../src/log';
-import {dict} from '#core/types/object';
-import {getActiveExperimentBranches, getExperimentBranch} from '#experiments';
+import {dict} from '../../../src/core/types/object';
+import {
+  getActiveExperimentBranches,
+  getExperimentBranch,
+} from '../../../src/experiments';
 import {
   getConsentMetadata,
   getConsentPolicyInfo,
@@ -32,8 +35,8 @@ import {
   getServiceForDoc,
   getServicePromiseForDoc,
   registerServiceBuilderForDoc,
-} from '../../../src/service-helpers';
-import {isArray, isFiniteNumber} from '#core/types';
+} from '../../../src/service';
+import {isArray, isFiniteNumber} from '../../../src/core/types';
 
 import {isInFie} from '../../../src/iframe-helper';
 import {linkerReaderServiceFor} from './linker-reader';
@@ -330,7 +333,16 @@ export class VariableService {
       'SESSION_ID': () =>
         this.getSessionValue_(type, SESSION_VALUES.SESSION_ID),
       'SESSION_TIMESTAMP': () =>
-        this.getSessionValue_(type, SESSION_VALUES.TIMESTAMP),
+        this.getSessionValue_(type, SESSION_VALUES.CREATION_TIMESTAMP),
+      'SESSION_COUNT': () => this.getSessionValue_(type, SESSION_VALUES.COUNT),
+      'EVENT_TIMESTAMP': (persist) => {
+        persist = persist === 'false' ? false : true;
+        return this.getSessionValue_(
+          type,
+          SESSION_VALUES.EVENT_TIMESTAMP,
+          persist
+        );
+      },
     };
     const perfMacros = isInFie(element)
       ? {}
@@ -366,18 +378,6 @@ export class VariableService {
       ...perfMacros,
     };
     return /** @type {!JsonObject} */ (merged);
-  }
-
-  /**
-   *
-   * @param {string} vendorType
-   * @param {!SESSION_VALUES} key
-   * @return {!Promise<number>}
-   */
-  getSessionValue_(vendorType, key) {
-    return this.sessionManagerPromise_.then((sessionManager) => {
-      return sessionManager.getSessionValue(vendorType, key);
-    });
   }
 
   /**

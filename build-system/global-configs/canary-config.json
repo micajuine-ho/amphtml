@@ -10,7 +10,7 @@
   "doubleclickSraReportExcludedBlock": 0.1,
   "dfp-render-on-idle-cwv-exp": 1,
   "flexAdSlots": 0.05,
-  "flexible-bitrate": 0.5,
+  "flexible-bitrate": 0.1,
   "ios-fixed-no-transfer": 1,
   "ads-initialIntersection": 1,
   "amp-cid-backup": 1,
@@ -20,6 +20,5 @@
   "disable-a4a-non-sd": 1,
   "3p-vendor-split": 1,
   "story-ad-auto-advance": 1,
-  "story-ad-placements": 1,
-  "amp-story-page-attachment-ui-v2": 1
+  "story-ad-placements": 1
 }

@@ -18,17 +18,19 @@ import {Attributes, getAttributesFromConfigObj} from './attributes';
 import {
   LayoutMarginsChangeDef,
   cloneLayoutMarginsChangeDef,
-} from '#core/dom/layout/rect';
-import {Services} from '#service';
+} from '../../../src/core/math/layout-rect';
+import {Services} from '../../../src/services';
 import {
   closestAncestorElementBySelector,
   scopedQuerySelectorAll,
-} from '#core/dom/query';
-import {createElementWithAttributes} from '#core/dom';
+} from '../../../src/core/dom/query';
+import {
+  createElementWithAttributes,
+  whenUpgradedToCustomElement,
+} from '../../../src/dom';
 import {dev, user} from '../../../src/log';
-import {dict} from '#core/types/object';
+import {dict} from '../../../src/core/types/object';
 import {measurePageLayoutBox} from './measure-page-layout-box';
-import {whenUpgradedToCustomElement} from '../../../src/amp-element-helpers';
 
 /** @const */
 const TAG = 'amp-auto-ads';

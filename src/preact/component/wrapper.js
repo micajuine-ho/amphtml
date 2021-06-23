@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
-import {forwardRef} from '#preact/compat';
+import * as Preact from '../';
+import {forwardRef} from '../compat';
 
 /**
  * The wrapper component provides the canonical wrapper for components whose

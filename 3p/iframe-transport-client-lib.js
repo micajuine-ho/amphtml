@@ -17,7 +17,7 @@
 // src/polyfills.js must be the first import.
 import './polyfills';
 
-import {IframeTransportClient} from './iframe-transport-client';
+import {IframeTransportClient} from './iframe-transport-client.js';
 import {initLogConstructor, setReportError} from '../src/log';
 
 initLogConstructor();

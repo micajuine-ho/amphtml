@@ -21,12 +21,12 @@ import {
   SanitizerImpl,
   StorageLocation,
 } from '../../amp-script';
-import {FakeWindow} from '#testing/fake-dom';
-import {Services} from '#service';
+import {FakeWindow} from '../../../../../testing/fake-dom';
+import {Services} from '../../../../../src/services';
 import {
   registerServiceBuilderForDoc,
   resetServiceForTesting,
-} from '../../../../../src/service-helpers';
+} from '../../../../../src/service';
 import {user} from '../../../../../src/log';
 
 describes.fakeWin('AmpScript', {amp: {runtimeOn: false}}, (env) => {

@@ -20,14 +20,14 @@
 
 import {AmpStory} from '../amp-story';
 import {AmpStoryStoreService} from '../amp-story-store-service';
-import {LocalizationService} from '#service/localization';
-import {Services} from '#service';
+import {LocalizationService} from '../../../../src/service/localization';
+import {Services} from '../../../../src/services';
 import {
   calculateTargetScalingFactor,
   targetFitsWithinPage,
 } from '../animation-presets-utils';
 import {presets} from '../animation-presets';
-import {registerServiceBuilder} from '../../../../src/service-helpers';
+import {registerServiceBuilder} from '../../../../src/service';
 
 describes.realWin(
   'amp-story-full-bleed-animations',

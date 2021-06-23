@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {AmpDocSingle} from '#service/ampdoc-impl';
+import {AmpDocSingle} from '../../src/service/ampdoc-impl';
 import {BaseElement} from '../../src/base-element';
 import {ElementStub} from '../../src/element-stub';
-import {Services} from '#service';
+import {Services} from '../../src/services';
 import {
   copyElementToChildWindow,
   getElementClassForTesting,
@@ -26,8 +26,8 @@ import {
   stubElementIfNotKnown,
   stubElementsForDoc,
   upgradeOrRegisterElement,
-} from '#service/custom-element-registry';
-import {createElementWithAttributes} from '#core/dom';
+} from '../../src/service/custom-element-registry';
+import {createElementWithAttributes} from '../../src/dom';
 import {getImplSyncForTesting} from '../../src/custom-element';
 
 describes.realWin('CustomElement register', {amp: true}, (env) => {

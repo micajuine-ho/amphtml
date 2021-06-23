@@ -15,7 +15,7 @@
  */
 
 import '../amp-story-auto-analytics';
-import {createElementWithAttributes} from '#core/dom';
+import {createElementWithAttributes} from '../../../../src/dom';
 
 describes.realWin(
   'amp-story-auto-analytics',

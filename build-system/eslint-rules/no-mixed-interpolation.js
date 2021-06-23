@@ -19,7 +19,7 @@ const {
   definitionFile,
   singletonFunctions,
   transformableMethods,
-} = require('../babel-plugins/log-module-metadata');
+} = require('../babel-plugins/log-module-metadata.js');
 
 /**
  * @param {!Node} node

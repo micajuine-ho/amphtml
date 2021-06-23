@@ -15,7 +15,7 @@
  */
 
 import {Deferred} from './core/data-structures/promise';
-import {Services} from './service';
+import {Services} from './services';
 import {WindowInterface} from './core/window/interface';
 import {addParamsToUrl, isProxyOrigin, parseUrlDeprecated} from './url';
 import {dev, user, userAssert} from './log';

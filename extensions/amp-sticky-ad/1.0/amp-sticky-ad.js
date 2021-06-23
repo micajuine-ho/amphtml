@@ -15,18 +15,16 @@
  */
 
 import {CSS} from '../../../build/amp-sticky-ad-1.0.css';
-import {CommonSignals} from '#core/constants/common-signals';
-import {Services} from '#service';
+import {CommonSignals} from '../../../src/core/constants/common-signals';
+import {Services} from '../../../src/services';
 import {
   computedStyle,
   removeAlphaFromColor,
   setStyle,
   toggle,
-} from '#core/dom/style';
+} from '../../../src/style';
 import {dev, user, userAssert} from '../../../src/log';
-import {realChildElements} from '#core/dom/query';
-import {removeElement} from '#core/dom';
-import {whenUpgradedToCustomElement} from '../../../src/amp-element-helpers';
+import {removeElement, whenUpgradedToCustomElement} from '../../../src/dom';
 
 class AmpStickyAd extends AMP.BaseElement {
   /** @param {!AmpElement} element */
@@ -60,7 +58,7 @@ class AmpStickyAd extends AMP.BaseElement {
     this.viewport_ = this.getViewport();
     this.element.classList.add('i-amphtml-sticky-ad-layout');
 
-    const children = realChildElements(this.element);
+    const children = this.getRealChildren();
     userAssert(
       children.length == 1 && children[0].tagName == 'AMP-AD',
       'amp-sticky-ad must have a single amp-ad child'

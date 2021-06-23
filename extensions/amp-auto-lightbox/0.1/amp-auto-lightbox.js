@@ -22,18 +22,19 @@
  * Instead, the runtime loads it when encountering an <amp-img>.
  */
 
-import {AmpEvents} from '#core/constants/amp-events';
+import {AmpEvents} from '../../../src/core/constants/amp-events';
 import {AutoLightboxEvents} from '../../../src/auto-lightbox';
-import {CommonSignals} from '#core/constants/common-signals';
-import {Services} from '#service';
-import {closestAncestorElementBySelector} from '#core/dom/query';
+import {CommonSignals} from '../../../src/core/constants/common-signals';
+import {Services} from '../../../src/services';
+import {closestAncestorElementBySelector} from '../../../src/core/dom/query';
 import {dev} from '../../../src/log';
-import {dispatchCustomEvent} from '#core/dom';
-import {loadPromise} from '../../../src/event-helper';
-import {measureIntersectionNoRoot} from '#core/dom/layout/intersection-no-root';
-import {toArray} from '#core/types/array';
-import {tryParseJson} from '#core/types/object/json';
-import {whenUpgradedToCustomElement} from '../../../src/amp-element-helpers';
+import {
+  dispatchCustomEvent,
+  whenUpgradedToCustomElement,
+} from '../../../src/dom';
+import {measureIntersectionNoRoot} from '../../../src/utils/intersection-no-root';
+import {toArray} from '../../../src/core/types/array';
+import {tryParseJson} from '../../../src/core/types/object/json';
 
 const TAG = 'amp-auto-lightbox';
 
@@ -113,40 +114,33 @@ const META_OG_TYPE = 'meta[property="og:type"]';
 
 const NOOP = () => {};
 
+/**
+ * For better minification.
+ * @param {!../../../src/service/ampdoc-impl.AmpDoc} ampdoc
+ * @return {!Document|!ShadowRoot}
+ */
+const getRootNode = (ampdoc) => ampdoc.getRootNode();
+
 /** @visibleForTesting */
 export class Criteria {
   /**
    * @param {!Element} element
-   * @param {!../../../src/service/ampdoc-impl.AmpDoc} ampdoc
    * @param {number} renderWidth
    * @param {number} renderHeight
    * @return {boolean}
    */
-  static meetsAll(element, ampdoc, renderWidth, renderHeight) {
+  static meetsAll(element, renderWidth, renderHeight) {
     return (
-      Criteria.meetsSizingCriteria(
-        element,
-        ampdoc,
-        renderWidth,
-        renderHeight
-      ) && Criteria.meetsTreeShapeCriteria(element, ampdoc)
+      Criteria.meetsSizingCriteria(element, renderWidth, renderHeight) &&
+      Criteria.meetsTreeShapeCriteria(element)
     );
   }
 
   /**
    * @param {!Element} element
-   * @param {!../../../src/service/ampdoc-impl.AmpDoc} ampdoc
    * @return {boolean}
    */
-  static meetsTreeShapeCriteria(element, ampdoc) {
-    if (
-      element.tagName === 'IMG' &&
-      closestAncestorElementBySelector(element, 'amp-img')
-    ) {
-      // Images that are a child of an AMP-IMG do not need additional treatment.
-      return false;
-    }
-
+  static meetsTreeShapeCriteria(element) {
     const disabledSelector = `${DISABLED_ANCESTORS},${DISABLED_BY_ATTR}`;
     const disabledAncestor = closestAncestorElementBySelector(
       element,
@@ -155,23 +149,22 @@ export class Criteria {
     if (disabledAncestor) {
       return false;
     }
-    const actions = Services.actionServiceForDoc(ampdoc || element);
+    const actions = Services.actionServiceForDoc(element);
     return !actions.hasResolvableAction(element, 'tap');
   }
 
   /**
    * @param {!Element} element
-   * @param {!../../../src/service/ampdoc-impl.AmpDoc} ampdoc
    * @param {number} renderWidth
    * @param {number} renderHeight
    * @return {boolean}
    */
-  static meetsSizingCriteria(element, ampdoc, renderWidth, renderHeight) {
+  static meetsSizingCriteria(element, renderWidth, renderHeight) {
     const {naturalHeight, naturalWidth} = getMaxNaturalDimensions(
-      dev().assertElement(element.querySelector('img') || element)
+      dev().assertElement(element.querySelector('img'))
     );
 
-    const viewport = Services.viewportForDoc(ampdoc);
+    const viewport = Services.viewportForDoc(element);
     const {height: vh, width: vw} = viewport.getSize();
 
     return meetsSizingCriteria(
@@ -198,7 +191,7 @@ const srcsetWidthRe = /\s+([0-9]+)w(,|[\S\s]*$)/g;
  * @return {number} -1 if no srcset, or if srcset is defined by dpr instead of
  *   width. (This value is useful for comparisons, see getMaxNaturalDimensions.)
  */
-function getMaxWidthFromSrcset(img) {
+export function getMaxWidthFromSrcset(img) {
   let max = -1;
 
   const srcsetAttr = img.getAttribute('srcset');
@@ -223,7 +216,7 @@ function getMaxWidthFromSrcset(img) {
  * @param {!Element} img
  * @return {{naturalWidth: number, naturalHeight: number}}
  */
-function getMaxNaturalDimensions(img) {
+export function getMaxNaturalDimensions(img) {
   const {naturalHeight, naturalWidth} = img;
   const ratio = naturalWidth / naturalHeight;
   const maxWidthFromSrcset = getMaxWidthFromSrcset(img);
@@ -280,16 +273,11 @@ function markAsVisited(candidate) {
 }
 
 /**
- * @param {!Array<string>} tagNames
+ * @param {string} tagName
  * @return {string}
  */
-function candidateSelector(tagNames) {
-  return tagNames
-    .map(
-      (tagName) =>
-        `${tagName}:not([${LIGHTBOXABLE_ATTR}]):not([${VISITED_ATTR}])`
-    )
-    .join(',');
+function candidateSelector(tagName) {
+  return `${tagName}:not([${LIGHTBOXABLE_ATTR}]):not([${VISITED_ATTR}])`;
 }
 
 /**
@@ -297,9 +285,6 @@ function candidateSelector(tagNames) {
  * @return {!Promise}
  */
 function whenLoaded(element) {
-  if (element.tagName === 'IMG') {
-    return loadPromise(element);
-  }
   return whenUpgradedToCustomElement(element).then((element) =>
     element.signals().whenSignal(CommonSignals.LOAD_END)
   );
@@ -313,7 +298,7 @@ export class Scanner {
    * @return {!Array<!Element>}
    */
   static getCandidates(root) {
-    const selector = candidateSelector(['amp-img', 'img']);
+    const selector = candidateSelector('amp-img');
     const candidates = toArray(root.querySelectorAll(selector));
     // TODO(alanorozco): DOM mutations should be wrapped in mutate contexts.
     // Alternatively, use in-memory "visited" marker instead of attribute.
@@ -333,7 +318,7 @@ export class DocMetaAnnotations {
    * @return {string|undefined}
    */
   static getOgType(ampdoc) {
-    const tag = ampdoc.getRootNode().querySelector(META_OG_TYPE);
+    const tag = getRootNode(ampdoc).querySelector(META_OG_TYPE);
     if (tag) {
       return tag.getAttribute('content');
     }
@@ -354,7 +339,7 @@ export class DocMetaAnnotations {
    * @return {!Array<string>}
    */
   static getAllLdJsonTypes(ampdoc) {
-    return toArray(ampdoc.getRootNode().querySelectorAll(SCRIPT_LD_JSON))
+    return toArray(getRootNode(ampdoc).querySelectorAll(SCRIPT_LD_JSON))
       .map((el) => {
         const {textContent} = el;
         return (tryParseJson(textContent) || {})['@type'];
@@ -384,8 +369,10 @@ export class DocMetaAnnotations {
 function usesLightboxExplicitly(ampdoc) {
   // TODO(alanorozco): Backport into Extensions service.
   const requiredExtensionSelector = `script[custom-element="${REQUIRED_EXTENSION}"]`;
+
   const lightboxedElementsSelector = `[${LIGHTBOXABLE_ATTR}]:not([${VISITED_ATTR}])`;
-  const exists = (selector) => !!ampdoc.getRootNode().querySelector(selector);
+
+  const exists = (selector) => !!getRootNode(ampdoc).querySelector(selector);
 
   return (
     exists(requiredExtensionSelector) && exists(lightboxedElementsSelector)
@@ -453,17 +440,13 @@ export function runCandidates(ampdoc, candidates) {
     whenLoaded(candidate).then(() => {
       return measureIntersectionNoRoot(candidate).then(
         ({boundingClientRect}) => {
-          if (
-            candidate.tagName !== 'IMG' &&
-            !candidate.signals().get(CommonSignals.LOAD_END)
-          ) {
-            // <amp-img> will change the img's src inline data on unlayout and
-            // remove it from DOM.
+          // <amp-img> will change the img's src inline data on unlayout and
+          // remove it from DOM.
+          if (!candidate.signals().get(CommonSignals.LOAD_END)) {
             return;
           }
-
           const {height, width} = boundingClientRect;
-          if (!Criteria.meetsAll(candidate, ampdoc, width, height)) {
+          if (!Criteria.meetsAll(candidate, width, height)) {
             return;
           }
           dev().info(TAG, 'apply', candidate);
@@ -492,7 +475,7 @@ export function scan(ampdoc, opt_root) {
 AMP.extension(TAG, '0.1', (AMP) => {
   const {ampdoc} = AMP;
   ampdoc.whenReady().then(() => {
-    ampdoc.getRootNode().addEventListener(AmpEvents.DOM_UPDATE, (e) => {
+    getRootNode(ampdoc).addEventListener(AmpEvents.DOM_UPDATE, (e) => {
       const {target} = e;
       scan(ampdoc, dev().assertElement(target));
     });

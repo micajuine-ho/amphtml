@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 import {WebLoginDialog, openLoginDialog} from '../login-dialog';
-import {installDocService} from '#service/ampdoc-impl';
+import {installDocService} from '../../../../src/service/ampdoc-impl';
 
 const RETURN_URL_ESC = encodeURIComponent(
   'http://localhost:8000/extensions' +

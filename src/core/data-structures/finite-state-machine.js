@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {devAssert} from '#core/assert';
-import {map} from '#core/types/object';
+import {devAssert} from '../assert';
+import {map} from '../types/object';
 
 /** @template STATE */
 export class FiniteStateMachine {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {dev} from '../../../src/log';
 import {getWinOrigin} from '../../../src/url';
 import {listen} from '../../../src/event-helper';

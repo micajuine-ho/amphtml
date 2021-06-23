@@ -59,11 +59,7 @@ module.exports = {
                   }
                 }
 
-                return [
-                  fixer.removeRange([node.range[1], node.range[1] + 1]),
-                  fixer.remove(node),
-                  fixer.insertTextAfter(last, text),
-                ];
+                return [fixer.remove(node), fixer.insertTextAfter(last, text)];
               },
             });
           }

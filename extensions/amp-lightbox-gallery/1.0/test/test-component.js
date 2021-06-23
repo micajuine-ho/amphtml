@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as Preact from '#preact';
+import * as Preact from '../../../../src/preact';
 import {LightboxGalleryProvider, WithLightbox} from '../component';
 import {mount} from 'enzyme';
 
@@ -116,15 +116,8 @@ describes.sandboxed('LightboxGallery preact component', {}, () => {
       // Render provided children
       lightbox = wrapper.find('Lightbox');
       expect(lightbox).to.have.lengthOf(1);
-      expect(lightbox.prop('closeButtonAs').name).to.equal('CloseButtonIcon');
       expect(lightbox.children()).to.have.lengthOf(1);
-
-      // Carousel UI
-      const carousel = lightbox.find('BaseCarousel');
-      expect(carousel).to.have.lengthOf(1);
-      expect(carousel.prop('arrowPrevAs').name).to.equal('NavButtonIcon');
-      expect(carousel.prop('arrowNextAs').name).to.equal('NavButtonIcon');
-      expect(carousel.find('img')).to.have.lengthOf(2);
+      expect(lightbox.find('img')).to.have.lengthOf(2);
     });
 
     it('opens with rendered when given', () => {
@@ -172,21 +165,14 @@ describes.sandboxed('LightboxGallery preact component', {}, () => {
       // Render provided children
       lightbox = wrapper.find('Lightbox');
       expect(lightbox).to.have.lengthOf(1);
-      expect(lightbox.prop('closeButtonAs').name).to.equal('CloseButtonIcon');
       expect(lightbox.children()).to.have.lengthOf(1);
 
-      // Carousel UI
-      const carousel = lightbox.find('BaseCarousel');
-      expect(carousel).to.have.lengthOf(1);
-      expect(carousel.prop('arrowPrevAs').name).to.equal('NavButtonIcon');
-      expect(carousel.prop('arrowNextAs').name).to.equal('NavButtonIcon');
-
-      // Children are given to carousel
-      const imgs = carousel.find('img');
-      expect(imgs).to.have.lengthOf(3); // Carousel only renders 3 items.
+      const imgs = lightbox.find('img');
+      expect(imgs).to.have.lengthOf(4);
       expect(imgs.at(0).hasClass('rendered-img')).to.be.false;
       expect(imgs.at(1).hasClass('rendered-img')).to.be.true;
       expect(imgs.at(2).hasClass('rendered-img')).to.be.false;
+      expect(imgs.at(3).hasClass('rendered-img')).to.be.true;
     });
   });
 
@@ -284,15 +270,8 @@ describes.sandboxed('LightboxGallery preact component', {}, () => {
       // Render provided children
       lightbox = wrapper.find('Lightbox');
       expect(lightbox).to.have.lengthOf(1);
-      expect(lightbox.prop('closeButtonAs').name).to.equal('CloseButtonIcon');
       expect(lightbox.children()).to.have.lengthOf(1);
-
-      // Carousel UI
-      const carousel = lightbox.find('BaseCarousel');
-      expect(carousel).to.have.lengthOf(1);
-      expect(carousel.prop('arrowPrevAs').name).to.equal('NavButtonIcon');
-      expect(carousel.prop('arrowNextAs').name).to.equal('NavButtonIcon');
-      expect(carousel.find('img')).to.have.lengthOf(2);
+      expect(lightbox.find('img')).to.have.lengthOf(2);
     });
 
     it('opens with rendered when given', () => {
@@ -339,21 +318,14 @@ describes.sandboxed('LightboxGallery preact component', {}, () => {
       // Render provided children
       lightbox = wrapper.find('Lightbox');
       expect(lightbox).to.have.lengthOf(1);
-      expect(lightbox.prop('closeButtonAs').name).to.equal('CloseButtonIcon');
       expect(lightbox.children()).to.have.lengthOf(1);
 
-      // Carousel UI
-      const carousel = lightbox.find('BaseCarousel');
-      expect(carousel).to.have.lengthOf(1);
-      expect(carousel.prop('arrowPrevAs').name).to.equal('NavButtonIcon');
-      expect(carousel.prop('arrowNextAs').name).to.equal('NavButtonIcon');
-
-      // Children are given to carousel
-      const imgs = carousel.find('img');
-      expect(imgs).to.have.lengthOf(3); // Carousel only renders 3 items.
+      const imgs = lightbox.find('img');
+      expect(imgs).to.have.lengthOf(4);
       expect(imgs.at(0).hasClass('rendered-img')).to.be.false;
       expect(imgs.at(1).hasClass('rendered-img')).to.be.true;
       expect(imgs.at(2).hasClass('rendered-img')).to.be.false;
+      expect(imgs.at(3).hasClass('rendered-img')).to.be.true;
     });
   });
 });

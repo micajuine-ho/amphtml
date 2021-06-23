@@ -15,10 +15,10 @@
  */
 
 import {MessageType} from '../../../src/3p-frame-messaging';
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {SubscriptionApi} from '../../../src/iframe-helper';
-import {dict} from '#core/types/object';
-import {intersectionEntryToJson} from '#core/dom/layout/intersection';
+import {dict} from '../../../src/core/types/object';
+import {intersectionEntryToJson} from '../../../src/utils/intersection';
 
 /**
  * LegacyAdIntersectionObserverHost exists for backward compatibility to support

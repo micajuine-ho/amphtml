@@ -24,19 +24,19 @@ import {
 import {
   CONSENT_POLICY_STATE,
   CONSENT_STRING_TYPE,
-} from '#core/constants/consent-state';
+} from '../../../../src/core/constants/consent-state';
 import {
   ConsentPolicyInstance,
   ConsentPolicyManager,
 } from '../consent-policy-manager';
-import {dict} from '#core/types/object';
+import {dict} from '../../../../src/core/types/object';
 import {expandPolicyConfig} from '../consent-config';
-import {macroTask} from '#testing/yield';
+import {macroTask} from '../../../../testing/yield';
 
 import {
   registerServiceBuilder,
   resetServiceForTesting,
-} from '../../../../src/service-helpers';
+} from '../../../../src/service';
 
 describes.realWin(
   'ConsentPolicyManager',

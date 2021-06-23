@@ -15,12 +15,12 @@
  */
 
 import '../amp-fit-text';
-import {computedStyle} from '#core/dom/style';
-import {createElementWithAttributes} from '#core/dom';
+import {computedStyle} from '../../../../src/style';
+import {createElementWithAttributes} from '../../../../src/dom';
 import {expect} from 'chai';
-import {toggleExperiment} from '#experiments';
+import {toggleExperiment} from '../../../../src/experiments';
 import {useStyles} from '../component.jss';
-import {waitFor} from '#testing/test-helper';
+import {waitFor} from '../../../../testing/test-helper';
 
 describes.realWin(
   'amp-fit-text component',

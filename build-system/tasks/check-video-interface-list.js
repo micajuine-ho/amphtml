@@ -80,9 +80,8 @@ module.exports = {
   checkVideoInterfaceList,
 };
 
-checkVideoInterfaceList.description =
-  'Check 3rd party video player list in amp-video-interface.md';
+checkVideoInterfaceList.description = `Checks or updates 3rd party video player list on ${filepath}`;
 
 checkVideoInterfaceList.flags = {
-  'fix': 'Update the list and write results to file',
+  'fix': 'Write to file',
 };

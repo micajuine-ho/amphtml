@@ -23,9 +23,9 @@ import {
   PlaybackCssClass,
 } from '../amp-gwd-animation-impl';
 import {GWD_PAGEDECK_ID, TAG, addAction} from '../amp-gwd-animation';
-import {Services} from '#service';
+import {Services} from '../../../../src/services';
 import {createCustomEvent} from '../../../../src/event-helper';
-import {getServiceForDocOrNull} from '../../../../src/service-helpers';
+import {getServiceForDocOrNull} from '../../../../src/service';
 
 describes.sandboxed('AMP GWD Animation', {}, (env) => {
   /**

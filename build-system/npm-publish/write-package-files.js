@@ -19,16 +19,17 @@
  * Creates npm package files for a given component and AMP version.
  */
 
-const [extension, ampVersion, extensionVersion] = process.argv.slice(2);
+const [extension, ampVersion] = process.argv.slice(2);
 const {log} = require('../common/logging');
 const {stat, writeFile} = require('fs/promises');
 const {valid} = require('semver');
 
 /**
  * Determines whether to skip
+ * @param {string} extensionVersion
  * @return {Promise<boolean>}
  */
-async function shouldSkip() {
+async function shouldSkip(extensionVersion) {
   try {
     await stat(`extensions/${extension}/${extensionVersion}`);
     return false;
@@ -40,8 +41,9 @@ async function shouldSkip() {
 
 /**
  * Write package.json
+ * @param {string} extensionVersion
  */
-async function writePackageJson() {
+async function writePackageJson(extensionVersion) {
   const extensionVersionArr = extensionVersion.split('.', 2);
   const major = extensionVersionArr[0];
   const minor = ampVersion.slice(0, 10);
@@ -116,8 +118,9 @@ async function writePackageJson() {
 
 /**
  * Write react.js
+ * @param {string} extensionVersion
  */
-async function writeReactJs() {
+async function writeReactJs(extensionVersion) {
   const content = "module.exports = require('./dist/component-react');";
   try {
     await writeFile(
@@ -136,11 +139,13 @@ async function writeReactJs() {
  * Main
  */
 async function main() {
-  if (await shouldSkip()) {
-    return;
+  for (const version of ['1.0', '2.0']) {
+    if (await shouldSkip(version)) {
+      continue;
+    }
+    writePackageJson(version);
+    writeReactJs(version);
   }
-  writePackageJson();
-  writeReactJs();
 }
 
 main();

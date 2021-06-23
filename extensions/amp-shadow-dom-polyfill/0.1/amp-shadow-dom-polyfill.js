@@ -19,5 +19,3 @@
  * injected here from the `node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd.install.js`
  * script.
  */
-
-(function () {})();

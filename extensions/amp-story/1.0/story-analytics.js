@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Services} from '#service';
+import {Services} from '../../../src/services';
 import {StateProperty, getStoreService} from './amp-story-store-service';
-import {getDataParamsFromAttributes} from '#core/dom';
+import {getDataParamsFromAttributes} from '../../../src/dom';
 import {getVariableService} from './variable-service';
-import {map} from '#core/types/object';
-import {registerServiceBuilder} from '../../../src/service-helpers';
+import {map} from '../../../src/core/types/object';
+import {registerServiceBuilder} from '../../../src/service';
 import {triggerAnalyticsEvent} from '../../../src/analytics';
 
 /** @const {string} */

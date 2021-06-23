@@ -15,7 +15,7 @@
  */
 'use strict';
 
-import {Services} from '#service';
+import {Services} from '../src/services';
 
 /**
  * Helper class to skip or retry tests under specific environment. Instantiate

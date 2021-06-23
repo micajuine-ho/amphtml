@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Services} from '#service';
+import {Services} from '../../src/services';
 import {
   activateChunkingForTesting,
   chunkInstanceForTesting,
@@ -22,7 +22,7 @@ import {
   onIdle,
   startupChunk,
 } from '../../src/chunk';
-import {installDocService} from '#service/ampdoc-impl';
+import {installDocService} from '../../src/service/ampdoc-impl';
 
 describes.sandboxed('chunk2', {}, () => {
   beforeEach(() => {
